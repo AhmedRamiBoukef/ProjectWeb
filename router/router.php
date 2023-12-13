@@ -1,8 +1,10 @@
 <?php
 require_once($_SERVER['DOCUMENT_ROOT'] . './Project/controllers/User/HomePageController.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . './Project/controllers/User/ComparePageController.php');
 require_once($_SERVER['DOCUMENT_ROOT'] . './Project/controllers/Admin/LoginPageController.php');
 require_once($_SERVER['DOCUMENT_ROOT'] . './Project/controllers/Admin/HomePageController.php');
 require_once($_SERVER['DOCUMENT_ROOT'] . './Project/controllers/Admin/BrandsPageController.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . './Project/controllers/Admin/ReviewPageController.php');
 session_start();
 $request = $_SERVER['REQUEST_URI'];
 $error = 0;
@@ -50,8 +52,16 @@ switch ($request) {
         $controller = new AdminBrandsPageController();
         $controller->showVehiculePage($AdminVehiculeid);
         break;  
+    case "/Project/Admin/review/":  
+        $controller = new AdminReviewPageController();
+        $controller->showReviewPage();
+        break;  
     case "/Project/":
         $controller = new HomePageController();
         $controller->showHomePage();
+        break;  
+    case "/Project/compare/":
+        $controller = new ComparePageController();
+        $controller->showComparePage();
         break;  
 }

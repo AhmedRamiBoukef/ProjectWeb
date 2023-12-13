@@ -8,6 +8,7 @@
 * {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
 .header-container {
@@ -56,6 +57,10 @@
 }
 
   .menu {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background-color: #fff;
     width: 100%;
     height: 10vh;
     box-shadow: 0 0.1px 11px 2px rgba(68,89,88,.11);
@@ -93,8 +98,12 @@
   .footer-menu {
     width: 100%;
     height: 8vh;
-    background-color: black;
-    color: white;
+    border-top: 1px solid #ccc;
+    text-align: center;
+  }
+
+  .footer-menu p {
+    margin: 20px 0;
   }
 
   .footer-menu > ul {
@@ -106,7 +115,7 @@
     padding: 0;
   }
   .footer-menu a {
-    color: white;
+    color: inherit;
     text-align: center;
     text-decoration: none;
     padding: 0 20px;
@@ -272,13 +281,15 @@ table tbody tr td:last-child {
 }
 
 
-.Brands h1 {
+.Brands h1  {
   text-align: center;
   margin: 20px 0;
   font-family: 'Comic Sans MS', cursive;
 }
 
-
+.compare-div > h1,.compare-div > p ,.popular > h1 , .popular > p {
+  font-family: 'Comic Sans MS', cursive;
+}
 .marquee {
   margin: 60px 0;
   width: var(--marquee-width);
@@ -339,4 +350,205 @@ table tbody tr td:last-child {
     --marquee-elements-displayed: 3;
   }
   .marquee:before, .marquee:after { width: 5rem; }
+}
+
+
+.compare-div {
+  background-color: #f2f2f2;
+  padding: 5%;
+}
+
+.compare-button {
+  padding: 10px 30px;
+  background-color: #007bff;
+  color: #fff; 
+  border-radius: 5px;
+  border: none;
+  margin: 20px auto;
+  left: 50%;
+  position: relative;
+  transform: translateX(-50%);
+}
+
+.compare-div > div {
+  margin-top: 30px;
+  height: 100%;
+  overflow-x: scroll;
+  padding: 10px 0;
+}
+.compare-div > div > div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  width: 1700px;
+}
+
+.Compare {
+  border-radius: 8px;
+  background-image: linear-gradient(180deg,#00bfde,#00bfde 27%,#fff 0);
+  padding: 2rem;
+  width: 400px;
+}
+.Compare h1 {
+  font-weight: 700;
+  line-height: 1.2;
+}
+.Compare img,.featured-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.Compare form div {
+  display: flex;
+  flex-direction: column;
+  max-width: 503px;
+  margin-bottom: 20px;
+  -webkit-tap-highlight-color: transparent;
+  background-color: #fff;
+  border: 1px solid #bdbdbd;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  height: 56px;
+  overflow: hidden;
+  padding: 0;
+  position: relative;
+  width: 100%;
+}
+.Compare form div select {
+  padding: 16px 16px 0;
+  align-items: center;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: transparent;
+  border: 0;
+  border-radius: 5px;
+  color: #212121;
+  display: flex;
+  font-size: 16px;
+  height: 56px;
+  padding: 0 0 0 16px;
+  width: 100%;
+  cursor: pointer;
+  position: relative;
+  z-index: 2;
+}
+.Compare form div label {
+  font-size: 12px;
+  transform-origin: top left;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  color: #555;
+  cursor: text;
+  font-size: 12px;
+  left: 16px;
+  top: 1px;
+  transition: font-size .3s ease,transform .3s ease,left .3s ease;
+  white-space: nowrap;
+  position: absolute;
+}
+
+.popular {
+  margin: 30px 0;
+  padding: 0 5%;
+}
+
+.popular > div {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.featured-card {
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,.1);
+  -webkit-box-shadow: 0 2px 10px rgba(0,0,0,.1);
+  -moz-box-shadow: 0 2px 10px;
+  color: #212121;
+  display: flex;
+  flex-direction: column;
+  height: 220px;
+  width: 350px;  
+}
+.popular a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.featured-card .images {
+  align-items: center;
+  background-color: #f2f2f2;
+  background-image: linear-gradient(135deg,#e6e6e6,#e6e6e6 50%,#f2f2f2 0);
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  display: flex;
+  flex-direction: row;
+  padding: .75rem;
+  font-size: 1.875rem;
+  font-weight: 700;
+}
+
+.featured-card .images div:first-child {
+  padding-left: 0;
+  padding-right: .5rem;
+}
+.featured-card .images div:last-child{
+  padding-left: .5rem;
+}
+
+.featured-card .name {
+  padding: 1rem;
+}
+.featured-card .name div:first-child, .featured-card .name div:last-child {
+  font-size: 1rem;
+  font-weight: 700;
+  text-align: center;
+}
+.featured-card .name div:nth-child(2) {
+  text-align: center;
+}
+
+
+.guide-section {
+  font-family: 'Comic Sans MS', cursive;
+  width: 100%;
+  margin-bottom: 30px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.guide-section div:nth-child(1) {
+  width: 100%;
+  padding-left: 5%;
+}
+.guide-section div:nth-child(1) h2 {
+  line-height: 1;
+  margin-top: 0;
+}
+.guide-section div:nth-child(1) h2:nth-child(3) {
+  margin-bottom: 40px;
+}
+
+.guide-section a {
+  padding: 10px 30px;
+  background-color: #007bff;
+  color: #fff !important; 
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.guide-section div:nth-child(1) h2:not(:first-child)  {
+  color: #007bff;
+  
+}
+.guide-section img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }

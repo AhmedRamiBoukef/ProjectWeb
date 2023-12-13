@@ -21,4 +21,34 @@ class BrandModel extends DBModel
         $this->disconnect($db);
         return $infos;
     }
+    public function getModelsByBrand($brandID) {
+        $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
+        $sql = "SELECT ModelID, ModelName, ModelYear FROM Model WHERE BrandID = :BrandID";
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':BrandID', $brandID);
+        $stmt->execute();
+        $models = $stmt->fetchAll();
+        $this->disconnect($db);
+        return $models;
+    }
+    public function getYearsByModel($modelID) {
+        $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
+        $sql = "SELECT ModelID, ModelYear FROM Model WHERE ModelID = :ModelID";
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':ModelID', $modelID);
+        $stmt->execute();
+        $years = $stmt->fetchAll();
+        $this->disconnect($db);
+        return $years;
+    }
+    public function getVersionByModel($modelID) {
+        $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
+        $sql = "SELECT VehicleID, Version FROM VehicleInfo WHERE ModelID = :ModelID";
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':ModelID', $modelID);
+        $stmt->execute();
+        $versions = $stmt->fetchAll();
+        $this->disconnect($db);
+        return $versions;
+    }
 }    
