@@ -1,6 +1,7 @@
 <?php
 require_once("../controllers/Admin/LoginPageController.php");
 require_once("../controllers/Admin/BrandsPageController.php");
+require_once("../controllers/User/NewsPageController.php");
 
 if (isset($_POST['login'])) {
     $controller = new AdminLoginPageController();
@@ -27,4 +28,18 @@ if(isset($_GET['modelID']) && isset($_GET['year'])) {
     $controller = new AdminBrandsPageController();
     $versions = $controller->getVersionByModel($_GET['modelID']);
     echo json_encode($versions);
+}
+
+
+if(isset($_GET['offset']) && isset($_GET['limit'])) {
+    $controller = new NewsPageController();
+    $news = $controller->getNews($_GET['offset'],$_GET['limit']);
+    echo json_encode($news);
+}
+
+
+if(isset($_GET['getNews']) ) {
+    $controller = new NewsPageController();
+    $news = $controller->getNombreNews();
+    echo json_encode($news);
 }

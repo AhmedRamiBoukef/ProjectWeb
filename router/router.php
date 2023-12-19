@@ -1,6 +1,7 @@
 <?php
 require_once($_SERVER['DOCUMENT_ROOT'] . './Project/controllers/User/HomePageController.php');
 require_once($_SERVER['DOCUMENT_ROOT'] . './Project/controllers/User/ComparePageController.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . './Project/controllers/User/NewsPageController.php');
 require_once($_SERVER['DOCUMENT_ROOT'] . './Project/controllers/Admin/LoginPageController.php');
 require_once($_SERVER['DOCUMENT_ROOT'] . './Project/controllers/Admin/HomePageController.php');
 require_once($_SERVER['DOCUMENT_ROOT'] . './Project/controllers/Admin/BrandsPageController.php');
@@ -9,8 +10,25 @@ session_start();
 $request = $_SERVER['REQUEST_URI'];
 $error = 0;
 $AdminVehiculeid = 0;
+$id = 0;
+$vehicleIDs = [];
 if (isset($_GET['AdminVehiculeid'])) {
     $AdminVehiculeid = $_GET['AdminVehiculeid'];
+    $request = explode('?', $request)[0];
+}
+if (isset($_GET['id'])) {
+    $id = $_GET['id'];
+    $request = explode('?', $request)[0];
+}
+if (isset($_GET['vehicleID1']) && isset($_GET['vehicleID2'])) {
+    $vehicleIDs[] = $_GET['vehicleID1'];
+    $vehicleIDs[] = $_GET['vehicleID2'];
+    if (isset($_GET['vehicleID3'])) {
+        $vehicleIDs[] = $_GET['vehicleID3'];
+    }
+    if (isset($_GET['vehicleID4'])) {
+        $vehicleIDs[] = $_GET['vehicleI4'];
+    }
     $request = explode('?', $request)[0];
 }
 if (isset($_GET['error'])) {
@@ -18,6 +36,10 @@ if (isset($_GET['error'])) {
     $request = explode('?', $request)[0];
 }else{
     $error=0;
+}
+
+if (substr($request, -1) !== '/') {
+    $request .= '/';
 }
 
 
@@ -62,6 +84,14 @@ switch ($request) {
         break;  
     case "/Project/compare/":
         $controller = new ComparePageController();
-        $controller->showComparePage();
+        $controller->showComparePage($vehicleIDs);
+        break;  
+    case "/Project/news/":
+        $controller = new NewsPageController();
+        $controller->showNewsPage();
+        break;  
+    case "/Project/news/detail/":
+        $controller = new NewsPageController();
+        $controller->showNewsDetailsPage($id);
         break;  
 }

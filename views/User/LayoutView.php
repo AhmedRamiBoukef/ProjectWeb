@@ -8,13 +8,13 @@ class LayoutView
     {
 ?> <nav class="menu">
         <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">News</a></li>
-            <li><a href="#">Comparator</a></li>
-            <li><a href="#">Brands</a></li>
-            <li><a href="#">Reviews</a></li>
-            <li><a href="#">Guides</a></li>
-            <li><a href="#">Contact</a></li>
+            <li><a href="/Project/">Home</a></li>
+            <li><a href="/Project/news/">News</a></li>
+            <li><a href="/Project/compare/">Comparator</a></li>
+            <li><a href="/Project/brands/">Brands</a></li>
+            <li><a href="/Project/reviews/">Reviews</a></li>
+            <li><a href="/Project/guide/">Guides</a></li>
+            <li><a href="/Project/contact/">Contact</a></li>
         </ul>
     </nav>
     <?php
@@ -25,13 +25,13 @@ class LayoutView
     ?>
         <div class="footer-menu">
             <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">News</a></li>
-                <li><a href="#">Comparator</a></li>
-                <li><a href="#">Brands</a></li>
-                <li><a href="#">Reviews</a></li>
-                <li><a href="#">Guides</a></li>
-                <li><a href="#">Contact</a></li>
+                <li><a href="/Project/">Home</a></li>
+                <li><a href="/Project/news/">News</a></li>
+                <li><a href="/Project/compare/">Comparator</a></li>
+                <li><a href="/Project/brands/">Brands</a></li>
+                <li><a href="/Project/reviews/">Reviews</a></li>
+                <li><a href="/Project/guide/">Guides</a></li>
+                <li><a href="/Project/contact/">Contact</a></li>
             </ul>
             <div class="social">
                 <?php
@@ -80,7 +80,7 @@ class LayoutView
     public function showVehicleCard($comparaison)
     {
     ?>
-        <a class="featured-card" href="/Project/compare/id1=<?php echo $comparaison["VehicleID1"] ?>&<?php echo $comparaison["VehicleID2"] ?>">
+        <a class="featured-card" href="/Project/compare/vehicleID1=<?php echo $comparaison["VehicleID1"] ?>&vehicleID2=<?php echo $comparaison["VehicleID2"] ?>">
             <div class="images">
                 <div><img style="transform: scaleX(-1);" src="/Project/public/images/<?php echo $comparaison["ImagePath1"] ?>" alt="<?php echo $comparaison["VehicleName1"] ?>"></div>
                 <div>vs</div>
@@ -161,4 +161,43 @@ class LayoutView
 
 <?php
     }
+    public function showDiaporama($diaporama)
+    {
+?>
+        <div id="carouselAuto" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner ">
+                <?php
+
+                
+                $i=0;
+                foreach ($diaporama as $slide) {
+                    if($i==0){
+                        ?>
+                        <a href="<?php echo $slide['SlideshowLinkURL'] ?>" class="carousel-item active" data-bs-interval="5000">
+                            <img src="/Project/public/images/<?php echo $slide['SlideshowImagePath'] ?>" class="d-block w-100" alt="<?php echo $slide['SlideshowImagePath'] ?>">
+                        </a>
+                        <?php
+                    } else {
+                        ?>
+                        <a href="<?php echo $slide['SlideshowLinkURL'] ?>" class="carousel-item" data-bs-interval="5000">
+                            <img src="/Project/public/images/<?php echo $slide['SlideshowImagePath'] ?>" class="d-block w-100" alt="<?php echo $slide['SlideshowImagePath'] ?>">
+                        </a>
+                        <?php
+                    }
+                    $i = $i+1;
+                }
+                ?>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselAuto" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselAuto" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    <?php
+    }
 }
+

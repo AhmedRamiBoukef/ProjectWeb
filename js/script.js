@@ -1,11 +1,16 @@
 const root = document.documentElement;
-const marqueeElementsDisplayed = getComputedStyle(root).getPropertyValue("--marquee-elements-displayed");
-const marqueeContent = document.querySelector("ul.marquee-content");
+const spinnerElementsDisplayed = getComputedStyle(root).getPropertyValue("--spinner-elements-displayed");
+const spinnerContent = document.querySelector("ul.spinner-content");
+let offset = 12; 
+const limit = 10; 
 
-root.style.setProperty("--marquee-elements", marqueeContent.children.length);
 
-for(let i=0; i<marqueeElementsDisplayed; i++) {
-  marqueeContent.appendChild(marqueeContent.children[i].cloneNode(true));
+if (spinnerContent) {
+    root.style.setProperty("--spinner-elements", spinnerContent.children.length);
+    
+    for(let i=0; i<spinnerElementsDisplayed; i++) {
+      spinnerContent.appendChild(spinnerContent.children[i].cloneNode(true));
+    }
 }
 
 
@@ -79,20 +84,101 @@ $(document).ready(function () {
           alert('Please fill in the first two vehiculs to compare.');
           return;
       }
-      if ((selectedVersion1 !== '' && (selectedVersion1 === selectedVersion2 || selectedVersion1 === selectedVersion3 || selectedVersion1 === selectedVersion4)) ||
-            (selectedVersion2 !== '' && (selectedVersion2 === selectedVersion3 || selectedVersion2 === selectedVersion4)) ||
-            (selectedVersion3 !== '' && selectedVersion3 === selectedVersion4)) {
-            alert("Some of the selected versions are the same. Please select different versions.");
-            return;
-        }
 
-      location.href = '/Project/compare/?vehicleID='+selectedVersion1+'&vehicleID='+selectedVersion2;
+      location.href = '/Project/compare/?vehicleID1='+selectedVersion1+'&vehicleID2='+selectedVersion2;
       if(selectedVersion3 != ""){
-        location.href = '/Project/compare/?vehicleID='+selectedVersion1+'&vehicleID='+selectedVersion2+'&vehicleID='+selectedVersion3;
+        location.href = '/Project/compare/?vehicleID1='+selectedVersion1+'&vehicleID2='+selectedVersion2+'&vehicleID3='+selectedVersion3;
       }
       if(selectedVersion4 != ""){
-        location.href = '/Project/compare/?vehicleID='+selectedVersion1+'&vehicleID='+selectedVersion2+'&vehicleID='+selectedVersion3+'&vehicleID='+selectedVersion4;
+        location.href = '/Project/compare/?vehicleID1='+selectedVersion1+'&vehicleID2='+selectedVersion2+'&vehicleID3='+selectedVersion3+'&vehicleID4='+selectedVersion4;
       }
 
   });
+
+
+    const loadMoreBtn = $('#load-more-btn');
+    const newsContainer = $('#news-container');
+
+    let nombre = 0;
+    loadMoreBtn.on('click', function () {
+        $.ajax({
+            url: `/Project/Api/api.php?getNews=1`,
+            method: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                nombre = data.NumberOfNews;
+            },
+            error: function (error) {
+                console.error('Error fetching news:', error);
+            }
+        });
+        console.log(nombre);
+        console.log(newsContainer[0].children.length);
+        console.log(limit);
+        console.log(offset);
+        if (newsContainer[0].children.length < nombre) {
+            fetchNews();
+        }
+    });
+
+    function fetchNews() {
+        $.ajax({
+            url: `/Project/Api/api.php?offset=${offset}&limit=${limit}`,
+            method: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                appendNewsToContainer(data);
+                offset = offset+limit;
+                console.log("offezfez",offset);
+            },
+            error: function (error) {
+                console.error('Error fetching news:', error);
+            }
+        });
+    }
+
+    function appendNewsToContainer(newsData) {
+        $.each(newsData, function (_, newsItem) {
+            const newsCard = createNewsCard(newsItem);
+            newsContainer.append(newsCard);
+        });
+    }
+
+    function createNewsCard(newsItem) {
+        const card = $('<a>', {
+            href: `/Project/news/detail/?id=${newsItem['NewsID']}`,
+            class: 'news-card'
+        });
+    
+        const imageContainer = $('<div>');
+        const image = $('<img>', {
+            src: `/Project/public/images/${newsItem['ImagePath']}`,
+            alt: ''
+        });
+        imageContainer.append(image);
+    
+        const contentContainer = $('<div>');
+        
+        const shortenedTitle = newsItem['Title'].length > 32 ? newsItem['Title'].substring(0, 32) + '...' : newsItem['Title'];
+        const title = $('<h1>', { text: shortenedTitle });
+    
+        let shortenedContent = newsItem['Content'].length > 110 ? newsItem['Content'].substring(0, 110) + '...' : newsItem['Content'];
+    
+        shortenedContent = shortenedContent.padEnd(110, ' ');
+    
+        const paragraph = $('<p>', { text: shortenedContent });
+        const publishedDate = $('<h3>', { text: `Published · ${formatDate(newsItem['Date'])}` });
+    
+        contentContainer.append(title, paragraph, publishedDate);
+        card.append(imageContainer, contentContainer);
+    
+        return card;
+    }
+    
+
+    function formatDate(dateString) {
+        const options = { day: 'numeric', month: 'short', year: 'numeric' };
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', options);
+    }
 });

@@ -3,53 +3,15 @@ require_once($_SERVER['DOCUMENT_ROOT'] . './Project/views/User/LayoutView.php');
 require_once($_SERVER['DOCUMENT_ROOT'] . '/Project/Controllers/Admin/BrandsPageController.php');
 class HomePageView extends LayoutView
 {
-    public function showDiaporama()
-    {
-?>
-        <div id="carouselAuto" class="carousel slide" data-bs-ride="carousel">
-            <div class="carousel-inner ">
-                <?php
-
-                $controller = new HomePageController();
-                $diaporama = $controller->getDiaporama();
-                $i=0;
-                foreach ($diaporama as $slide) {
-                    if($i==0){
-                        ?>
-                        <a href="<?php echo $slide['SlideshowLinkURL'] ?>" class="carousel-item active" data-bs-interval="5000">
-                            <img src="/Project/public/images/<?php echo $slide['SlideshowImagePath'] ?>" class="d-block w-100" alt="<?php echo $slide['SlideshowImagePath'] ?>">
-                        </a>
-                        <?php
-                    } else {
-                        ?>
-                        <a href="<?php echo $slide['SlideshowLinkURL'] ?>" class="carousel-item" data-bs-interval="5000">
-                            <img src="/Project/public/images/<?php echo $slide['SlideshowImagePath'] ?>" class="d-block w-100" alt="<?php echo $slide['SlideshowImagePath'] ?>">
-                        </a>
-                        <?php
-                    }
-                    $i = $i+1;
-                }
-                ?>
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselAuto" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselAuto" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
-        </div>
-    <?php
-    }
+    
 
     public function showBrands()
     {
     ?>
         <div class="Brands">
             <h1>Brands</h1>
-            <div class="marquee">
-                <ul class="marquee-content">
+            <div class="spinner">
+                <ul class="spinner-content">
                     <?php
                     $controller = new AdminBrandsPageController();
                     $brands = $controller->getBrands();
@@ -107,7 +69,9 @@ class HomePageView extends LayoutView
     public function showHomePage()
     {
         $this->showHeader();
-        $this->showDiaporama();
+        $controller = new HomePageController();
+        $diaporama = $controller->getDiaporama();
+        $this->showDiaporama($diaporama);
         $this->showMenu();
         $this->showBrands();
         $this->showComprare();
