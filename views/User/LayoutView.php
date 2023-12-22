@@ -4,19 +4,41 @@ require_once($_SERVER['DOCUMENT_ROOT'] . '/Project/Controllers/Admin/BrandsPageC
 
 class LayoutView
 {
+    public function showBrands()
+    {
+    ?>
+        <div class="Brands">
+            <h1>Brands</h1>
+            <div class="spinner">
+                <ul class="spinner-content">
+                    <?php
+                    $controller = new AdminBrandsPageController();
+                    $brands = $controller->getBrands();
+                    foreach ($brands as $brand) {
+                    ?>
+                        <li><a href="/Project/Brand/<?php echo $brand['BrandID'] ?>"><img src="/Project/public/images/<?php echo $brand['ImagePath'] ?>" alt="Brand<?php echo $brand['BrandID'] ?>"></a></li>
+                    <?php
+                    }
+                    ?>
+
+                </ul>
+            </div>
+        </div>
+    <?php
+    }
     public function showMenu()
     {
 ?> <nav class="menu">
-        <ul>
-            <li><a href="/Project/">Home</a></li>
-            <li><a href="/Project/news/">News</a></li>
-            <li><a href="/Project/compare/">Comparator</a></li>
-            <li><a href="/Project/brands/">Brands</a></li>
-            <li><a href="/Project/reviews/">Reviews</a></li>
-            <li><a href="/Project/guide/">Guides</a></li>
-            <li><a href="/Project/contact/">Contact</a></li>
-        </ul>
-    </nav>
+            <ul>
+                <li><a href="/Project/">Home</a></li>
+                <li><a href="/Project/news/">News</a></li>
+                <li><a href="/Project/compare/">Comparator</a></li>
+                <li><a href="/Project/brands/">Brands</a></li>
+                <li><a href="/Project/reviews/">Reviews</a></li>
+                <li><a href="/Project/guide/">Guides</a></li>
+                <li><a href="/Project/contact/">Contact</a></li>
+            </ul>
+        </nav>
     <?php
     }
 
@@ -61,10 +83,10 @@ class LayoutView
     {
         ?>
         <div class="header-container">
-            <div class="logo">
+            <a href="/Project/" class="logo">
                 <img src="/Project/public/images/logo1.png" alt="">
                 <h2>AutoVS</h2>
-            </div>
+            </a>
             <div class="social">
                 <?php
                 $this->showSocialMedia();
@@ -80,7 +102,7 @@ class LayoutView
     public function showVehicleCard($comparaison)
     {
     ?>
-        <a class="featured-card" href="/Project/compare/vehicleID1=<?php echo $comparaison["VehicleID1"] ?>&vehicleID2=<?php echo $comparaison["VehicleID2"] ?>">
+        <a class="featured-card" href="/Project/compare/?vehicleID1=<?php echo $comparaison["VehicleID1"] ?>&vehicleID2=<?php echo $comparaison["VehicleID2"] ?>">
             <div class="images">
                 <div><img style="transform: scaleX(-1);" src="/Project/public/images/<?php echo $comparaison["ImagePath1"] ?>" alt="<?php echo $comparaison["VehicleName1"] ?>"></div>
                 <div>vs</div>
@@ -138,7 +160,7 @@ class LayoutView
         </div>
     <?php
     }
-    public function showComprare()
+    public function showCompare()
     {
     ?>
         <div class="compare-div">
@@ -159,32 +181,32 @@ class LayoutView
             <button class="compare-button">Compare</button>
         </div>
 
-<?php
+    <?php
     }
     public function showDiaporama($diaporama)
     {
-?>
+    ?>
         <div id="carouselAuto" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner ">
                 <?php
 
-                
-                $i=0;
+
+                $i = 0;
                 foreach ($diaporama as $slide) {
-                    if($i==0){
-                        ?>
+                    if ($i == 0) {
+                ?>
                         <a href="<?php echo $slide['SlideshowLinkURL'] ?>" class="carousel-item active" data-bs-interval="5000">
                             <img src="/Project/public/images/<?php echo $slide['SlideshowImagePath'] ?>" class="d-block w-100" alt="<?php echo $slide['SlideshowImagePath'] ?>">
                         </a>
-                        <?php
+                    <?php
                     } else {
-                        ?>
+                    ?>
                         <a href="<?php echo $slide['SlideshowLinkURL'] ?>" class="carousel-item" data-bs-interval="5000">
                             <img src="/Project/public/images/<?php echo $slide['SlideshowImagePath'] ?>" class="d-block w-100" alt="<?php echo $slide['SlideshowImagePath'] ?>">
                         </a>
-                        <?php
+                <?php
                     }
-                    $i = $i+1;
+                    $i = $i + 1;
                 }
                 ?>
             </div>
@@ -199,5 +221,46 @@ class LayoutView
         </div>
     <?php
     }
-}
+    public function showStars($rating)
+    {
+        $fullStarCount = floor($rating);
+        $halfStar = $rating - $fullStarCount >= 0.5;
 
+        for ($i = 0; $i < $fullStarCount; $i++) {
+            echo '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="orange" class="bi bi-star-fill" viewBox="0 0 16 16">
+              <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+              </svg>';
+        }
+
+        if ($halfStar) {
+            echo '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="orange" class="bi bi-star-half" viewBox="0 0 16 16">
+              <path d="M5.354 5.119 7.538.792A.516.516 0 0 1 8 .5c.183 0 .366.097.465.292l2.184 4.327 4.898.696A.537.537 0 0 1 16 6.32a.548.548 0 0 1-.17.445l-3.523 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256a.52.52 0 0 1-.146.05c-.342.06-.668-.254-.6-.642l.83-4.73L.173 6.765a.55.55 0 0 1-.172-.403.58.58 0 0 1 .085-.302.513.513 0 0 1 .37-.245l4.898-.696zM8 12.027a.5.5 0 0 1 .232.056l3.686 1.894-.694-3.957a.565.565 0 0 1 .162-.505l2.907-2.77-4.052-.576a.525.525 0 0 1-.393-.288L8.001 2.223 8 2.226v9.8z"/>
+              </svg>';
+        }
+
+        for ($i = 0; $i < 5 - $fullStarCount - $halfStar; $i++) {
+            echo '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star" viewBox="0 0 16 16">
+              <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"/>
+              </svg>';
+        }
+    }
+    public function showPopular($id)
+    {
+    ?>
+        <div class="popular">
+            <h1>Popular car comparisons</h1>
+            <p>Here’s how the most-searched-for-vehiculs on the road differ.</p>
+            <div>
+                <?php
+                $controller = new HomePageController();
+                foreach ($controller->getComparaison($id) as $comparaison) {
+                    $this->showVehicleCard($comparaison);
+                }
+
+                ?>
+            </div>
+
+        </div>
+<?php
+    }
+}

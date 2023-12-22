@@ -43,3 +43,9 @@ if(isset($_GET['getNews']) ) {
     $news = $controller->getNombreNews();
     echo json_encode($news);
 }
+
+
+if(isset($_POST['note']) && isset($_POST['review'])) {
+    $controller = new AdminBrandsPageController();
+    $models = $controller->getModelsByBrand($_POST['brandID']);
+}

@@ -2,6 +2,8 @@
 require_once($_SERVER['DOCUMENT_ROOT'] . './Project/controllers/User/HomePageController.php');
 require_once($_SERVER['DOCUMENT_ROOT'] . './Project/controllers/User/ComparePageController.php');
 require_once($_SERVER['DOCUMENT_ROOT'] . './Project/controllers/User/NewsPageController.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . './Project/controllers/User/BrandsPageController.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . './Project/controllers/User/vehiclePageController.php');
 require_once($_SERVER['DOCUMENT_ROOT'] . './Project/controllers/Admin/LoginPageController.php');
 require_once($_SERVER['DOCUMENT_ROOT'] . './Project/controllers/Admin/HomePageController.php');
 require_once($_SERVER['DOCUMENT_ROOT'] . './Project/controllers/Admin/BrandsPageController.php');
@@ -93,5 +95,13 @@ switch ($request) {
     case "/Project/news/detail/":
         $controller = new NewsPageController();
         $controller->showNewsDetailsPage($id);
+        break;  
+    case "/Project/brands/":
+        $controller = new BrandsPageController();
+        $controller->showBrandsPage();
+        break;  
+    case "/Project/vehicle/":
+        $controller = new VehiclePageController();
+        $controller->showVehicleDetailsPage($id);
         break;  
 }

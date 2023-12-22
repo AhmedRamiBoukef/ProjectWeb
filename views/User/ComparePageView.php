@@ -11,7 +11,7 @@ class ComparePageView extends LayoutView
             $vehicle = $controller->getCompare($vehicleID);
             $vehicles[] = $vehicle;
         }
-        ?>
+?>
         <div class="compare-table">
 
             <table class="table table-bordered">
@@ -26,21 +26,29 @@ class ComparePageView extends LayoutView
                     <?php
                     $attributes = [
                         'BrandName', 'ModelName', 'ModelYear', 'Version', 'Note',
-                        'Power', 'Consumption', 'Dimensions', 'Capacity','Acceleration','TopSpeed','VitesseTYPE', 'IndicativePrice'
+                        'Power', 'Consumption', 'Dimensions', 'Capacity', 'Acceleration', 'TopSpeed', 'VitesseTYPE', 'IndicativePrice'
                     ];
                     ?>
                     <tr>
                         <?php foreach ($vehicles as $vehicle) { ?>
-                            <td><a href="/Project/vehicule?VehiculeID=<?php echo$vehicle['VehicleID'] ?>" alt="<?php echo$vehicle['VehicleID'] ?>"><img src="/Project/public/images/<?php echo$vehicle['ImagePath'] ?>" alt="<?php echo$vehicle['ImagePath'] ?>"></a></td>
+                            <td><a href="/Project/vehicle/?id=<?php echo $vehicle['VehicleID'] ?>" alt="<?php echo $vehicle['VehicleID'] ?>"><img src="/Project/public/images/<?php echo $vehicle['ImagePath'] ?>" alt="<?php echo $vehicle['ImagePath'] ?>"></a></td>
                         <?php } ?>
                     </tr>
                     <?php
-    
+
                     foreach ($attributes as $attribute) { ?>
                         <tr class="compare-attr">
                             <?php foreach ($vehicles as $vehicle) { ?>
                                 <td>
-                                    <div><?= $vehicle[$attribute] ?></div>
+                                    <?php
+                                    if ($attribute == 'Note') {
+                                    ?>
+                                        <div><?= $vehicle[$attribute] ?> / 5 <?php $this->showStars($vehicle[$attribute]) ?></div>
+                                    <?php
+                                    } else {
+                                    ?>
+                                        <div><?= $vehicle[$attribute] ?></div>
+                                    <?php } ?>
                                     <div><?= $attribute ?></div>
                                 </td>
                             <?php } ?>
@@ -49,7 +57,7 @@ class ComparePageView extends LayoutView
                 </tbody>
             </table>
         </div>
-        <?php
+<?php
 
     }
 
@@ -57,7 +65,7 @@ class ComparePageView extends LayoutView
     {
         $this->showHeader();
         $this->showMenu();
-        $this->showComprare();
+        $this->showCompare();
         $this->showComprareTable($vehicleIDs);
         $this->showFooter();
     }

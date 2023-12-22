@@ -94,6 +94,25 @@ $(document).ready(function () {
       }
 
   });
+    $('#modalcompareButton').on('click', function () {
+        var selectedVersion1 = $('#selectedVehicule').val();
+        var selectedVersion2 = $('#vehicle_picker_version2').val();
+        var selectedVersion3 = $('#vehicle_picker_version3').val();
+        var selectedVersion4 = $('#vehicle_picker_version4').val();
+        if ($('#vehicle_picker_brand2').val() === '' || $('#vehicle_picker_model2').val() === '' || $('#vehicle_picker_version2').val() === '' || $('#vehicle_picker_year2').val() === '') {
+            alert('Please fill at least in the second vehicul to compare.');
+            return;
+        }
+
+        location.href = '/Project/compare/?vehicleID1='+selectedVersion1+'&vehicleID2='+selectedVersion2;
+        if(selectedVersion3 != ""){
+            location.href = '/Project/compare/?vehicleID1='+selectedVersion1+'&vehicleID2='+selectedVersion2+'&vehicleID3='+selectedVersion3;
+        }
+        if(selectedVersion4 != ""){
+            location.href = '/Project/compare/?vehicleID1='+selectedVersion1+'&vehicleID2='+selectedVersion2+'&vehicleID3='+selectedVersion3+'&vehicleID4='+selectedVersion4;
+        }
+
+    });
 
 
     const loadMoreBtn = $('#load-more-btn');
@@ -181,4 +200,55 @@ $(document).ready(function () {
         const date = new Date(dateString);
         return date.toLocaleDateString('en-US', options);
     }
+    var coll = document.getElementsByClassName("collapsee");
+    var i;
+
+    for (i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function() {
+        this.classList.toggle("active");
+        console.log(this.children);
+        var content = this.nextElementSibling;
+        if (content.style.maxHeight){
+            content.style.maxHeight = null;
+            this.children[1].class = 'bi bi-dash-lg'
+        } else {
+            content.style.maxHeight = content.scrollHeight + "px";
+            this.children[1].class = 'bi bi-plus-lg'
+        } 
+    });
+    }
+
+    let stars = document.querySelectorAll('.rating-star');
+    
+
+    stars.forEach(function (star, index) {
+        star.addEventListener('click', function () {
+            $("#note").val(index+1);
+            console.log(note.value);
+            for (var i = 0; i <= index; i++) {
+                stars[i].setAttribute('fill',"orange");
+            }
+            for (var i = index + 1; i <= stars.length; i++) {
+                stars[i].setAttribute('fill',"currentColor");
+            }
+        });
+    });
+
+    document.getElementById('ReviewSubmitButton').addEventListener('click', function () {
+        var review = document.getElementById('review').value;
+        var note = document.getElementById('note').value;
+
+        if (review.trim() === '') {
+            alert('Please enter your review');
+            return ;
+        }
+
+        if (note === '0') {
+            alert('Please select a note');
+            return ;
+        }
+        document.getElementById('reviewForm').submit();
+    });
+
 });
+

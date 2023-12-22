@@ -13,10 +13,13 @@ class HomePageController
         $model = new HomePageModel();
         return $model->getDiaporama();
     }
-    public function getComparaison()
+    public function getComparaison($id)
     {
         $model = new HomePageModel();
-        return $model->getComparaison();
+        if ($id == 0) {
+            return $model->getComparaison();
+        }
+        return $model->getPopularComparaison($id);
     }
     public function showHomePage()
     {
