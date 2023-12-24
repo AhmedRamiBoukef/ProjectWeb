@@ -263,4 +263,23 @@ class LayoutView
         </div>
 <?php
     }
+    public function showReviewCard($review) {
+        ?>
+        <div class="Review-Card">
+            <div>
+                <div><?= strtoupper($review['UserName'][0]); ?></div>
+                <div>
+                    <div><?= $review['UserName']; ?></div>
+                    <div>
+                        <div><?php $this->showStars($review['Rating']) ?></div>
+                        <span><?= date('jS M Y', strtotime($review['Date'])) ?></span>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <?= $review['Comment']; ?>
+            </div>
+        </div>
+        <?php
+    }
 }

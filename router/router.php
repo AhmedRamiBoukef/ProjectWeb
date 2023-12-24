@@ -3,6 +3,8 @@ require_once($_SERVER['DOCUMENT_ROOT'] . './Project/controllers/User/HomePageCon
 require_once($_SERVER['DOCUMENT_ROOT'] . './Project/controllers/User/ComparePageController.php');
 require_once($_SERVER['DOCUMENT_ROOT'] . './Project/controllers/User/NewsPageController.php');
 require_once($_SERVER['DOCUMENT_ROOT'] . './Project/controllers/User/BrandsPageController.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . './Project/controllers/User/ContactPageController.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . './Project/controllers/User/ReviewPageController.php');
 require_once($_SERVER['DOCUMENT_ROOT'] . './Project/controllers/User/vehiclePageController.php');
 require_once($_SERVER['DOCUMENT_ROOT'] . './Project/controllers/Admin/LoginPageController.php');
 require_once($_SERVER['DOCUMENT_ROOT'] . './Project/controllers/Admin/HomePageController.php');
@@ -43,7 +45,6 @@ if (isset($_GET['error'])) {
 if (substr($request, -1) !== '/') {
     $request .= '/';
 }
-
 
 if (strpos($request, "Admin") && isset($_SESSION['admin']) && ($request == "/Project/Admin/" || $request == "/Project/Admin/login/") && $request != "/Project/Admin/Api/api.php") {
     header("Location: /Project/Admin/home/");
@@ -100,8 +101,20 @@ switch ($request) {
         $controller = new BrandsPageController();
         $controller->showBrandsPage();
         break;  
+    case "/Project/brand/":
+        $controller = new BrandsPageController();
+        $controller->showBrandPage($id);
+        break;  
     case "/Project/vehicle/":
         $controller = new VehiclePageController();
         $controller->showVehicleDetailsPage($id);
+        break;  
+    case "/Project/review/":
+        $controller = new ReviewPageController();
+        $controller->showReviewPage($id);
+        break;  
+    case "/Project/contact/":
+        $controller = new ContactPageController();
+        $controller->showContactPage();
         break;  
 }

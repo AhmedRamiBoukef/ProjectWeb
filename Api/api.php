@@ -2,6 +2,7 @@
 require_once("../controllers/Admin/LoginPageController.php");
 require_once("../controllers/Admin/BrandsPageController.php");
 require_once("../controllers/User/NewsPageController.php");
+require_once("../controllers/User/ReviewPageController.php");
 
 if (isset($_POST['login'])) {
     $controller = new AdminLoginPageController();
@@ -42,6 +43,17 @@ if(isset($_GET['getNews']) ) {
     $controller = new NewsPageController();
     $news = $controller->getNombreNews();
     echo json_encode($news);
+}
+
+if(isset($_GET['getReviewsbyID']) ) {
+    $controller = new ReviewPageController();
+    $reviews = $controller->getNombreReviewsByID($_GET['getReviewsbyID']);
+    echo json_encode($reviews);
+}
+
+if(isset($_GET['id']) && isset($_GET['showReviewPage'])) {
+    $controller = new ReviewPageController();
+    echo $controller->getVehicleReviews($_GET['id'],$_GET['showReviewPage']);
 }
 
 

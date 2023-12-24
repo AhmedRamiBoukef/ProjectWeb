@@ -1,96 +1,7 @@
-const root = document.documentElement;
-const spinnerElementsDisplayed = getComputedStyle(root).getPropertyValue(
-  "--spinner-elements-displayed"
-);
-const spinnerContent = document.querySelector("ul.spinner-content");
-let offset = 12;
-const limit = 10;
 
-if (spinnerContent) {
-  root.style.setProperty("--spinner-elements", spinnerContent.children.length);
 
-  for (let i = 0; i < spinnerElementsDisplayed; i++) {
-    spinnerContent.appendChild(spinnerContent.children[i].cloneNode(true));
-  }
-}
-let page = 1;
-function createPagination(totalPages, page) {
-  const element = document.querySelector("#pagination");
-  const reviewList = document.querySelector("#reviews-list");
-  let liTag = "";
-  let active;
-  let beforePage = page - 1;
-  let afterPage = page + 1;
-  if (page > 1) {
-    liTag += `<li class="page-item" onclick="createPagination(totalPages, ${
-      page - 1
-    })"><a class="page-link">Previous</a></li>`;
-  }
-
-  if (page > 2) {
-    liTag += `<li class="page-item" onclick="createPagination(totalPages, 1)"><a class="page-link">1</a></li>`;
-    if (page > 3) {
-      liTag += `<li class="page-item"><a class="page-link">...</a></li>`;
-    }
-  }
-
-  for (var plength = beforePage; plength <= afterPage; plength++) {
-    if (plength > totalPages) {
-      continue;
-    }
-    if (plength == 0) {
-      plength = plength + 1;
-    }
-    if (page == plength) {
-      active = "active";
-    } else {
-      active = "";
-    }
-    liTag += `<li class="page-item  ${active}" onclick="createPagination(totalPages, ${plength})"><a class="page-link">${plength}</a></li>`;
-  }
-
-  if (page < totalPages - 1) {
-    if (page < totalPages - 2) {
-      liTag += `<li class="page-item"><a class="page-link">...</a></li>`;
-    }
-    liTag += `<li class="page-item" onclick="createPagination(totalPages, ${totalPages})"><a class="page-link">${totalPages}</a></li>`;
-  }
-
-  if (page < totalPages) {
-    liTag += `<li class="page-item" onclick="createPagination(totalPages, ${
-      page + 1
-    })"><a class="page-link">Next</a></li>`;
-  }
-  element.innerHTML = liTag;
-  $.ajax({
-    url: `/Project/Api/api.php?id=${
-      location.href.split("=")[1]
-    }&showReviewPage=${page}`,
-    method: "GET",
-    success: function (data) {
-      reviewList.innerHTML = data;
-    },
-    error: function (error) {
-      console.error("Error fetching reviews:", error);
-    },
-  });
-}
 
 $(document).ready(function () {
-  if (location.href.split("=")[1] === "http://localhost/Project/review/?id" ) {
-    $.ajax({
-      url: `/Project/Api/api.php?getReviewsbyID=${location.href.split("=")[1]}`,
-      method: "GET",
-      dataType: "json",
-      success: function (data) {
-        totalPages = Math.floor(data / 5) + 1;
-        createPagination(totalPages, page);
-      },
-      error: function (error) {
-        console.error("Error fetching reviews:", error);
-      },
-    });
-  }
 
   for (let index = 1; index < 4; index++) {
     $("#vehicle_picker_brand" + index).on("change", function () {
@@ -266,98 +177,11 @@ $(document).ready(function () {
     }
   });
 
-  const loadMoreBtn = $("#load-more-btn");
-  const newsContainer = $("#news-container");
-
-  let nombre = 0;
-  loadMoreBtn.on("click", function () {
-    $.ajax({
-      url: `/Project/Api/api.php?getNews=1`,
-      method: "GET",
-      dataType: "json",
-      success: function (data) {
-        nombre = data.NumberOfNews;
-      },
-      error: function (error) {
-        console.error("Error fetching news:", error);
-      },
-    });
-    if (newsContainer[0].children.length < nombre) {
-      fetchNews();
-    }
-  });
-
-  function fetchNews() {
-    $.ajax({
-      url: `/Project/Api/api.php?offset=${offset}&limit=${limit}`,
-      method: "GET",
-      dataType: "json",
-      success: function (data) {
-        appendNewsToContainer(data);
-        offset = offset + limit;
-      },
-      error: function (error) {
-        console.error("Error fetching news:", error);
-      },
-    });
-  }
-
-  function appendNewsToContainer(newsData) {
-    $.each(newsData, function (_, newsItem) {
-      const newsCard = createNewsCard(newsItem);
-      newsContainer.append(newsCard);
-    });
-  }
-
-  function createNewsCard(newsItem) {
-    const card = $("<a>", {
-      href: `/Project/news/detail/?id=${newsItem["NewsID"]}`,
-      class: "news-card",
-    });
-
-    const imageContainer = $("<div>");
-    const image = $("<img>", {
-      src: `/Project/public/images/${newsItem["ImagePath"]}`,
-      alt: "",
-    });
-    imageContainer.append(image);
-
-    const contentContainer = $("<div>");
-
-    const shortenedTitle =
-      newsItem["Title"].length > 32
-        ? newsItem["Title"].substring(0, 32) + "..."
-        : newsItem["Title"];
-    const title = $("<h1>", { text: shortenedTitle });
-
-    let shortenedContent =
-      newsItem["Content"].length > 110
-        ? newsItem["Content"].substring(0, 110) + "..."
-        : newsItem["Content"];
-
-    shortenedContent = shortenedContent.padEnd(110, " ");
-
-    const paragraph = $("<p>", { text: shortenedContent });
-    const publishedDate = $("<h3>", {
-      text: `Published · ${formatDate(newsItem["Date"])}`,
-    });
-
-    contentContainer.append(title, paragraph, publishedDate);
-    card.append(imageContainer, contentContainer);
-
-    return card;
-  }
-
-  function formatDate(dateString) {
-    const options = { day: "numeric", month: "short", year: "numeric" };
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", options);
-  }
-  var coll = document?.getElementsByClassName("collapsee");
+  var coll = document.getElementsByClassName("collapsee");
   var i;
 
   for (i = 0; i < coll.length; i++) {
-    coll[i]?.addEventListener("click", function () {
+    coll[i].addEventListener("click", function () {
       this.classList.toggle("active");
       console.log(this.children);
       var content = this.nextElementSibling;
@@ -373,7 +197,7 @@ $(document).ready(function () {
 
   let stars = document.querySelectorAll(".rating-star");
 
-  stars?.forEach(function (star, index) {
+  stars.forEach(function (star, index) {
     star.addEventListener("click", function () {
       $("#note").val(index + 1);
       console.log(note.value);
@@ -387,8 +211,8 @@ $(document).ready(function () {
   });
 
   document
-    ?.getElementById("ReviewSubmitButton")
-    ?.addEventListener("click", function () {
+    .getElementById("ReviewSubmitButton")
+    .addEventListener("click", function () {
       var review = document.getElementById("review").value;
       var note = document.getElementById("note").value;
 
@@ -403,32 +227,4 @@ $(document).ready(function () {
       }
       document.getElementById("reviewForm").submit();
     });
-
-  const form = document?.getElementById("contactForm");
-  function sendEmail() {
-    const subject = document.getElementById("subject");
-    const message = document.getElementById("message");
-    const bodyMessage = `Subject: ${subject.value}<br> Message:${message.value}`;
-    console.log(bodyMessage);
-    Email.send({
-      Host: "smtp.elasticemail.com",
-      Username: "esiswitch@gmail.com",
-      Password: "xrth kfwz ztie qjqw",
-      To: "ka_boukef@esi.dz.com",
-      From: "esiswitch@gmail.com",
-      Subject: subject.value,
-      Body: bodyMessage,
-    }).then((message) => {
-      if (message == "OK") {
-        const toast = document.getElementById("toast");
-        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toast);
-        toastBootstrap.show();
-      }
-    });
-  }
-  form?.addEventListener("submit", (e) => {
-    e.preventDefault();
-    console.log("submitted");
-    sendEmail();
-  });
 });
