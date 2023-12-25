@@ -6,33 +6,49 @@ class AdminUsersPageView extends AdminLayoutView
     {
 ?>
         <div class="container">
+            <div id="filter">
+                <h4>Select data to filter</h4>
+                <div>
+                    <select class="form-control bootstrap-table-filter-control-Gender">
+                        <option value="">Gender</option>
+                    </select>
+                    <select class="form-control bootstrap-table-filter-control-Status">
+                        <option value="">Status</option>
+                    </select>
+                </div>
+            </div>
 
-            <table id="table" data-toggle="table" data-searchable="true" data-search="true" data-filter-control="true" class="table-responsive">
+            <table id="table" data-filter-control-container="#filter" data-toggle="table" data-searchable="true" data-search="true" data-filter-control="true" class="table-responsive">
             <thead>
                 <tr>
-                
-                <th data-field="brand" data-filter-control="select" data-sortable="true">Brand</th>
-                <th data-field="model" data-filter-control="select" data-sortable="true">Model</th>
-                <th data-field="version" data-filter-control="select" data-sortable="true">Version</th>
-                <th data-field="year" data-filter-control="select" data-sortable="true">Year</th>
-                <th>Link</th>
+                    <th data-field="Username" data-sortable="true">Username</th>
+                    <th data-field="FirstName" data-sortable="true">First Name</th>
+                    <th data-field="LastName" data-sortable="true">Last Name</th>
+                    <th data-field="Gender" data-filter-control="select"  data-sortable="true">Gender</th>
+                    <th data-field="DateOfBirth" data-sortable="true">Date Of Birth</th>
+                    <th data-field="Email" data-sortable="true">Email</th>
+                    <th data-field="Status" data-filter-control="select"  data-sortable="true">Status</th>
+                    <th data-field="Modify"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">  <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>  <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/></svg></th>
                 </tr>
             </thead>
             <tbody>
                 <?php
-                    require_once($_SERVER['DOCUMENT_ROOT'] . '/Project/Controllers/Admin/BrandsPageController.php');
-                    $controller = new AdminBrandsPageController();
-                    $brands = $controller->getBrands();
+                    require_once($_SERVER['DOCUMENT_ROOT'] . '/Project/Controllers/Admin/UsersPageController.php');
+                    $controller = new AdminUsersPageController();
+                    $users = $controller->getUsers();
                     
-                    foreach ($brands as $brand) {
+                    foreach ($users as $user) {
                 ?>
-                <tr>
-                    <td><?php echo $brand['Brand'] ?></td>
-                    <td><?php echo $brand['Model'] ?></td>
-                    <td><?php echo $brand['Version'] ?></td>
-                    <td><?php echo $brand['Year'] ?></td>
-                    <td><a href="/Project/Admin/vehicule/?AdminVehiculeid=<?php echo $brand['VehicleID'] ?>"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-car-front" viewBox="0 0 16 16">  <path d="M4 9a1 1 0 1 1-2 0 1 1 0 0 1 2 0m10 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0M6 8a1 1 0 0 0 0 2h4a1 1 0 1 0 0-2zM4.862 4.276 3.906 6.19a.51.51 0 0 0 .497.731c.91-.073 2.35-.17 3.597-.17 1.247 0 2.688.097 3.597.17a.51.51 0 0 0 .497-.731l-.956-1.913A.5.5 0 0 0 10.691 4H5.309a.5.5 0 0 0-.447.276"/>  <path d="M2.52 3.515A2.5 2.5 0 0 1 4.82 2h6.362c1 0 1.904.596 2.298 1.515l.792 1.848c.075.175.21.319.38.404.5.25.855.715.965 1.262l.335 1.679c.033.161.049.325.049.49v.413c0 .814-.39 1.543-1 1.997V13.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-1.338c-1.292.048-2.745.088-4 .088s-2.708-.04-4-.088V13.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-1.892c-.61-.454-1-1.183-1-1.997v-.413a2.5 2.5 0 0 1 .049-.49l.335-1.68c.11-.546.465-1.012.964-1.261a.807.807 0 0 0 .381-.404l.792-1.848ZM4.82 3a1.5 1.5 0 0 0-1.379.91l-.792 1.847a1.8 1.8 0 0 1-.853.904.807.807 0 0 0-.43.564L1.03 8.904a1.5 1.5 0 0 0-.03.294v.413c0 .796.62 1.448 1.408 1.484 1.555.07 3.786.155 5.592.155 1.806 0 4.037-.084 5.592-.155A1.479 1.479 0 0 0 15 9.611v-.413c0-.099-.01-.197-.03-.294l-.335-1.68a.807.807 0 0 0-.43-.563 1.807 1.807 0 0 1-.853-.904l-.792-1.848A1.5 1.5 0 0 0 11.18 3z"/></svg></a></td>
-                </tr>
+                    <tr>
+                        <td><?= $user['username'] ?></td>
+                        <td><?= $user['FirstName'] ?></td>
+                        <td><?= $user['LastName'] ?></td>
+                        <td><?= $user['Gender'] ?></td>
+                        <td><?= $user['DateOfBirth'] ?></td>
+                        <td><?= $user['Email'] ?></td>
+                        <td><?= $user['IsBlocked'] ? "Blocked" : "Not Blocked" ?></td>
+                        <td><a href="/Project/Admin/users/?id=<?= $user['UserID'] ?>"><svg xm?id=lns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">  <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>  <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/></svg></a></td>
+                    </tr>
                 <?php
                     }
                 ?>

@@ -5,7 +5,7 @@ class LoginModel extends DBModel
     public function login($username, $password)
     {
         $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
-        $sql = "SELECT * FROM admin WHERE username = :username";
+        $sql = "SELECT * FROM user WHERE username = :username";
         $stmt = $db->prepare($sql);
         $stmt->bindParam(':username', $username);
         $stmt->execute();
@@ -18,4 +18,31 @@ class LoginModel extends DBModel
             return false;
         }
     }
+    public function signup($username, $firstname, $lastname, $email, $date, $gender, $password)
+    {
+        $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
+        $sql = "INSERT INTO user (username,FirstName, LastName, Gender, DateOfBirth, Email, Password)
+                        VALUES (:username, :firstname, :lastname, :gender, :date, :email, :password)";
+        $stmt = $db->prepare($sql);
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+        $stmt->bindParam(':username', $username);
+        $stmt->bindParam(':firstname', $firstname);
+        $stmt->bindParam(':lastname', $lastname);
+        $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':date', $date);
+        $stmt->bindParam(':gender', $gender);
+        $stmt->bindParam(':password', $hashedPassword);
+        $stmt->execute();
+        
+        $insertedUserId = $db->lastInsertId();
+        $sql = "SELECT * FROM user WHERE UserID = :userId";
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':userId', $insertedUserId);
+        $stmt->execute();
+        $insertedUser = $stmt->fetch();
+        
+        $this->disconnect($db);
+        return $insertedUser;
+    }
+
 }    

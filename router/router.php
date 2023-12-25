@@ -10,6 +10,7 @@ require_once($_SERVER['DOCUMENT_ROOT'] . './Project/controllers/Admin/LoginPageC
 require_once($_SERVER['DOCUMENT_ROOT'] . './Project/controllers/Admin/HomePageController.php');
 require_once($_SERVER['DOCUMENT_ROOT'] . './Project/controllers/Admin/BrandsPageController.php');
 require_once($_SERVER['DOCUMENT_ROOT'] . './Project/controllers/Admin/ReviewPageController.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . './Project/controllers/Admin/UsersPageController.php');
 session_start();
 $request = $_SERVER['REQUEST_URI'];
 $error = 0;
@@ -80,6 +81,10 @@ switch ($request) {
     case "/Project/Admin/review/":  
         $controller = new AdminReviewPageController();
         $controller->showReviewPage();
+        break;  
+    case "/Project/Admin/users/":  
+        $controller = new AdminUsersPageController();
+        $controller->showUsersPage();
         break;  
     case "/Project/":
         $controller = new HomePageController();

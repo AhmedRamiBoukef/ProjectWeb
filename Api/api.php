@@ -9,6 +9,11 @@ if (isset($_POST['login'])) {
     $controller->handleLogin();
 }
 
+if (isset($_POST['signup'])) {
+    $controller = new AdminLoginPageController();
+    $controller->handleSignup();
+}
+
 if (isset($_GET['logout'])) {
     $controller = new AdminLoginPageController();
     $controller->handleLogout();
