@@ -77,7 +77,7 @@ function createPagination(totalPages, page) {
 }
 
 $(document).ready(function () {
-  if (location.href.split("=")[1] === "http://localhost/Project/review/?id" ) {
+  if (location.href.split("=")[1] === "http://localhost/Project/review/?id") {
     $.ajax({
       url: `/Project/Api/api.php?getReviewsbyID=${location.href.split("=")[1]}`,
       method: "GET",
@@ -431,4 +431,187 @@ $(document).ready(function () {
     console.log("submitted");
     sendEmail();
   });
+
+  $('#updateNewsForm').on('submit', function (e) {
+    e.preventDefault(); 
+
+    var updatedImages = [];
+
+    $('.card-img').each(function () {
+        var imgSrc = $(this).attr('src');
+        var imgFilename = imgSrc.substring(imgSrc.lastIndexOf('/') + 1);
+        updatedImages.push(imgFilename);
+    });
+
+    $('#updatedImages').val(updatedImages.join(','));
+    var formElement = document.getElementById("updateNewsForm");
+    var formData = new FormData(formElement);
+    console.log(...formData)
+
+    $.ajax({
+        url: '/Project/Api/api.php?updateNews=1',
+        method: 'POST',
+        data: formData, 
+        processData: false,
+        contentType: false,
+        dataType: "json",
+        success: function (data) {
+            console.log(data);
+        },
+        error: function (error) {
+            console.log(error);
+        }
+      });
+  });
+
+  $('.card .bi-x-circle-fill').on('click', function () {
+    var card = $(this).closest('.card');
+    var imgSrc = card.find('.card-img').attr('src');
+    var imgFilename = imgSrc.substring(imgSrc.lastIndexOf('/') + 1);
+    var id = $('#NewsID').val();
+
+    if (confirm('Are you sure you want to delete this image?')) {
+      $.ajax({
+          url: '/Project/Api/api.php',
+          method: 'POST',
+          data: { deleteNewsImage: imgFilename,id: id },
+          dataType: "json",
+          success: function (data) {
+              card.remove();
+              console.log(data);
+          },
+          error: function (error) {
+              console.log("error",error);
+          }
+      });
+    }
+  });
+
+
+  $('#images').on('change', function (e) {
+      var files = e.target.files;
+
+      for (var i = 0; i < files.length; i++) {
+          var reader = new FileReader();
+          reader.onload = function (event) {
+              var imgSrc = event.target.result;
+              var newCard = $('<div class="card swiper-slide">' +
+                  '<img src="' + imgSrc + '" alt="" class="card-img">' +
+                  '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-x-circle-fill delete-image" viewBox="0 0 16 16">' +
+                  '<path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z" />' +
+                  '</svg>' +
+                  '</div>');
+
+              $('.card-wrapper').append(newCard);
+          };
+          reader.readAsDataURL(files[i]);
+      }
+  });
+
+  $(document).on('click', '.delete-image', function () {
+      var card = $(this).closest('.card');
+      card.remove();
+  });
+});
+
+function changeReview(id) {
+  var status = document.getElementById("status" + id).value;
+  $.ajax({
+    url: "/Project/Api/api.php",
+    method: "POST",
+    data: { status: status, ReviewID: id, updateReview: 1 },
+    dataType: "json",
+    success: function (data) {
+      alert("Review updated successfully");
+      if (status === "Rejected") {
+        blockUser(id);
+      }
+    },
+    error: function (error) {
+      console.log(error);
+    },
+  });
+}
+function deleteReview(id) {
+  if (confirm("Are you sure you want to delete this review?")) {
+    $.ajax({
+      url: "/Project/Api/api.php",
+      method: "POST",
+      data: { ReviewID: id, deleteReview: 1 },
+      dataType: "json",
+      success: function (data) {
+        alert("Review deleted successfully");
+        location.reload();
+      },
+      error: function (error) {
+        console.log("error", error);
+      },
+    });
+  }
+}
+function deleteUser(id) {
+  if (confirm("Are you sure you want to delete this user?")) {
+    $.ajax({
+      url: "/Project/Api/api.php",
+      method: "POST",
+      data: { UserID: id, deleteUser: 1 },
+      dataType: "json",
+      success: function (data) {
+        alert("User deleted successfully");
+        location.reload();
+      },
+      error: function (error) {
+        console.log("error", error);
+      },
+    });
+  }
+}
+function blockUser(id) {
+  if (confirm("Do you want to block this user?")) {
+    $.ajax({
+      url: "/Project/Api/api.php",
+      method: "POST",
+      data: { UserID: id, blockUser: 1 },
+      dataType: "json",
+      success: function (data) {
+        alert("User blocked successfully");
+        location.reload();
+      },
+      error: function (error) {
+        console.log(error);
+      },
+    });
+  }
+}
+
+
+ 
+var swiper = new Swiper(".slide-content", {
+  slidesPerView: 3,
+  spaceBetween: 25,
+  loop: true,
+  centerSlide: 'true',
+  fade: 'true',
+  grabCursor: 'true',
+  pagination: {
+    el: ".swiper-pagination",
+    clickable: true,
+    dynamicBullets: true,
+  },
+  navigation: {
+    nextEl: ".swiper-button-next",
+    prevEl: ".swiper-button-prev",
+  },
+
+  breakpoints:{
+      0: {
+          slidesPerView: 1,
+      },
+      520: {
+          slidesPerView: 2,
+      },
+      950: {
+          slidesPerView: 3,
+      },
+  },
 });

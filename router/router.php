@@ -11,6 +11,7 @@ require_once($_SERVER['DOCUMENT_ROOT'] . './Project/controllers/Admin/HomePageCo
 require_once($_SERVER['DOCUMENT_ROOT'] . './Project/controllers/Admin/BrandsPageController.php');
 require_once($_SERVER['DOCUMENT_ROOT'] . './Project/controllers/Admin/ReviewPageController.php');
 require_once($_SERVER['DOCUMENT_ROOT'] . './Project/controllers/Admin/UsersPageController.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . './Project/controllers/Admin/NewsPageController.php');
 session_start();
 $request = $_SERVER['REQUEST_URI'];
 $error = 0;
@@ -78,13 +79,25 @@ switch ($request) {
         $controller = new AdminBrandsPageController();
         $controller->showVehiculePage($AdminVehiculeid);
         break;  
-    case "/Project/Admin/review/":  
+    case "/Project/Admin/news/":  
+        $controller = new AdminNewsPageController();
+        $controller->showNewsPage();
+        break;  
+    case "/Project/Admin/reviews/":  
         $controller = new AdminReviewPageController();
         $controller->showReviewPage();
         break;  
     case "/Project/Admin/users/":  
         $controller = new AdminUsersPageController();
         $controller->showUsersPage();
+        break;  
+    case "/Project/Admin/users/modify/":  
+        $controller = new AdminUsersPageController();
+        $controller->showModifyUserPage($id);
+        break;  
+    case "/Project/Admin/news/update/":  
+        $controller = new AdminNewsPageController();
+        $controller->showUpdateNewsPage($id);
         break;  
     case "/Project/":
         $controller = new HomePageController();

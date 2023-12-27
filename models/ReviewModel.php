@@ -12,6 +12,32 @@ class ReviewModel extends DBModel
         $this->disconnect($db);
         return $reviews;
     }
+    public function getReviews() {
+        $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
+        $sql = "SELECT R.ReviewID, U.IsBlocked, U.username, U.UserID, V.VehicleID, V.VehiculeName, R.Comment, R.Rating, R.Status FROM Review R JOIN User U ON R.UserID = U.UserID JOIN VehicleInfo V ON R.VehicleID = V.VehicleID";
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $reviews = $stmt->fetchAll();
+        $this->disconnect($db);
+        return $reviews;
+    }
+    public function updateReview($reviewID, $newStatus) {
+        $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
+        $sql = "UPDATE Review SET Status = :newStatus WHERE ReviewID = :reviewID;";
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(":reviewID", $reviewID);
+        $stmt->bindParam(":newStatus", $newStatus);
+        $stmt->execute();
+        $this->disconnect($db);
+    }
+    public function deleteReview($reviewID) {
+        $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
+        $sql = "DELETE FROM Review WHERE ReviewID = :reviewID;";
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(":reviewID", $reviewID);
+        $stmt->execute();
+        $this->disconnect($db);
+    }
     public function getVehicleReviews($id, $page = 1, $pageSize = 5) {
         $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);        
         $offset = ($page - 1) * $pageSize;

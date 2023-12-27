@@ -1,6 +1,9 @@
 <?php
 require_once("../controllers/Admin/LoginPageController.php");
 require_once("../controllers/Admin/BrandsPageController.php");
+require_once("../controllers/Admin/ReviewPageController.php");
+require_once("../controllers/Admin/UsersPageController.php");
+require_once("../controllers/Admin/NewsPageController.php");
 require_once("../controllers/User/NewsPageController.php");
 require_once("../controllers/User/ReviewPageController.php");
 
@@ -65,4 +68,45 @@ if(isset($_GET['id']) && isset($_GET['showReviewPage'])) {
 if(isset($_POST['note']) && isset($_POST['review'])) {
     $controller = new AdminBrandsPageController();
     $models = $controller->getModelsByBrand($_POST['brandID']);
+}
+
+if(isset($_POST['updateUser'])) {
+    $controller = new AdminUsersPageController();
+    $controller->modifyUser();
+}
+
+if(isset($_GET['toggleUser'])) {
+    $controller = new AdminUsersPageController();
+    $controller->toggleUser();
+}
+
+if(isset($_POST['blockUser'])) {
+    $controller = new AdminUsersPageController();
+    $controller->blockUser();
+}
+
+if(isset($_POST['updateReview'])) {
+    $controller = new AdminReviewPageController();
+    $controller->updateReview();
+}
+
+if(isset($_POST['deleteReview'])) {
+    $controller = new AdminReviewPageController();
+    $controller->deleteReview();
+}
+
+if(isset($_POST['deleteUser'])) {
+    $controller = new AdminUsersPageController();
+    $controller->deleteUser();
+}
+
+if(isset($_POST['deleteNewsImage'])) {
+    $controller = new AdminNewsPageController();
+    $controller->deleteImage();
+}
+
+if(isset($_GET['updateNews'])) {
+    // $controller = new AdminUsersPageController();
+    // $controller->deleteUser();
+    echo json_encode($_POST['updatedImages']);
 }

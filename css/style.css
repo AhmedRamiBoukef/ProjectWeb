@@ -280,12 +280,6 @@
 
 
 
-#table tbody tr td:last-child {
- display: flex;
- justify-content: center;
- align-items: center; 
-}
-
 
 .Brands h1  {
   text-align: center;
@@ -1138,8 +1132,199 @@
   margin: 40px 0;
 }
 
-.center svg {
+.center{
   position: relative;
   left: 50%;
   transform: translateX(-50%);
+}
+
+.userInfo {
+  margin: 30px 5%;
+}
+
+.userInfo form > div {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  margin: 20px 0;
+}
+
+.userInfo form div div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0;
+}
+
+.userInfo > div:first-child {
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.userInfo form div div input,.userInfo form div div select {
+	background: #eee;
+	justify-content: center;
+	display: flex;
+	padding: 10px 10px;
+	outline: none;
+	border-radius: 5px;
+}
+
+.userInfo button,.userInfo a,.NewsInfo button {
+  padding: 10px 30px;
+  background-color: #007bff;
+  color: #fff; 
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.userInfo form button,.NewsInfo button {
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.status {
+  width: 100%;
+  height: 100%;
+  outline: none;
+  border: none;
+  background-color: transparent;
+}
+
+.manage {
+  display: flex;
+  justify-content: space-around;
+  gap: 5px;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.manage button,.manage a {
+  text-decoration: none;
+  color: inherit;
+  padding: 3px 5px;
+  border: none;
+  border-radius: 3px;
+}
+
+.manage button:first-child,.manage a:first-child {
+  background-color: #007bff;
+}
+
+.manage button:last-child {
+  background-color: #dd0937;
+}
+
+.NewsInfo {
+  margin: 30px 5%;
+}
+
+.NewsInfo form > div {
+  gap: 20px;
+  margin: 20px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.NewsInfo input {
+  background: #eee;
+	justify-content: center;
+	display: flex;
+	padding: 10px 10px;
+	outline: none;
+  width: 70vw;
+	border-radius: 5px;
+}
+
+.NewsInfo > div {
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+}
+
+.NewsInfo textarea {
+  height: 300px;
+  display: block;
+  padding: 10px 10px;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  background: #eee;
+  font-size: 16px;
+  resize: none;
+  width: 70vw;
+}
+
+
+
+
+
+
+
+
+
+.slide-container{
+  max-width: 1120px;
+  width: 100%;
+  padding: 40px 0;
+}
+.slide-content{
+  margin: 0 40px;
+  overflow: hidden;
+  border-radius: 25px;
+}
+.card{
+  border-radius: 25px;
+  background-color: #FFF;
+  position: relative;
+}
+
+.swiper-slide svg {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+}
+
+.swiper-navBtn{
+  color: #6E93f7;
+  transition: color 0.3s ease;
+}
+.swiper-navBtn:hover{
+  color: #4070F4;
+}
+.swiper-navBtn::before,
+.swiper-navBtn::after{
+  font-size: 35px;
+}
+.swiper-button-next{
+  right: 0;
+}
+.swiper-button-prev{
+  left: 0;
+}
+.swiper-pagination-bullet{
+  background-color: #6E93f7;
+  opacity: 1;
+}
+.swiper-pagination-bullet-active{
+  background-color: #4070F4;
+}
+
+@media screen and (max-width: 768px) {
+  .slide-content{
+    margin: 0 10px;
+  }
+  .swiper-navBtn{
+    display: none;
+  }
 }

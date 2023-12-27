@@ -24,6 +24,24 @@ class NewsModel extends DBModel
         $this->disconnect($db);
         return $news;
     }
+    public function getAllNews()
+    {
+        $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
+        $sql = "SELECT N.NewsID, N.Title, I.ImageID, I.ImagePath, N.Content, N.Date
+        FROM News N 
+        JOIN (
+            SELECT NewsID, ImageID 
+            FROM NewsImage 
+            GROUP BY NewsID 
+        ) NI ON N.NewsID = NI.NewsID 
+        JOIN Image I ON NI.ImageID = I.ImageID
+        ";
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $news = $stmt->fetchAll();
+        $this->disconnect($db);
+        return $news;
+    }
     public function getNewsByID($id)
     {
         $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
@@ -34,6 +52,7 @@ class NewsModel extends DBModel
         $news = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         $result = array(
+            'NewsID' => $news[0]['NewsID'],
             'Title' => $news[0]['Title'],
             'Content' => $news[0]['Content'],
             'Date' => $news[0]['Date'],
@@ -43,6 +62,26 @@ class NewsModel extends DBModel
         );
         $this->disconnect($db);
         return $result;
+    }
+    public function deleteImage($id,$image)
+    {
+        $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
+        $sql = "SELECT ImageID FROM Image WHERE ImagePath = :image;";
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(":image", $image);
+        $stmt->execute();
+        $imageID = $stmt->fetch();
+        $sql = "DELETE FROM Image WHERE ImagePath = :image;";
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(":image", $image);
+        $stmt->execute();
+        $sql = "DELETE FROM NewsImage WHERE NewsID = :NewsID AND ImageID = :imageID;";
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(":NewsID", $id);
+        $stmt->bindParam(":imageID", $imageID);
+        $stmt->execute();
+        
+        $this->disconnect($db);
     }
 
     public function getNombreNews()

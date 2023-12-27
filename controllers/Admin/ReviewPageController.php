@@ -9,6 +9,18 @@ class AdminReviewPageController
         $model = new ReviewModel();
         return $model->getReviews();
     }
+    public function updateReview()
+    {
+        $model = new ReviewModel();
+        $model->updateReview($_POST['ReviewID'],$_POST['status']);
+        echo json_encode("Review updated");
+    }
+    public function deleteReview()
+    {
+        $model = new ReviewModel();
+        $model->deleteReview($_POST['ReviewID']);
+        echo json_encode("Review deleted");
+    }
     
     public function showReviewPage()
     {
