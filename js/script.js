@@ -197,6 +197,62 @@ $(document).ready(function () {
       alert("Please fill in the first two vehiculs to compare.");
       return;
     }
+    
+
+    var selectedVersions1 = [
+      $("#vehicle_picker_version2").val(),
+      $("#vehicle_picker_version3").val(),
+      $("#vehicle_picker_version4").val(),
+  ];
+    var selectedVersions2 = [
+      $("#vehicle_picker_version3").val(),
+      $("#vehicle_picker_version4").val(),
+  ];
+
+    selectedVersions1.forEach(function (selectedVersion) {
+      if (!selectedVersion) return;
+
+      var comparisonData = {
+          vehicleID1: selectedVersion1,
+          vehicleID2: selectedVersion,
+          comparison: 1,
+      };
+
+      $.ajax({
+          url: '/Project/Api/api.php',
+          type: 'POST',
+          data: comparisonData,
+          dataType: 'json',
+          success: function (data) {
+              console.log(data);
+          },
+          error: function (error) {
+              console.error("Error updating comparison:", error);
+          }
+      });
+  });
+    selectedVersions2.forEach(function (selectedVersion) {
+      if (!selectedVersion) return;
+
+      var comparisonData = {
+          vehicleID1: selectedVersion2,
+          vehicleID2: selectedVersion,
+          comparison: 1,
+      };
+
+      $.ajax({
+          url: '/Project/Api/api.php',
+          type: 'POST',
+          data: comparisonData,
+          dataType: 'json',
+          success: function (data) {
+              console.log(data);
+          },
+          error: function (error) {
+              console.error("Error updating comparison:", error);
+          }
+      });
+  });
 
     location.href =
       "/Project/compare/?vehicleID1=" +

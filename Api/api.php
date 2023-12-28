@@ -1,6 +1,7 @@
 <?php
 require_once("../controllers/Admin/LoginPageController.php");
 require_once("../controllers/Admin/BrandsPageController.php");
+require_once("../controllers/Admin/HomePageController.php");
 require_once("../controllers/Admin/ReviewPageController.php");
 require_once("../controllers/Admin/UsersPageController.php");
 require_once("../controllers/Admin/NewsPageController.php");
@@ -103,6 +104,11 @@ if(isset($_POST['deleteUser'])) {
 if(isset($_POST['deleteNewsImage'])) {
     $controller = new AdminNewsPageController();
     $controller->deleteImage();
+}
+
+if(isset($_POST['comparison'])) {
+    $controller = new AdminHomePageController();
+    $controller->handleCompare();
 }
 
 if(isset($_GET['updateNews'])) {
