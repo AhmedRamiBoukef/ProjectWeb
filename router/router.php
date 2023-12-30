@@ -33,7 +33,7 @@ if (isset($_GET['vehicleID1']) && isset($_GET['vehicleID2'])) {
         $vehicleIDs[] = $_GET['vehicleID3'];
     }
     if (isset($_GET['vehicleID4'])) {
-        $vehicleIDs[] = $_GET['vehicleI4'];
+        $vehicleIDs[] = $_GET['vehicleID4'];
     }
     $request = explode('?', $request)[0];
 }

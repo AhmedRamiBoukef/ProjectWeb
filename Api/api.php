@@ -111,8 +111,13 @@ if(isset($_POST['comparison'])) {
     $controller->handleCompare();
 }
 
-if(isset($_GET['updateNews'])) {
-    // $controller = new AdminUsersPageController();
-    // $controller->deleteUser();
-    echo json_encode($_POST['updatedImages']);
+if(isset($_POST['updatedImages'])) {
+    $controller = new AdminNewsPageController();
+    // $controller->updateNews();
+    echo json_encode("News Updated");
+}
+
+if(isset($_POST['deleteNews'])) {
+    $controller = new AdminNewsPageController();
+    $controller->deleteNews();
 }

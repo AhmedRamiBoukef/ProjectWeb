@@ -94,4 +94,17 @@ class NewsModel extends DBModel
         $this->disconnect($db);
         return $news;
     }
+    public function deleteNews($id)
+    {
+        $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
+        $sql = "DELETE FROM News WHERE NewsID = :id";
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(":id", $id);
+        $stmt->execute();
+        $sql = "DELETE FROM NewsImage WHERE NewsID = :NewsID;";
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(":NewsID", $id);
+        $stmt->execute();
+        $this->disconnect($db);
+    }
 }

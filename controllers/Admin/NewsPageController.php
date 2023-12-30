@@ -47,6 +47,12 @@ class AdminNewsPageController
         $model->deleteReview($_POST['ReviewID']);
         echo json_encode("Review deleted");
     }
+    public function deleteNews()
+    {
+        $model = new NewsModel();
+        $model->deleteNews($_POST['NewsID']);
+        echo json_encode("News deleted");
+    }
     
     public function showNewsPage()
     {

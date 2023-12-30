@@ -92,7 +92,7 @@ $(document).ready(function () {
     });
   }
 
-  for (let index = 1; index < 4; index++) {
+  for (let index = 1; index < 5; index++) {
     $("#vehicle_picker_brand" + index).on("change", function () {
       var selectedBrand = $(this).val();
 
@@ -253,7 +253,28 @@ $(document).ready(function () {
           }
       });
   });
+  if (selectedVersion3 && selectedVersion4) {
+    var comparisonData = {
+      vehicleID1: selectedVersion3,
+      vehicleID2: selectedVersion4,
+      comparison: 1,
+  };
 
+  $.ajax({
+      url: '/Project/Api/api.php',
+      type: 'POST',
+      data: comparisonData,
+      dataType: 'json',
+      success: function (data) {
+          console.log(data);
+      },
+      error: function (error) {
+          console.error("Error updating comparison:", error);
+      }
+  });
+  }
+
+  
     location.href =
       "/Project/compare/?vehicleID1=" +
       selectedVersion1 +
@@ -502,10 +523,10 @@ $(document).ready(function () {
     $('#updatedImages').val(updatedImages.join(','));
     var formElement = document.getElementById("updateNewsForm");
     var formData = new FormData(formElement);
-    console.log(...formData)
+    console.log([...formData]);
 
     $.ajax({
-        url: '/Project/Api/api.php?updateNews=1',
+        url: '/Project/Api/api.php',
         method: 'POST',
         data: formData, 
         processData: false,
@@ -597,6 +618,24 @@ function deleteReview(id) {
       dataType: "json",
       success: function (data) {
         alert("Review deleted successfully");
+        location.reload();
+      },
+      error: function (error) {
+        console.log("error", error);
+      },
+    });
+  }
+}
+
+function deleteNews(id) {
+  if (confirm("Are you sure you want to delete this News?")) {
+    $.ajax({
+      url: "/Project/Api/api.php",
+      method: "POST",
+      data: { NewsID: id, deleteNews: 1 },
+      dataType: "json",
+      success: function (data) {
+        alert("News deleted successfully");
         location.reload();
       },
       error: function (error) {
