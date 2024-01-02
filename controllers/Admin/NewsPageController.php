@@ -24,8 +24,8 @@ class AdminNewsPageController
     public function updateNews()
     {
         $model = new NewsModel();
-        $model->updateNews($_POST['NewsID'],$_POST['Title'],$_POST['Description']);
-        echo json_encode("Review updated");
+        $model->updateNews($_POST['NewsID'],$_POST['title'],$_POST['Content']);
+        echo json_encode("News updated");
     }
     public function deleteImage()
     {

@@ -114,7 +114,6 @@ if(isset($_POST['comparison'])) {
 if(isset($_POST['updatedImages'])) {
     $controller = new AdminNewsPageController();
     $controller->updateNews();
-    echo json_encode("News Updated");
 }
 
 if(isset($_POST['deleteNews'])) {

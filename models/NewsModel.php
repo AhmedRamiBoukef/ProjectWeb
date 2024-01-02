@@ -110,7 +110,7 @@ class NewsModel extends DBModel
     public function updateNews($id, $title, $content)
     {
         $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
-        $db->beginTransaction();
+        
         $sql = "UPDATE News SET Title = :title, Content = :content WHERE NewsID = :id;";
         $stmt = $db->prepare($sql);
         $stmt->bindParam(":id", $id);
