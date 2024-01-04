@@ -78,7 +78,7 @@ class NewsModel extends DBModel
         $sql = "DELETE FROM NewsImage WHERE NewsID = :NewsID AND ImageID = :imageID;";
         $stmt = $db->prepare($sql);
         $stmt->bindParam(":NewsID", $id);
-        $stmt->bindParam(":imageID", $imageID);
+        $stmt->bindParam(":imageID", $imageID['ImageID']);
         $stmt->execute();
         
         $this->disconnect($db);
@@ -94,6 +94,16 @@ class NewsModel extends DBModel
         $this->disconnect($db);
         return $news;
     }
+    public function getNewsImages($id) {
+        $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
+        $sql ="SELECT ImagePath FROM Image I JOIN NewsImage NI ON I.ImageID = NI.ImageID WHERE NI.NewsID = :id;";
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(":id", $id);
+        $stmt->execute();
+        $images = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $this->disconnect($db);
+        return $images;
+    }
     public function deleteNews($id)
     {
         $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
@@ -101,11 +111,6 @@ class NewsModel extends DBModel
         $stmt = $db->prepare($sql);
         $stmt->bindParam(":id", $id);
         $stmt->execute();
-        $sql = "DELETE FROM NewsImage WHERE NewsID = :NewsID;";
-        $stmt = $db->prepare($sql);
-        $stmt->bindParam(":NewsID", $id);
-        $stmt->execute();
-        $this->disconnect($db);
     }
     public function updateNews($id, $title, $content)
     {
@@ -117,6 +122,36 @@ class NewsModel extends DBModel
         $stmt->bindParam(":title", $title);
         $stmt->bindParam(":content", $content);
         $stmt->execute();
+        $this->disconnect($db);
+    }
+    public function AddNews($title, $content)
+    {
+        $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
+        
+        $sql = "INSERT INTO News (Title, Content) VALUES (:title, :content);";
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(":title", $title);
+        $stmt->bindParam(":content", $content);
+        $stmt->execute();
+        $newsID = $db->lastInsertId();
+        $this->disconnect($db);
+        return $newsID;
+    }
+    public function InsertImages($id, $imagesArray)
+    {
+        $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
+
+        foreach ($imagesArray as $image) {
+            $sql = "INSERT INTO Image (ImagePath) VALUES (:image);";
+            $stmt = $db->prepare($sql);
+            $stmt->bindParam(":image", $image);
+            $stmt->execute();
+            $sql = "INSERT INTO NewsImage (NewsID, ImageID) VALUES (:NewsID, (SELECT ImageID FROM Image WHERE ImagePath = :image));";
+            $stmt = $db->prepare($sql);
+            $stmt->bindParam(":NewsID", $id);
+            $stmt->bindParam(":image", $image);
+            $stmt->execute();
+        }
         $this->disconnect($db);
     }
 }

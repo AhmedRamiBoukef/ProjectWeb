@@ -99,6 +99,10 @@ switch ($request) {
         $controller = new AdminNewsPageController();
         $controller->showUpdateNewsPage($id);
         break;  
+    case "/Project/Admin/news/Add/":  
+        $controller = new AdminNewsPageController();
+        $controller->showAddNewsPage();
+        break;  
     case "/Project/":
         $controller = new HomePageController();
         $controller->showHomePage();

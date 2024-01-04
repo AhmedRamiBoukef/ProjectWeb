@@ -116,6 +116,11 @@ if(isset($_POST['updatedImages'])) {
     $controller->updateNews();
 }
 
+if(isset($_POST['AddNews'])) {
+    $controller = new AdminNewsPageController();
+    $controller->AddNews();
+}
+
 if(isset($_POST['deleteNews'])) {
     $controller = new AdminNewsPageController();
     $controller->deleteNews();

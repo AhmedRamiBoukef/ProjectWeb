@@ -52,7 +52,7 @@ class AdminUpdateNewsPageView extends AdminLayoutView
                     <div>
                         <label for="images">Images</label>
                         <?php $this->slider($news['Images']); ?>
-                        <input type="file" name="images" id="images" accept="image/*" multiple>
+                        <input type="file" name="images[]" id="images" accept="image/*" multiple>
                     </div>
                     <input type="hidden" id="updatedImages" name="updatedImages" value="">
 

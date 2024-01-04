@@ -520,10 +520,11 @@ $(document).ready(function () {
         updatedImages.push(imgFilename);
     });
 
+
+
     $('#updatedImages').val(updatedImages.join(','));
     var formElement = document.getElementById("updateNewsForm");
     var formData = new FormData(formElement);
-    console.log([...formData]);
 
     $.ajax({
         url: '/Project/Api/api.php',
@@ -533,7 +534,39 @@ $(document).ready(function () {
         contentType: false,
         dataType: "json",
         success: function (data) {
-            console.log(data);
+            alert("News updated successfully");
+        },
+        error: function (error) {
+            console.log(error);
+        }
+      });
+  });
+  $('#updateNewsForm').on('submit', function (e) {
+    e.preventDefault(); 
+
+    var updatedImages = [];
+
+    $('.card-img').each(function () {
+        var imgSrc = $(this).attr('src');
+        var imgFilename = imgSrc.substring(imgSrc.lastIndexOf('/') + 1);
+        updatedImages.push(imgFilename);
+    });
+
+
+
+    $('#updatedImages').val(updatedImages.join(','));
+    var formElement = document.getElementById("updateNewsForm");
+    var formData = new FormData(formElement);
+
+    $.ajax({
+        url: '/Project/Api/api.php',
+        method: 'POST',
+        data: formData, 
+        processData: false,
+        contentType: false,
+        dataType: "json",
+        success: function (data) {
+            alert("News updated successfully");
         },
         error: function (error) {
             console.log(error);
@@ -546,21 +579,27 @@ $(document).ready(function () {
     var imgSrc = card.find('.card-img').attr('src');
     var imgFilename = imgSrc.substring(imgSrc.lastIndexOf('/') + 1);
     var id = $('#NewsID').val();
+    console.log($(".card").length);
 
-    if (confirm('Are you sure you want to delete this image?')) {
-      $.ajax({
-          url: '/Project/Api/api.php',
-          method: 'POST',
-          data: { deleteNewsImage: imgFilename,id: id },
-          dataType: "json",
-          success: function (data) {
-              card.remove();
-              console.log(data);
-          },
-          error: function (error) {
-              console.log("error",error);
-          }
-      });
+    if ($(".card").length > 1) {
+      if (confirm('Are you sure you want to delete this image?')) {
+        $.ajax({
+            url: '/Project/Api/api.php',
+            method: 'POST',
+            data: { deleteNewsImage: imgFilename,id: id },
+            dataType: "json",
+            success: function (data) {
+                card.remove();
+                console.log(data);
+            },
+            error: function (error) {
+                console.log("error",error);
+            }
+        });
+    }
+
+    }else {
+      alert("News can't have 0 images");
     }
   });
 
@@ -653,6 +692,23 @@ function deleteUser(id) {
       dataType: "json",
       success: function (data) {
         alert("User deleted successfully");
+        location.reload();
+      },
+      error: function (error) {
+        console.log("error", error);
+      },
+    });
+  }
+}
+function deleteNews(id) {
+  if (confirm("Are you sure you want to delete this News?")) {
+    $.ajax({
+      url: "/Project/Api/api.php",
+      method: "POST",
+      data: { NewsID: id, deleteNews: 1 },
+      dataType: "json",
+      success: function (data) {
+        alert("News deleted successfully");
         location.reload();
       },
       error: function (error) {

@@ -1,6 +1,7 @@
 <?php
 require_once($_SERVER['DOCUMENT_ROOT'] . './Project/views/Admin/NewsPageView.php');
 require_once($_SERVER['DOCUMENT_ROOT'] . './Project/views/Admin/UpdateNewsPageView.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . './Project/views/Admin/AddNewsPageView.php');
 require_once($_SERVER['DOCUMENT_ROOT'] . './Project/Models/NewsModel.php');
 
 class AdminNewsPageController
@@ -18,14 +19,52 @@ class AdminNewsPageController
     public function updateReview()
     {
         $model = new ReviewModel();
-        $model->updateReview($_POST['ReviewID'],$_POST['status']);
+        $model->updateReview($_POST['ReviewID'], $_POST['status']);
         echo json_encode("Review updated");
     }
     public function updateNews()
     {
         $model = new NewsModel();
-        $model->updateNews($_POST['NewsID'],$_POST['title'],$_POST['Content']);
-        echo json_encode($_POST);
+        $model->updateNews($_POST['NewsID'], $_POST['title'], $_POST['Content']);
+
+        if (!empty($_FILES['images']['name'][0])) {
+            $imagesArray = [];
+
+            $targetFolder = $_SERVER['DOCUMENT_ROOT'] . '/Project/public/images/';
+
+            foreach ($_FILES['images']['name'] as $key => $imageName) {
+                $tempFile = $_FILES['images']['tmp_name'][$key];
+                $targetFile = $targetFolder . $imageName;
+                if (move_uploaded_file($tempFile, $targetFile)) {
+
+                    $imagesArray[] = $imageName;
+                }
+            }
+            $model->InsertImages($_POST['NewsID'], $imagesArray);
+        }
+        echo json_encode("News Updated");
+    }
+    public function AddNews()
+    {
+        $model = new NewsModel();
+        $newsID = $model->AddNews($_POST['title'], $_POST['Content']);
+
+        if (!empty($_FILES['images']['name'][0])) {
+            $imagesArray = [];
+
+            $targetFolder = $_SERVER['DOCUMENT_ROOT'] . '/Project/public/images/';
+
+            foreach ($_FILES['images']['name'] as $key => $imageName) {
+                $tempFile = $_FILES['images']['tmp_name'][$key];
+                $targetFile = $targetFolder . $imageName;
+                if (move_uploaded_file($tempFile, $targetFile)) {
+                    $imagesArray[] = $imageName;
+                }
+            }
+            $model->InsertImages($newsID, $imagesArray);
+        }
+        header("Location: /Project/Admin/news/");
+        exit();
     }
     public function deleteImage()
     {
@@ -38,13 +77,13 @@ class AdminNewsPageController
 
         if (file_exists($imagePath)) {
             if (unlink($imagePath)) {
-                $model->deleteImage($id,$filename);
+                $model->deleteImage($id, $filename);
                 echo json_encode(['success' => true, 'message' => 'Image deleted successfully.']);
             } else {
                 echo json_encode(['success' => false, 'message' => 'Failed to delete the image.']);
             }
         } else {
-            echo json_encode(['success' => false, 'message' => 'Image '.$imagePath.' not found.']);
+            echo json_encode(['success' => false, 'message' => 'Image ' . $imagePath . ' not found.']);
         }
     }
     public function deleteReview()
@@ -57,9 +96,18 @@ class AdminNewsPageController
     {
         $model = new NewsModel();
         $model->deleteNews($_POST['NewsID']);
+        $images = $model->getNewsImages($_POST['NewsID']);
+        $imageDirectory = '../public/images/';
+        foreach ($images as $image) {
+            $imagePath = $imageDirectory . $image['ImagePath'];
+            if (file_exists($imagePath)) {
+                unlink($imagePath);
+                $model->deleteImage($_POST['NewsID'], $image['ImagePath']);
+            }
+        }
         echo json_encode("News deleted");
     }
-    
+
     public function showNewsPage()
     {
         $view = new AdminNewsPageView();
@@ -70,5 +118,9 @@ class AdminNewsPageController
         $view = new AdminUpdateNewsPageView();
         $view->showNewsPage($id);
     }
-
+    public function showAddNewsPage()
+    {
+        $view = new AdminAddNewsPageView();
+        $view->showNewsPage();
+    }
 }
