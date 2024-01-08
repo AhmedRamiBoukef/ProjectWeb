@@ -6,6 +6,7 @@ require_once($_SERVER['DOCUMENT_ROOT'] . './Project/controllers/User/BrandsPageC
 require_once($_SERVER['DOCUMENT_ROOT'] . './Project/controllers/User/ContactPageController.php');
 require_once($_SERVER['DOCUMENT_ROOT'] . './Project/controllers/User/ReviewPageController.php');
 require_once($_SERVER['DOCUMENT_ROOT'] . './Project/controllers/User/vehiclePageController.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . './Project/controllers/User/ProfilePageController.php');
 require_once($_SERVER['DOCUMENT_ROOT'] . './Project/controllers/Admin/LoginPageController.php');
 require_once($_SERVER['DOCUMENT_ROOT'] . './Project/controllers/Admin/HomePageController.php');
 require_once($_SERVER['DOCUMENT_ROOT'] . './Project/controllers/Admin/BrandsPageController.php');
@@ -131,6 +132,10 @@ switch ($request) {
         $controller = new VehiclePageController();
         $controller->showVehicleDetailsPage($id);
         break;  
+    case "/Project/reviews/":
+        $controller = new ReviewPageController();
+        $controller->showReviewsPage();
+        break;  
     case "/Project/review/":
         $controller = new ReviewPageController();
         $controller->showReviewPage($id);
@@ -138,5 +143,9 @@ switch ($request) {
     case "/Project/contact/":
         $controller = new ContactPageController();
         $controller->showContactPage();
+        break;  
+    case "/Project/profile/":
+        $controller = new ProfilePageController();
+        $controller->showProfilePage();
         break;  
 }

@@ -10,9 +10,23 @@ class BrandsPageController
         $view = new BrandsPageView();
         $view->showBrandsPage();
     }
+    public function getBrandByID($id)
+    {
+        $model = new BrandModel();
+        return $model->getBrandByID($id);
+    }
+    public function getVehiculesByBrandID($id)
+    {
+        $model = new BrandModel();
+        return $model->getVehiculesByBrandID($id,$_SESSION['UserID']);
+    }
     public function showBrandPage($id)
     {
         $view = new BrandPageView();
         $view->showBrandPage($id);
+    }
+    public function getVehiculeDetails() {
+        $view = new BrandPageView();
+        $view->showVehicleDetails($_GET['vehiculeDetailsID']);
     }
 }

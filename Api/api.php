@@ -7,6 +7,7 @@ require_once("../controllers/Admin/UsersPageController.php");
 require_once("../controllers/Admin/NewsPageController.php");
 require_once("../controllers/User/NewsPageController.php");
 require_once("../controllers/User/ReviewPageController.php");
+require_once("../controllers/User/BrandsPageController.php");
 
 if (isset($_POST['login'])) {
     $controller = new AdminLoginPageController();
@@ -66,9 +67,24 @@ if(isset($_GET['id']) && isset($_GET['showReviewPage'])) {
 }
 
 
-if(isset($_POST['note']) && isset($_POST['review'])) {
-    $controller = new AdminBrandsPageController();
-    $models = $controller->getModelsByBrand($_POST['brandID']);
+if(isset($_POST['note']) && isset($_POST['review']) && isset($_POST['VehicleID'])) {
+    session_start();
+    if (isset($_SESSION['UserID'])) {
+        $controller = new ReviewPageController();
+        $controller->AddReview();
+    } else {
+        echo json_encode("You need to be logged in to post a review");
+    }
+}
+
+if(isset($_POST['note']) && isset($_POST['review']) && isset($_POST['BrnadID'])) {
+    session_start();
+    if (isset($_SESSION['UserID'])) {
+        $controller = new ReviewPageController();
+        $controller->AddBrnadReview();
+    } else {
+        echo json_encode("You need to be logged in to post a review");
+    }
 }
 
 if(isset($_POST['updateUser'])) {
@@ -124,4 +140,19 @@ if(isset($_POST['AddNews'])) {
 if(isset($_POST['deleteNews'])) {
     $controller = new AdminNewsPageController();
     $controller->deleteNews();
+}
+
+if(isset($_GET['vehiculeDetailsID'])) {
+    $controller = new BrandsPageController();
+    $controller->getVehiculeDetails();
+}
+
+if(isset($_POST['addFavorite'])) {
+    $controller = new AdminUsersPageController();
+    $controller->addFavorite();
+}
+
+if(isset($_POST['deleteFavorite'])) {
+    $controller = new AdminUsersPageController();
+    $controller->deleteFavorite();
 }

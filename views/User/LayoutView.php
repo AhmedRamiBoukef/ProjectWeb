@@ -6,7 +6,7 @@ class LayoutView
 {
     public function showBrands()
     {
-    ?>
+?>
         <div class="Brands">
             <h1>Brands</h1>
             <div class="spinner">
@@ -16,7 +16,7 @@ class LayoutView
                     $brands = $controller->getBrands();
                     foreach ($brands as $brand) {
                     ?>
-                        <li><a href="/Project/Brand/<?php echo $brand['BrandID'] ?>"><img src="/Project/public/images/<?php echo $brand['ImagePath'] ?>" alt="Brand<?php echo $brand['BrandID'] ?>"></a></li>
+                        <li><a href="/Project/brand/?id=<?php echo $brand['BrandID'] ?>"><img src="/Project/public/images/<?php echo $brand['ImagePath'] ?>" alt="Brand<?php echo $brand['BrandID'] ?>"></a></li>
                     <?php
                     }
                     ?>
@@ -26,9 +26,11 @@ class LayoutView
         </div>
     <?php
     }
+
+
     public function showMenu()
     {
-?> <nav class="menu">
+    ?> <nav class="menu">
             <ul>
                 <li><a href="/Project/">Home</a></li>
                 <li><a href="/Project/news/">News</a></li>
@@ -91,8 +93,35 @@ class LayoutView
                 <?php
                 $this->showSocialMedia();
                 ?>
-
             </div>
+            <?php
+            if (isset($_SESSION["UserID"])) {
+            ?>
+                <div class="Profile">
+                    <a href="/Project/profile/">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black" class="bi bi-person-circle" viewBox="0 0 16 16">
+                            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+                            <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
+                        </svg>
+                    </a>
+                    <a class="logout" href="/Project/Api/api.php?logout=1">
+                        <p>Logout</p>
+                        <img src="/Project/public/images/logout.png" alt="logout">
+                    </a>
+                </div>
+            <?php
+            } else {
+            ?>
+                <a class="loginButton" href="/Project/Admin/login/">
+                    <p>Login / Signup</p>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-in-left" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M10 3.5a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-2a.5.5 0 0 1 1 0v2A1.5 1.5 0 0 1 9.5 14h-8A1.5 1.5 0 0 1 0 12.5v-9A1.5 1.5 0 0 1 1.5 2h8A1.5 1.5 0 0 1 11 3.5v2a.5.5 0 0 1-1 0z" />
+                        <path fill-rule="evenodd" d="M4.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H14.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708z" />
+                    </svg>
+                </a>
+            <?php
+            }
+            ?>
         </div>
 
 
@@ -261,10 +290,11 @@ class LayoutView
             </div>
 
         </div>
-<?php
+    <?php
     }
-    public function showReviewCard($review) {
-        ?>
+    public function showReviewCard($review)
+    {
+    ?>
         <div class="Review-Card">
             <div>
                 <div><?= strtoupper($review['UserName'][0]); ?></div>
@@ -280,6 +310,36 @@ class LayoutView
                 <?= $review['Comment']; ?>
             </div>
         </div>
-        <?php
+    <?php
+    }
+
+    public function showCard($vehicule)
+    {
+    ?>
+
+        <div class="Brand-VehicleCard">
+            <div>
+                <img src="/Project/public/images/<?= $vehicule['ImagePath'] ?>" alt="<?= $vehicule['ImagePath'] ?>">
+            </div>
+            <div>
+                <h1><?= $vehicule['VehiculeName'] ?> <?= $vehicule['ModelYear'] ?></h1>
+                <h4><?= $vehicule['IndicativePrice'] ?> <span>Starting Price</span></h4>
+                <p><span>Rating :</span> <?php $this->showStars($vehicule['Note']) ?></p>
+            </div>
+            <div class="favorite-logo" data-favorite="<?= $vehicule['favorite'] ?>" data-vehicleID="<?= $vehicule['VehicleID'] ?>" data-userID="<?= $_SESSION['UserID'] ?>">
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="red" class="heart-icon bi bi-heart-fill <?= $vehicule['favorite'] ? "show" : "not-show" ?>" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314" />
+                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="black" class="heart-icon bi bi-heart <?= $vehicule['favorite'] ? "not-show" : "show" ?>" viewBox="0 0 16 16">
+                    <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143q.09.083.176.171a3 3 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15" />
+                </svg>
+            </div>
+
+            <a href="/Project/vehicle/?id=<?= $vehicule['VehicleID'] ?>">
+                View Details
+            </a>
+
+        </div>
+<?php
     }
 }

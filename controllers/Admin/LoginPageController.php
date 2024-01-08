@@ -13,11 +13,11 @@ class AdminLoginPageController
             session_start();
             if ($user['admin'] == 1) {
                 $_SESSION['admin'] = true;
-                $_SESSION['username'] = $user['username'];
+                $_SESSION['UserID'] = $user['UserID'];
                 header('Location: /Project/Admin/home/');
                 exit();
             }
-            $_SESSION['username'] = $user['username'];
+            $_SESSION['UserID'] = $user['UserID'];
             header('Location: /Project/');
             exit();
         } else {
@@ -40,11 +40,11 @@ class AdminLoginPageController
             session_start();
             if ($user['admin'] == 1) {
                 $_SESSION['admin'] = true;
-                $_SESSION['username'] = $user['username'];
+                $_SESSION['UserID'] = $user['UserID'];
                 header('Location: /Project/Admin/home/');
                 exit();
             }
-            $_SESSION['username'] = $user['username'];
+            $_SESSION['UserID'] = $user['UserID'];
             header('Location: /Project/');
             exit();
         } else {

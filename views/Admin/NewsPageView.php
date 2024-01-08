@@ -7,14 +7,14 @@ class AdminNewsPageView extends AdminLayoutView
 ?>
         <div class="container">
 
-            <table id="table" data-toggle="table" data-searchable="true" data-search="true" data-filter-control="true" class="table-responsive">
+            <table id="table" class="table table-striped" style="width:100%">
             <thead>
                 <tr>
                 
-                <th data-field="title"data-sortable="true">Title</th>
-                <th data-field="content"data-sortable="true">Content</th>
-                <th data-field="date" data-sortable="true">Date</th>
-                <th data-field="manage">manage</th>
+                <th>Title</th>
+                <th>Content</th>
+                <th>Date</th>
+                <th>manage</th>
 
                 </tr>
             </thead>

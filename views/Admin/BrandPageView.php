@@ -6,8 +6,22 @@ class AdminBrandPageView extends AdminLayoutView
     {
 ?>
         <div class="container">
+            <div id="filter">
+                <h4>Select data to filter</h4>
+                <div>
+                    <select class="form-control bootstrap-table-filter-control-model">
+                        <option value="">Model</option>
+                    </select>
+                    <select class="form-control bootstrap-table-filter-control-version">
+                        <option value="">Version</option>
+                    </select>
+                    <select class="form-control bootstrap-table-filter-control-year">
+                        <option value="">Year</option>
+                    </select>
+                </div>
+            </div>
 
-            <table id="table" data-toggle="table" data-searchable="true" data-search="true" data-filter-control="true" class="table-responsive">
+            <table id="table" data-filter-control-container="#filter" data-toggle="table" data-searchable="true" data-search="true" data-filter-control="true" class="table-responsive">
             <thead>
                 <tr>
                 

@@ -1,7 +1,7 @@
 <?php
 require_once($_SERVER['DOCUMENT_ROOT'] . './Project/views/User/LayoutView.php');
 
-class BrandsPageView extends LayoutView
+class ReviewsPageView extends LayoutView
 {
 
     public function showBrand()
@@ -17,7 +17,7 @@ class BrandsPageView extends LayoutView
                     $brands = $controller->getBrands();
                     foreach ($brands as $brand) {
                     ?>
-                        <li><a href="/Project/brand/?id=<?php echo $brand['BrandID'] ?>"><img src="/Project/public/images/<?php echo $brand['ImagePath'] ?>" alt="Brand<?php echo $brand['BrandID'] ?>"></a></li>
+                        <li><a href="/Project/review/?id=<?php echo $brand['BrandID'] ?>"><img src="/Project/public/images/<?php echo $brand['ImagePath'] ?>" alt="Brand<?php echo $brand['BrandID'] ?>"></a></li>
                     <?php
                     }
                     ?>
@@ -30,7 +30,7 @@ class BrandsPageView extends LayoutView
 
     }
 
-    public function showBrandsPage()
+    public function showReviewsPage()
     {
         $this->showHeader();
         $this->showMenu();

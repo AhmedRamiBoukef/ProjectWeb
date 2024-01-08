@@ -223,64 +223,6 @@
 } 
 
 
-/* .login {
-  font-family: Arial, sans-serif;
-  background-color: #f2f2f2;
-  text-align: center;
-  height: 100vh;
-  width: 100vw;
-  display: flex;
-  justify-content: center;
-  align-content: center;
-}
-.login div {
-  display: flex;
-  justify-content: center;
-  align-content: center;
-  flex-direction: column;
-}
-
-.login h2 {
-  color: #333;
-}
-
-.login form {
-  width: 300px;
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.login input {
-  width: 100%;
-  padding: 10px;
-  margin: 10px 0;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-}
-
-.login button {
-  width: 100%;
-  padding: 10px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
-}
-
-.login button:hover {
-  background-color: #0056b3;
-}
-
-.login p {
-  color: red;
-} */
-
-
-
-
 .Brands h1  {
   text-align: center;
   margin: 20px 0;
@@ -560,7 +502,7 @@
 .compare-table table {
   width: 100%;
 }
-.compare-table table img,.news-card img,.news-header img {
+.compare-table table img,.news-card img,.news-header img,.Brand-VehicleCard img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -695,6 +637,7 @@
   border-radius: 8px;
   padding: 32px;
   font-size: 20px;
+  position: relative;
 }
 
 .vehicle-details-head > div:first-child > button {
@@ -877,7 +820,7 @@
   margin: 64px 5%;
 }
 
-.Add-Review-Container > h1, .Add-Review-Container > p,.Review-details > h1, .Review-details > p {
+.Add-Review-Container > h1, .Add-Review-Container > p,.Review-details > h1, .Review-details > p, .brand-details > h1, .brand-details > p {
   font-family: 'Comic Sans MS', cursive;
 }
 
@@ -909,6 +852,10 @@
   border: none;
   cursor: pointer;
   text-decoration: none;
+}
+
+.Add-Review-Container button:hover {
+  background-color: #0056b3;
 }
 
 #modalcompare {
@@ -1327,4 +1274,235 @@
   .swiper-navBtn{
     display: none;
   }
+}
+
+
+.brandPage {
+  height: 56vh;
+}
+
+
+.brands-details {
+  margin: 0 5%;
+}
+
+.brands-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin: 40px 0;
+}
+
+.brands-header div:first-child {
+  width: 60%;
+}
+
+.brands-header div:first-child p {
+  font-size: 18px;
+  margin-bottom: -6px;
+  color: #757575;
+  margin-top: 20px;
+}
+
+.brands-header div:first-child h1 {
+  font-size: 56px;
+  line-height: 60px;
+  font-weight: 800;
+  font-family: south-east-cn, "Arial Black", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: -1px;
+}
+
+.brands-header > div:not(:first-child) {
+  width: 40%;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-right: 10%;
+  background-color: #4070F4;
+  padding: 60px;
+}
+.brands-header div:not(:first-child) img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.brands-details > p {
+  font-size: 22px;
+  line-height: 30px;
+  margin-top: 32px;
+}
+
+.Brand-details {
+  margin: 64px 5%;
+}
+
+.Brand-VehicleCard {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,.1);
+  -webkit-box-shadow: 0 2px 10px rgba(0,0,0,.1);
+  -moz-box-shadow: 0 2px 10px;
+  border-radius: 8px;
+  overflow: hidden;
+  width: 360px;
+  height: 374px;
+  text-decoration: none;
+  color: inherit;
+  margin: 20px 0;
+}
+.Brand-VehicleCard > div {
+  border-radius: 8px 8px 0 0;
+  overflow: hidden;
+}
+.Brand-VehicleCard div:nth-child(2) {
+  padding: 8px;
+}
+
+.Brand-VehicleCard div:first-child {
+  background-color: #e7e2e2;
+}
+.Brand-VehicleCard > a {
+  border-top: 1px solid #ccc;
+  padding: 16px 0;
+  border-radius: 0;
+  text-align: center;
+  font-weight: bold;
+  color: #4070F4;
+  text-decoration: none;
+  color: #000;
+}
+.Brand-VehicleCard > a:hover {
+  background-color: #4070F4;
+  color: #fff;
+}
+
+.Brand-VehicleCard h1 {
+  font-weight: 700;
+  font-size: 20px;
+}
+
+.Brand-VehicleCard h3 {
+  font-size: 13px;
+}
+.Brand-VehicleCard h4 {
+  font-size: 19px;
+  font-weight: 600;
+}
+
+.Brand-VehicleCard span {
+  color: rgb(102, 102, 102);
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.Brand-details > div {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.Select-Vehicule-Container {
+  margin: 64px 5%;
+}
+
+.Select-Vehicule-Container h1, .Select-Vehicule-Container p {
+  font-family: 'Comic Sans MS', cursive;
+}
+
+.Select-Vehicule-Container select {
+  width: 100%;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  background-color: #f8f8f8;
+  font-size: 16px;
+  padding: 12px 20px;
+  outline: none;
+}
+
+.loginButton {
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: 'Comic Sans MS', cursive; 
+}
+.loginButton p {
+  margin: 0;
+}
+
+.loginButton svg {
+  height: 30px;
+  width: 30px;
+}
+
+.Profile {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.Profile > a > svg {
+  width: 32px;
+  height: 32px;
+}
+
+.favorite-container p {
+  font-size: 16px;
+  margin: 20px 0;
+}
+
+.Brand-VehicleCard {
+  position: relative;
+}
+
+.favorite-logo {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  cursor: pointer;
+  z-index: 99999;
+}
+
+
+.favorite-logo .not-show {
+  display: none;
+}
+
+.favorite-logo .show {
+  display: block;
+}
+
+#cardDetails {
+  border-top: 1px solid #ccc;
+  padding: 16px 0;
+  border-radius: 0;
+  text-align: center;
+  font-weight: bold;
+  text-decoration: none;
+  background-color: transparent;
+  color: #000;
+}
+#cardDetails:hover {
+  background-color: #4070F4;
+  color: #fff;
+}
+
+.delete-favorite-logo {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+
+#table {
+  
 }

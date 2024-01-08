@@ -1,6 +1,7 @@
 <?php
 require_once($_SERVER['DOCUMENT_ROOT'] . './Project/views/User/NewsPageView.php');
 require_once($_SERVER['DOCUMENT_ROOT'] . './Project/views/User/ReviewDetailsPageView.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . './Project/views/User/ReviewPageView.php');
 require_once($_SERVER['DOCUMENT_ROOT'] . './Project/Models/ReviewModel.php');
 
 
@@ -9,6 +10,10 @@ class ReviewPageController
     public function getPopularReviews($id) {
         $model = new ReviewModel();
         return $model->getPopularReviews($id);
+    }
+    public function getPopularBrandReviews($id) {
+        $model = new ReviewModel();
+        return $model->getPopularBrandReviews($id);
     }
     public function getVehicleReviews($id, $page = 1) {
         $model = new ReviewModel();
@@ -23,9 +28,24 @@ class ReviewPageController
         $model = new ReviewModel();
         return $model->getPopularReviews($data);
     }
+    public function AddReview() {
+        $model = new ReviewModel();
+        $model->AddReview($_POST['VehicleID'], $_SESSION['UserID'], $_POST['review'], $_POST['note']);
+        echo json_encode("Review added successfully");
+    }
+    public function AddBrnadReview() {
+        $model = new ReviewModel();
+        $model->AddBrnadReview($_POST['BrnadID'], $_SESSION['UserID'], $_POST['review'], $_POST['note']);
+        echo json_encode("Review added successfully");
+    }
     public function showReviewPage($id)
     {
         $view = new ReviewPageView();
         $view->showReviewPage($id);
+    }
+    public function showReviewsPage()
+    {
+        $view = new ReviewsPageView();
+        $view->showReviewsPage();
     }
 }

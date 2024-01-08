@@ -52,5 +52,15 @@ class AdminUsersPageController
         $view = new AdminModifyUsersPageView();
         $view->showUserPage($id);
     }
+    public function addFavorite() {
+        $model = new UserModel();
+        $model->addFavorite($_POST['VehicleID'], $_POST['UserID']);
+        echo json_encode("Favorite added successfully");
+    }
+    public function deleteFavorite() {
+        $model = new UserModel();
+        $model->deleteFavorite($_POST['VehicleID'], $_POST['UserID']);
+        echo json_encode("Favorite deleted successfully");
+    }
 
 }

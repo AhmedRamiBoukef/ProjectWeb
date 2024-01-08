@@ -77,6 +77,42 @@ function createPagination(totalPages, page) {
 }
 
 $(document).ready(function () {
+  $(".favorite-logo").click(function () {
+    var currentFavorite = $(this).data("favorite");
+    var vehicleID = $(this).data("vehicleid");
+    var UserID = $(this).data("userid");
+    if (currentFavorite) {
+      $.ajax({
+        url: "/Project/Api/api.php",
+        method: "POST",
+        data: { VehicleID: vehicleID, deleteFavorite: 1, UserID: UserID },
+        dataType: "json",
+        success: function (data) {
+          $(this).data("favorite", 0);
+        },
+        error: function (error) {
+          console.error(error);
+        },
+      });
+    } else {
+      $.ajax({
+        url: "/Project/Api/api.php",
+        method: "POST",
+        data: { VehicleID: vehicleID, addFavorite: 1, UserID: UserID },
+        dataType: "json",
+        success: function (data) {
+          $(this).data("favorite", 1);
+        },
+        error: function (error) {
+          console.error(error);
+        },
+      });
+    }
+    $(this).find(".heart-icon").toggleClass("show not-show");
+  });
+  var table = $("#table").DataTable({
+    search: true
+  });
   if (location.href.split("=")[1] === "http://localhost/Project/review/?id") {
     $.ajax({
       url: `/Project/Api/api.php?getReviewsbyID=${location.href.split("=")[1]}`,
@@ -197,84 +233,82 @@ $(document).ready(function () {
       alert("Please fill in the first two vehiculs to compare.");
       return;
     }
-    
 
     var selectedVersions1 = [
       $("#vehicle_picker_version2").val(),
       $("#vehicle_picker_version3").val(),
       $("#vehicle_picker_version4").val(),
-  ];
+    ];
     var selectedVersions2 = [
       $("#vehicle_picker_version3").val(),
       $("#vehicle_picker_version4").val(),
-  ];
+    ];
 
     selectedVersions1.forEach(function (selectedVersion) {
       if (!selectedVersion) return;
 
       var comparisonData = {
-          vehicleID1: selectedVersion1,
-          vehicleID2: selectedVersion,
-          comparison: 1,
+        vehicleID1: selectedVersion1,
+        vehicleID2: selectedVersion,
+        comparison: 1,
       };
 
       $.ajax({
-          url: '/Project/Api/api.php',
-          type: 'POST',
-          data: comparisonData,
-          dataType: 'json',
-          success: function (data) {
-              console.log(data);
-          },
-          error: function (error) {
-              console.error("Error updating comparison:", error);
-          }
+        url: "/Project/Api/api.php",
+        type: "POST",
+        data: comparisonData,
+        dataType: "json",
+        success: function (data) {
+          console.log(data);
+        },
+        error: function (error) {
+          console.error("Error updating comparison:", error);
+        },
       });
-  });
+    });
     selectedVersions2.forEach(function (selectedVersion) {
       if (!selectedVersion) return;
 
       var comparisonData = {
-          vehicleID1: selectedVersion2,
-          vehicleID2: selectedVersion,
-          comparison: 1,
+        vehicleID1: selectedVersion2,
+        vehicleID2: selectedVersion,
+        comparison: 1,
       };
 
       $.ajax({
-          url: '/Project/Api/api.php',
-          type: 'POST',
-          data: comparisonData,
-          dataType: 'json',
-          success: function (data) {
-              console.log(data);
-          },
-          error: function (error) {
-              console.error("Error updating comparison:", error);
-          }
-      });
-  });
-  if (selectedVersion3 && selectedVersion4) {
-    var comparisonData = {
-      vehicleID1: selectedVersion3,
-      vehicleID2: selectedVersion4,
-      comparison: 1,
-  };
-
-  $.ajax({
-      url: '/Project/Api/api.php',
-      type: 'POST',
-      data: comparisonData,
-      dataType: 'json',
-      success: function (data) {
+        url: "/Project/Api/api.php",
+        type: "POST",
+        data: comparisonData,
+        dataType: "json",
+        success: function (data) {
           console.log(data);
-      },
-      error: function (error) {
+        },
+        error: function (error) {
           console.error("Error updating comparison:", error);
-      }
-  });
-  }
+        },
+      });
+    });
+    if (selectedVersion3 && selectedVersion4) {
+      var comparisonData = {
+        vehicleID1: selectedVersion3,
+        vehicleID2: selectedVersion4,
+        comparison: 1,
+      };
 
-  
+      $.ajax({
+        url: "/Project/Api/api.php",
+        type: "POST",
+        data: comparisonData,
+        dataType: "json",
+        success: function (data) {
+          console.log(data);
+        },
+        error: function (error) {
+          console.error("Error updating comparison:", error);
+        },
+      });
+    }
+
     location.href =
       "/Project/compare/?vehicleID1=" +
       selectedVersion1 +
@@ -478,8 +512,54 @@ $(document).ready(function () {
         alert("Please select a note");
         return;
       }
-      document.getElementById("reviewForm").submit();
+      var formElement = document.getElementById("reviewForm");
+      var formData = new FormData(formElement);
+      $.ajax({
+        url: "/Project/Api/api.php",
+        method: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+        dataType: "json",
+        success: function (data) {
+          alert(data);
+        },
+        error: function (error) {
+          console.log(error);
+        },
+      });
     });
+
+  $("#vehiculeSelect").on("change", function () {
+    var selectedID = $(this).val();
+    console.log(selectedID);
+    $.ajax({
+      url: "/Project/Api/api.php?vehiculeDetailsID=" + selectedID,
+      method: "GET",
+      success: function (data) {
+        var vehiculeDetails = $("#vehicule-details-brand");
+        vehiculeDetails.empty();
+        vehiculeDetails.append(data);
+        var coll = document?.getElementsByClassName("collapsee");
+        var i;
+
+        for (i = 0; i < coll.length; i++) {
+          coll[i]?.addEventListener("click", function () {
+            this.classList.toggle("active");
+            console.log(this.children);
+            var content = this.nextElementSibling;
+            if (content.style.maxHeight) {
+              content.style.maxHeight = null;
+              this.children[1].class = "bi bi-dash-lg";
+            } else {
+              content.style.maxHeight = content.scrollHeight + "px";
+              this.children[1].class = "bi bi-plus-lg";
+            }
+          });
+        }
+      },
+    });
+  });
 
   const form = document?.getElementById("contactForm");
   function sendEmail() {
@@ -509,124 +589,129 @@ $(document).ready(function () {
     sendEmail();
   });
 
-  $('#updateNewsForm').on('submit', function (e) {
-    e.preventDefault(); 
+  $("#updateNewsForm").on("submit", function (e) {
+    e.preventDefault();
 
     var updatedImages = [];
 
-    $('.card-img').each(function () {
-        var imgSrc = $(this).attr('src');
-        var imgFilename = imgSrc.substring(imgSrc.lastIndexOf('/') + 1);
-        updatedImages.push(imgFilename);
+    $(".card-img").each(function () {
+      var imgSrc = $(this).attr("src");
+      var imgFilename = imgSrc.substring(imgSrc.lastIndexOf("/") + 1);
+      updatedImages.push(imgFilename);
     });
 
-
-
-    $('#updatedImages').val(updatedImages.join(','));
+    $("#updatedImages").val(updatedImages.join(","));
     var formElement = document.getElementById("updateNewsForm");
     var formData = new FormData(formElement);
 
     $.ajax({
-        url: '/Project/Api/api.php',
-        method: 'POST',
-        data: formData, 
-        processData: false,
-        contentType: false,
-        dataType: "json",
-        success: function (data) {
-            alert("News updated successfully");
-        },
-        error: function (error) {
-            console.log(error);
-        }
-      });
+      url: "/Project/Api/api.php",
+      method: "POST",
+      data: formData,
+      processData: false,
+      contentType: false,
+      dataType: "json",
+      success: function (data) {
+        alert("News updated successfully");
+      },
+      error: function (error) {
+        console.log(error);
+      },
+    });
   });
-  $('#updateNewsForm').on('submit', function (e) {
-    e.preventDefault(); 
+  $("#updateNewsForm").on("submit", function (e) {
+    e.preventDefault();
 
     var updatedImages = [];
 
-    $('.card-img').each(function () {
-        var imgSrc = $(this).attr('src');
-        var imgFilename = imgSrc.substring(imgSrc.lastIndexOf('/') + 1);
-        updatedImages.push(imgFilename);
+    $(".card-img").each(function () {
+      var imgSrc = $(this).attr("src");
+      var imgFilename = imgSrc.substring(imgSrc.lastIndexOf("/") + 1);
+      updatedImages.push(imgFilename);
     });
 
-
-
-    $('#updatedImages').val(updatedImages.join(','));
+    $("#updatedImages").val(updatedImages.join(","));
     var formElement = document.getElementById("updateNewsForm");
     var formData = new FormData(formElement);
 
     $.ajax({
-        url: '/Project/Api/api.php',
-        method: 'POST',
-        data: formData, 
-        processData: false,
-        contentType: false,
-        dataType: "json",
-        success: function (data) {
-            alert("News updated successfully");
-        },
-        error: function (error) {
-            console.log(error);
-        }
-      });
+      url: "/Project/Api/api.php",
+      method: "POST",
+      data: formData,
+      processData: false,
+      contentType: false,
+      dataType: "json",
+      success: function (data) {
+        alert("News updated successfully");
+      },
+      error: function (error) {
+        console.log(error);
+      },
+    });
   });
 
-  $('.card .bi-x-circle-fill').on('click', function () {
-    var card = $(this).closest('.card');
-    var imgSrc = card.find('.card-img').attr('src');
-    var imgFilename = imgSrc.substring(imgSrc.lastIndexOf('/') + 1);
-    var id = $('#NewsID').val();
+  $(".card .bi-x-circle-fill").on("click", function () {
+    var card = $(this).closest(".card");
+    var imgSrc = card.find(".card-img").attr("src");
+    var imgFilename = imgSrc.substring(imgSrc.lastIndexOf("/") + 1);
+    var id = $("#NewsID").val();
     console.log($(".card").length);
 
     if ($(".card").length > 1) {
-      if (confirm('Are you sure you want to delete this image?')) {
+      if (confirm("Are you sure you want to delete this image?")) {
         $.ajax({
-            url: '/Project/Api/api.php',
-            method: 'POST',
-            data: { deleteNewsImage: imgFilename,id: id },
-            dataType: "json",
-            success: function (data) {
-                card.remove();
-                console.log(data);
-            },
-            error: function (error) {
-                console.log("error",error);
-            }
+          url: "/Project/Api/api.php",
+          method: "POST",
+          data: { deleteNewsImage: imgFilename, id: id },
+          dataType: "json",
+          success: function (data) {
+            card.remove();
+            console.log(data);
+          },
+          error: function (error) {
+            console.log("error", error);
+          },
         });
-    }
-
-    }else {
+      }
+    } else {
       alert("News can't have 0 images");
     }
   });
 
+  $("#images").on("change", function (e) {
+    var files = e.target.files;
 
-  $('#images').on('change', function (e) {
-      var files = e.target.files;
+    for (var i = 0; i < files.length; i++) {
+      var reader = new FileReader();
+      reader.onload = function (event) {
+        var imgSrc = event.target.result;
+        var newCard = $(
+          '<div class="card swiper-slide">' +
+            '<img src="' +
+            imgSrc +
+            '" alt="" class="card-img">' +
+            '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-x-circle-fill delete-image" viewBox="0 0 16 16">' +
+            '<path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z" />' +
+            "</svg>" +
+            "</div>"
+        );
 
-      for (var i = 0; i < files.length; i++) {
-          var reader = new FileReader();
-          reader.onload = function (event) {
-              var imgSrc = event.target.result;
-              var newCard = $('<div class="card swiper-slide">' +
-                  '<img src="' + imgSrc + '" alt="" class="card-img">' +
-                  '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-x-circle-fill delete-image" viewBox="0 0 16 16">' +
-                  '<path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z" />' +
-                  '</svg>' +
-                  '</div>');
-
-              $('.card-wrapper').append(newCard);
-          };
-          reader.readAsDataURL(files[i]);
-      }
+        $(".card-wrapper").append(newCard);
+      };
+      reader.readAsDataURL(files[i]);
+    }
   });
 
-  $(document).on('click', '.delete-image', function () {
-      var card = $(this).closest('.card');
-      card.remove();
+  $(document).on("click", ".delete-image", function () {
+    var card = $(this).closest(".card");
+    card.remove();
+  });
+
+  $(".delete-favorite-logo").on("click", function () {
+    var vehicleID = $(this).data("vehicleid");
+    var userID = $(this).data("userid");
+
+    deleteItem(vehicleID, userID);
   });
 });
 
@@ -735,15 +820,35 @@ function blockUser(id) {
   }
 }
 
+function deleteItem(vehicleID, userID) {
+  if (confirm("Do you want to delete this favorite?")) {
+    $.ajax({
+      url: "/Project/Api/api.php",
+      method: "POST",
+      data: { VehicleID: vehicleID, UserID: userID, deleteFavorite: 1 },
+      dataType: "json",
+      success: function (data) {
+        $('[data-vehicleid="' + vehicleID + '"]').remove();
+        if ($(".favorite-container").children().length === 0) {
+          $(".favorite-container").append(
+            "<p>There are no favorite vehicles for this profile</p>"
+          );
+        }
+      },
+      error: function (error) {
+        console.log(error);
+      },
+    });
+  }
+}
 
- 
 var swiper = new Swiper(".slide-content", {
   slidesPerView: 3,
   spaceBetween: 25,
   loop: true,
-  centerSlide: 'true',
-  fade: 'true',
-  grabCursor: 'true',
+  centerSlide: "true",
+  fade: "true",
+  grabCursor: "true",
   pagination: {
     el: ".swiper-pagination",
     clickable: true,
@@ -754,15 +859,15 @@ var swiper = new Swiper(".slide-content", {
     prevEl: ".swiper-button-prev",
   },
 
-  breakpoints:{
-      0: {
-          slidesPerView: 1,
-      },
-      520: {
-          slidesPerView: 2,
-      },
-      950: {
-          slidesPerView: 3,
-      },
+  breakpoints: {
+    0: {
+      slidesPerView: 1,
+    },
+    520: {
+      slidesPerView: 2,
+    },
+    950: {
+      slidesPerView: 3,
+    },
   },
 });

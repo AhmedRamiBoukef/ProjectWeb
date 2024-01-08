@@ -69,4 +69,40 @@ class UserModel extends DBModel
         $stmt->execute();
         $this->disconnect($db);
     }
+    public function addFavorite($vehicleID, $userID) {
+        $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
+        $sql1 = "SELECT * FROM Favorite WHERE VehicleID = :vehicleID AND UserID = :userID";
+        $stmt1 = $db->prepare($sql1);
+        $stmt1->bindParam(':vehicleID', $vehicleID);
+        $stmt1->bindParam(':userID', $userID);
+        $stmt1->execute();
+        $favorite = $stmt1->fetch();
+        if(!$favorite) {
+            $sql2 = "INSERT INTO Favorite (VehicleID, UserID) VALUES (:vehicleID, :userID)";
+            $stmt2 = $db->prepare($sql2);
+            $stmt2->bindParam(':vehicleID', $vehicleID);
+            $stmt2->bindParam(':userID', $userID);
+            $stmt2->execute();
+        }
+        $this->disconnect($db);
+    }
+
+    public function deleteFavorite($vehicleID, $userID) {
+        $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
+        $sql1 = "SELECT * FROM Favorite WHERE VehicleID = :vehicleID AND UserID = :userID";
+        $stmt1 = $db->prepare($sql1);
+        $stmt1->bindParam(':vehicleID', $vehicleID);
+        $stmt1->bindParam(':userID', $userID);
+        $stmt1->execute();
+        $favorite = $stmt1->fetch();
+        if($favorite) {
+            $sql2 = "DELETE FROM Favorite WHERE VehicleID = :vehicleID AND UserID = :userID";
+            $stmt2 = $db->prepare($sql2);
+            $stmt2->bindParam(':vehicleID', $vehicleID);
+            $stmt2->bindParam(':userID', $userID);
+            $stmt2->execute();
+        }
+        $this->disconnect($db);
+    }
+    
 }    
