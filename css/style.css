@@ -1182,7 +1182,7 @@
   flex-direction: column;
 }
 
-.NewsInfo input {
+.NewsInfo input,.NewsInfo select {
   background: #eee;
 	justify-content: center;
 	display: flex;
@@ -1190,6 +1190,7 @@
 	outline: none;
   width: 70vw;
 	border-radius: 5px;
+  border: none;
 }
 
 .NewsInfo > div {
@@ -1318,8 +1319,7 @@
   width: 40%;
   border-radius: 10px;
   overflow: hidden;
-  margin-right: 10%;
-  background-color: #4070F4;
+  background: #eee;
   padding: 60px;
 }
 .brands-header div:not(:first-child) img {
@@ -1503,6 +1503,66 @@
   cursor: pointer;
 }
 
-#table {
-  
+#table_filter{
+  float:right;
+}
+#table_paginate{
+  float:right;
+}
+
+.container {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.Handler {
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.Handler > div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.Handler > div a {
+  text-decoration: none;
+  color: white;
+  background-color: #4070F4;
+  padding: 10px 30px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+}
+
+.Handler > div a:hover {
+  background-color: #0056b3;
+}
+
+.BrandLogoCard {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.BrandLogoCard img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.manage .bi-car-front {
+  background-color: #007bff;
+}
+
+.profile-reviews {
+  margin: 64px 5%;
 }

@@ -44,4 +44,41 @@ class AdminLayoutView
         </div>
     <?php
     }
+    public function showFooter()
+    {
+    ?>
+        <div class="footer-menu">
+            <ul>
+                <li><a href="/Project/">Home</a></li>
+                <li><a href="/Project/news/">News</a></li>
+                <li><a href="/Project/compare/">Comparator</a></li>
+                <li><a href="/Project/brands/">Brands</a></li>
+                <li><a href="/Project/reviews/">Reviews</a></li>
+                <li><a href="/Project/guide/">Guides</a></li>
+                <li><a href="/Project/contact/">Contact</a></li>
+            </ul>
+            <div class="social">
+                <?php
+                $this->showSocialMedia();
+                ?>
+
+            </div>
+
+            <p>© 2023 AutoVS. All rights reserved.</p>
+        </div>
+
+        <?php
+    }
+    public function showSocialMedia()
+    {
+        $controller = new HomePageController();
+        $socialMedia = $controller->getSocialMedia();
+        foreach ($socialMedia as $media) {
+        ?>
+            <a href="<?php echo $media["URL"] ?>">
+                <img src="/Project/public/images/<?php echo $media["ImagePath"] ?>" alt="<?php echo $media["Type"] ?>">
+            </a>
+        <?php
+        }
+    }
 }

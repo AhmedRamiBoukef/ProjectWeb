@@ -61,9 +61,20 @@ if(isset($_GET['getReviewsbyID']) ) {
     echo json_encode($reviews);
 }
 
+if(isset($_GET['getReviewsBrandbyID']) ) {
+    $controller = new ReviewPageController();
+    $reviews = $controller->getNombreReviewsBrandByID($_GET['getReviewsBrandbyID']);
+    echo json_encode($reviews);
+}
+
 if(isset($_GET['id']) && isset($_GET['showReviewPage'])) {
     $controller = new ReviewPageController();
     echo $controller->getVehicleReviews($_GET['id'],$_GET['showReviewPage']);
+}
+
+if(isset($_GET['id']) && isset($_GET['showReviewBrandPage'])) {
+    $controller = new ReviewPageController();
+    echo $controller->getBrandReviews($_GET['id'],$_GET['showReviewBrandPage']);
 }
 
 
@@ -135,6 +146,21 @@ if(isset($_POST['updatedImages'])) {
 if(isset($_POST['AddNews'])) {
     $controller = new AdminNewsPageController();
     $controller->AddNews();
+}
+
+if(isset($_POST['AddBrand'])) {
+    $controller = new AdminBrandsPageController();
+    $controller->AddBrand();
+}
+
+if(isset($_POST['UpdateBrand'])) {
+    $controller = new AdminBrandsPageController();
+    $controller->UpdateBrand();
+}
+
+if(isset($_POST['AddVehicle'])) {
+    $controller = new AdminBrandsPageController();
+    $controller->AddVehicle();
 }
 
 if(isset($_POST['deleteNews'])) {

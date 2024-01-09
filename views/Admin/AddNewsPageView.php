@@ -37,5 +37,6 @@ class AdminAddNewsPageView extends AdminLayoutView
     {
         $this->showNavbar();
         $this->content();
+        $this->showFooter();
     }
 }

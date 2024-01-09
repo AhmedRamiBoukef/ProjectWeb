@@ -122,9 +122,9 @@ class VehicleDetailsPageView extends LayoutView
                 <div class="vehicle-details-card">
                     <?php
                     $sections = [
-                        "Overview" => ["BrandName", "ModelName", "Version", "ModelYear"],
+                        "Overview" => ["Brand", "Model", "Version", "Year"],
                         "Note & Price" => ["Note", "IndicativePrice"],
-                        "Engine Specifications" => ["EngineName", "EngineType", "Power"],
+                        "Engine Specifications" => ["Engine", "Type", "Power"],
                         "Performance" => ["Acceleration", "TopSpeed"],
                         "Consumption" => ["Consumption"],
                         "Dimensions & Capacity" => ["Dimensions", "Capacity", "VitesseTYPE"],

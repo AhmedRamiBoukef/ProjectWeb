@@ -2,6 +2,7 @@
 require_once($_SERVER['DOCUMENT_ROOT'] . './Project/controllers/User/HomePageController.php');
 require_once($_SERVER['DOCUMENT_ROOT'] . './Project/controllers/User/ComparePageController.php');
 require_once($_SERVER['DOCUMENT_ROOT'] . './Project/controllers/User/NewsPageController.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . './Project/controllers/User/GuidePageController.php');
 require_once($_SERVER['DOCUMENT_ROOT'] . './Project/controllers/User/BrandsPageController.php');
 require_once($_SERVER['DOCUMENT_ROOT'] . './Project/controllers/User/ContactPageController.php');
 require_once($_SERVER['DOCUMENT_ROOT'] . './Project/controllers/User/ReviewPageController.php');
@@ -76,9 +77,25 @@ switch ($request) {
         $controller = new AdminBrandsPageController();
         $controller->showBrandsPage();
         break;  
-    case "/Project/Admin/vehicule/":  
+    case "/Project/Admin/brand/add/":  
         $controller = new AdminBrandsPageController();
-        $controller->showVehiculePage($AdminVehiculeid);
+        $controller->showAddBrandPage();
+        break;  
+    case "/Project/Admin/brand/update/":  
+        $controller = new AdminBrandsPageController();
+        $controller->showUpdateBrandPage($id);
+        break;  
+    case "/Project/Admin/brand/details/":  
+        $controller = new AdminBrandsPageController();
+        $controller->showBrandDetailsPage($id);
+        break;  
+    case "/Project/Admin/brand/details/update/":  
+        $controller = new AdminBrandsPageController();
+        $controller->showUpdateVehiclePage($id);
+        break;  
+    case "/Project/Admin/vehicle/add/":  
+        $controller = new AdminBrandsPageController();
+        $controller->showAddVehiclePage();
         break;  
     case "/Project/Admin/news/":  
         $controller = new AdminNewsPageController();
@@ -120,6 +137,14 @@ switch ($request) {
         $controller = new NewsPageController();
         $controller->showNewsDetailsPage($id);
         break;  
+    case "/Project/guide/":
+        $controller = new GuidePageController();
+        $controller->showGuidePage();
+        break;  
+    case "/Project/guide/detail/":
+        $controller = new NewsPageController();
+        $controller->showNewsDetailsPage($id);
+        break;  
     case "/Project/brands/":
         $controller = new BrandsPageController();
         $controller->showBrandsPage();
@@ -139,6 +164,10 @@ switch ($request) {
     case "/Project/review/":
         $controller = new ReviewPageController();
         $controller->showReviewPage($id);
+        break;  
+    case "/Project/review/brand/":
+        $controller = new ReviewPageController();
+        $controller->showReviewBrandPage($id);
         break;  
     case "/Project/contact/":
         $controller = new ContactPageController();

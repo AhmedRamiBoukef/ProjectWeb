@@ -39,7 +39,7 @@ class AdminHomePageView extends AdminLayoutView
                 <div class="cat">
                     <a href="/Project/Admin/reviews">
     
-                            <img src="/Project/Admin/public/images/review.jpg" alt="" height="100%" width="100%" style="object-fit:cover">
+                            <img src="/Project/public/images/review.jpg" alt="" height="100%" width="100%" style="object-fit:cover">
                             <h1 class="centered">Reviews</h1>
     
                     </a>
@@ -63,6 +63,7 @@ class AdminHomePageView extends AdminLayoutView
     {
         $this->showNavbar();
         $this->content();
+        $this->showFooter();
     }
 
 

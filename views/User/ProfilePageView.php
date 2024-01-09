@@ -96,6 +96,28 @@ class ProfilePageView extends LayoutView
         </div>
         <?php
     }
+    public function showReviews($id) {
+        $controller = new ProfilePageController();
+        $reviews = $controller->getReviews($id);
+        ?>
+        <div class="profile-reviews">
+            <div>
+                <h3>User Notaions</h3>
+            </div>
+            <div class="favorite-container">
+            <?php
+                foreach ($reviews as $review) {
+                    $this->showReviewCard($review);
+                }    
+                if (count($reviews) == 0) {
+                    echo "<p>There are no reviews for this profile</p>";
+                }
+            ?>
+            </div>
+        </div>
+        <?php
+    }
+    
 
     public function showProfilePage()
     {
@@ -103,6 +125,7 @@ class ProfilePageView extends LayoutView
         $this->showMenu();
         $this->modifyUser($_SESSION['UserID']);
         $this->showFavorite();
+        $this->showReviews($_SESSION['UserID']);
         $this->showFooter();
     }
 }

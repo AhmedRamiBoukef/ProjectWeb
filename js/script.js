@@ -1,3 +1,161 @@
+function changeReview(id) {
+  var status = document.getElementById("status" + id).value;
+  $.ajax({
+    url: "/Project/Api/api.php",
+    method: "POST",
+    data: { status: status, ReviewID: id, updateReview: 1 },
+    dataType: "json",
+    success: function (data) {
+      alert("Review updated successfully");
+      if (status === "Rejected") {
+        blockUser(id);
+      }
+    },
+    error: function (error) {
+      console.log(error);
+    },
+  });
+}
+function deleteReview(id) {
+  if (confirm("Are you sure you want to delete this review?")) {
+    $.ajax({
+      url: "/Project/Api/api.php",
+      method: "POST",
+      data: { ReviewID: id, deleteReview: 1 },
+      dataType: "json",
+      success: function (data) {
+        alert("Review deleted successfully");
+        location.reload();
+      },
+      error: function (error) {
+        console.log("error", error);
+      },
+    });
+  }
+}
+
+function deleteNews(id) {
+  if (confirm("Are you sure you want to delete this News?")) {
+    $.ajax({
+      url: "/Project/Api/api.php",
+      method: "POST",
+      data: { NewsID: id, deleteNews: 1 },
+      dataType: "json",
+      success: function (data) {
+        alert("News deleted successfully");
+        location.reload();
+      },
+      error: function (error) {
+        console.log("error", error);
+      },
+    });
+  }
+}
+function deleteUser(id) {
+  if (confirm("Are you sure you want to delete this user?")) {
+    $.ajax({
+      url: "/Project/Api/api.php",
+      method: "POST",
+      data: { UserID: id, deleteUser: 1 },
+      dataType: "json",
+      success: function (data) {
+        alert("User deleted successfully");
+        location.reload();
+      },
+      error: function (error) {
+        console.log("error", error);
+      },
+    });
+  }
+}
+function deleteNews(id) {
+  if (confirm("Are you sure you want to delete this News?")) {
+    $.ajax({
+      url: "/Project/Api/api.php",
+      method: "POST",
+      data: { NewsID: id, deleteNews: 1 },
+      dataType: "json",
+      success: function (data) {
+        alert("News deleted successfully");
+        location.reload();
+      },
+      error: function (error) {
+        console.log("error", error);
+      },
+    });
+  }
+}
+function blockUser(id) {
+  if (confirm("Do you want to block this user?")) {
+    $.ajax({
+      url: "/Project/Api/api.php",
+      method: "POST",
+      data: { UserID: id, blockUser: 1 },
+      dataType: "json",
+      success: function (data) {
+        alert("User blocked successfully");
+        location.reload();
+      },
+      error: function (error) {
+        console.log(error);
+      },
+    });
+  }
+}
+
+function deleteItem(vehicleID, userID) {
+  if (confirm("Do you want to delete this favorite?")) {
+    $.ajax({
+      url: "/Project/Api/api.php",
+      method: "POST",
+      data: { VehicleID: vehicleID, UserID: userID, deleteFavorite: 1 },
+      dataType: "json",
+      success: function (data) {
+        $('[data-vehicleid="' + vehicleID + '"]').remove();
+        if ($(".favorite-container").children().length === 0) {
+          $(".favorite-container").append(
+            "<p>There are no favorite vehicles for this profile</p>"
+          );
+        }
+      },
+      error: function (error) {
+        console.log(error);
+      },
+    });
+  }
+}
+
+var swiper = new Swiper(".slide-content", {
+  slidesPerView: 3,
+  spaceBetween: 25,
+  loop: true,
+  centerSlide: "true",
+  fade: "true",
+  grabCursor: "true",
+  pagination: {
+    el: ".swiper-pagination",
+    clickable: true,
+    dynamicBullets: true,
+  },
+  navigation: {
+    nextEl: ".swiper-button-next",
+    prevEl: ".swiper-button-prev",
+  },
+
+  breakpoints: {
+    0: {
+      slidesPerView: 1,
+    },
+    520: {
+      slidesPerView: 2,
+    },
+    950: {
+      slidesPerView: 3,
+    },
+  },
+});
+
+
 const root = document.documentElement;
 const spinnerElementsDisplayed = getComputedStyle(root).getPropertyValue(
   "--spinner-elements-displayed"
@@ -75,6 +233,67 @@ function createPagination(totalPages, page) {
     },
   });
 }
+function createPagination2(totalPages, page) {
+  const element = document.querySelector("#pagination");
+  const reviewList = document.querySelector("#reviews-list");
+  let liTag = "";
+  let active;
+  let beforePage = page - 1;
+  let afterPage = page + 1;
+  if (page > 1) {
+    liTag += `<li class="page-item" onclick="createPagination2(totalPages, ${
+      page - 1
+    })"><a class="page-link">Previous</a></li>`;
+  }
+
+  if (page > 2) {
+    liTag += `<li class="page-item" onclick="createPagination2(totalPages, 1)"><a class="page-link">1</a></li>`;
+    if (page > 3) {
+      liTag += `<li class="page-item"><a class="page-link">...</a></li>`;
+    }
+  }
+
+  for (var plength = beforePage; plength <= afterPage; plength++) {
+    if (plength > totalPages) {
+      continue;
+    }
+    if (plength == 0) {
+      plength = plength + 1;
+    }
+    if (page == plength) {
+      active = "active";
+    } else {
+      active = "";
+    }
+    liTag += `<li class="page-item  ${active}" onclick="createPagination2(totalPages, ${plength})"><a class="page-link">${plength}</a></li>`;
+  }
+
+  if (page < totalPages - 1) {
+    if (page < totalPages - 2) {
+      liTag += `<li class="page-item"><a class="page-link">...</a></li>`;
+    }
+    liTag += `<li class="page-item" onclick="createPagination2(totalPages, ${totalPages})"><a class="page-link">${totalPages}</a></li>`;
+  }
+
+  if (page < totalPages) {
+    liTag += `<li class="page-item" onclick="createPagination2(totalPages, ${
+      page + 1
+    })"><a class="page-link">Next</a></li>`;
+  }
+  element.innerHTML = liTag;
+  $.ajax({
+    url: `/Project/Api/api.php?id=${
+      location.href.split("=")[1]
+    }&showReviewBrandPage=${page}`,
+    method: "GET",
+    success: function (data) {
+      reviewList.innerHTML = data;
+    },
+    error: function (error) {
+      console.error("Error fetching reviews:", error);
+    },
+  });
+}
 
 $(document).ready(function () {
   $(".favorite-logo").click(function () {
@@ -110,17 +329,31 @@ $(document).ready(function () {
     }
     $(this).find(".heart-icon").toggleClass("show not-show");
   });
-  var table = $("#table").DataTable({
-    search: true
-  });
-  if (location.href.split("=")[1] === "http://localhost/Project/review/?id") {
+  
+  if (location.href.split("=")[0] === "http://localhost/Project/review/?id") {
     $.ajax({
       url: `/Project/Api/api.php?getReviewsbyID=${location.href.split("=")[1]}`,
       method: "GET",
       dataType: "json",
       success: function (data) {
-        totalPages = Math.floor(data / 5) + 1;
+        totalPages = Math.ceil(data / 5);
         createPagination(totalPages, page);
+      },
+      error: function (error) {
+        console.error("Error fetching reviews:", error);
+      },
+    });
+  }
+  if (location.href.split("=")[0] === "http://localhost/Project/review/brand/?id") {
+    $.ajax({
+      url: `/Project/Api/api.php?getReviewsBrandbyID=${location.href.split("=")[1]}`,
+      method: "GET",
+      dataType: "json",
+      success: function (data) {
+        totalPages = Math.ceil(data / 5) ;
+        if (data != null) {
+          createPagination2(totalPages, page);
+        } 
       },
       error: function (error) {
         console.error("Error fetching reviews:", error);
@@ -701,6 +934,23 @@ $(document).ready(function () {
       reader.readAsDataURL(files[i]);
     }
   });
+  $("#BrandLogo").on("change", function () {
+    var file = this.files[0];
+
+    if (file) {
+      var reader = new FileReader();
+
+      reader.onload = function (e) {
+        var image = $("<img>").attr("src", e.target.result);
+
+        $(".BrandLogoCard").html(image);
+      };
+
+      reader.readAsDataURL(file);
+    } else {
+      $(".BrandLogoCard").html("");
+    }
+  });
 
   $(document).on("click", ".delete-image", function () {
     var card = $(this).closest(".card");
@@ -713,161 +963,13 @@ $(document).ready(function () {
 
     deleteItem(vehicleID, userID);
   });
-});
-
-function changeReview(id) {
-  var status = document.getElementById("status" + id).value;
-  $.ajax({
-    url: "/Project/Api/api.php",
-    method: "POST",
-    data: { status: status, ReviewID: id, updateReview: 1 },
-    dataType: "json",
-    success: function (data) {
-      alert("Review updated successfully");
-      if (status === "Rejected") {
-        blockUser(id);
-      }
-    },
-    error: function (error) {
-      console.log(error);
-    },
+  var table = $("#table").DataTable({
+    search: true,
+    searchPanes: true,
   });
-}
-function deleteReview(id) {
-  if (confirm("Are you sure you want to delete this review?")) {
-    $.ajax({
-      url: "/Project/Api/api.php",
-      method: "POST",
-      data: { ReviewID: id, deleteReview: 1 },
-      dataType: "json",
-      success: function (data) {
-        alert("Review deleted successfully");
-        location.reload();
-      },
-      error: function (error) {
-        console.log("error", error);
-      },
-    });
-  }
-}
+  table.searchPanes.container().prependTo(table.table().container());
+  table.searchPanes.resizePanes();
 
-function deleteNews(id) {
-  if (confirm("Are you sure you want to delete this News?")) {
-    $.ajax({
-      url: "/Project/Api/api.php",
-      method: "POST",
-      data: { NewsID: id, deleteNews: 1 },
-      dataType: "json",
-      success: function (data) {
-        alert("News deleted successfully");
-        location.reload();
-      },
-      error: function (error) {
-        console.log("error", error);
-      },
-    });
-  }
-}
-function deleteUser(id) {
-  if (confirm("Are you sure you want to delete this user?")) {
-    $.ajax({
-      url: "/Project/Api/api.php",
-      method: "POST",
-      data: { UserID: id, deleteUser: 1 },
-      dataType: "json",
-      success: function (data) {
-        alert("User deleted successfully");
-        location.reload();
-      },
-      error: function (error) {
-        console.log("error", error);
-      },
-    });
-  }
-}
-function deleteNews(id) {
-  if (confirm("Are you sure you want to delete this News?")) {
-    $.ajax({
-      url: "/Project/Api/api.php",
-      method: "POST",
-      data: { NewsID: id, deleteNews: 1 },
-      dataType: "json",
-      success: function (data) {
-        alert("News deleted successfully");
-        location.reload();
-      },
-      error: function (error) {
-        console.log("error", error);
-      },
-    });
-  }
-}
-function blockUser(id) {
-  if (confirm("Do you want to block this user?")) {
-    $.ajax({
-      url: "/Project/Api/api.php",
-      method: "POST",
-      data: { UserID: id, blockUser: 1 },
-      dataType: "json",
-      success: function (data) {
-        alert("User blocked successfully");
-        location.reload();
-      },
-      error: function (error) {
-        console.log(error);
-      },
-    });
-  }
-}
-
-function deleteItem(vehicleID, userID) {
-  if (confirm("Do you want to delete this favorite?")) {
-    $.ajax({
-      url: "/Project/Api/api.php",
-      method: "POST",
-      data: { VehicleID: vehicleID, UserID: userID, deleteFavorite: 1 },
-      dataType: "json",
-      success: function (data) {
-        $('[data-vehicleid="' + vehicleID + '"]').remove();
-        if ($(".favorite-container").children().length === 0) {
-          $(".favorite-container").append(
-            "<p>There are no favorite vehicles for this profile</p>"
-          );
-        }
-      },
-      error: function (error) {
-        console.log(error);
-      },
-    });
-  }
-}
-
-var swiper = new Swiper(".slide-content", {
-  slidesPerView: 3,
-  spaceBetween: 25,
-  loop: true,
-  centerSlide: "true",
-  fade: "true",
-  grabCursor: "true",
-  pagination: {
-    el: ".swiper-pagination",
-    clickable: true,
-    dynamicBullets: true,
-  },
-  navigation: {
-    nextEl: ".swiper-button-next",
-    prevEl: ".swiper-button-prev",
-  },
-
-  breakpoints: {
-    0: {
-      slidesPerView: 1,
-    },
-    520: {
-      slidesPerView: 2,
-    },
-    950: {
-      slidesPerView: 3,
-    },
-  },
+  $(".dtsp-collapseAll").click();
 });
+

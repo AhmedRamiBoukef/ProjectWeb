@@ -38,27 +38,18 @@ class ReviewPageView extends LayoutView
         }
     }
 
-    public function showReview($id)
+    public function showReview()
     {
-        $controller = new ReviewPageController();
     ?>
         <div class="Review-details">
             <h1>Reviews</h1>
             <p>Here’s a list of reviews given for this car.</p>
             <div id="reviews-list">
-            <?php
-                $controller->getVehicleReviews($id);
-            ?>
+                <p>There are no reviews for this brand.</p>
             </div>
             <nav>
                 <ul id="pagination" class="pagination justify-content-center">
-                    <li class="page-item disabled">
-                        <a class="page-link">Previous</a>
-                    </li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">Next</a>
-                    </li>
+                    
                 </ul>
             </nav>
         </div>
@@ -71,7 +62,7 @@ class ReviewPageView extends LayoutView
         $this->showHeader();
         $this->showMenu();
         $this->showVehicleDetails($id);
-        $this->showReview($id);
+        $this->showReview();
         $this->showFooter();
     }
 }

@@ -10,9 +10,9 @@ class VehicleModel extends DBModel
                     v.VehiculeName,
                     v.Note,
                     v.IndicativePrice,
-                    b.BrandName,
-                    m.ModelName,
-                    m.ModelYear,
+                    b.BrandName AS Brand,
+                    m.ModelName AS Model,
+                    m.ModelYear AS Year,
                     v.Version,
                     v.Dimensions,
                     v.Capacity,
@@ -22,8 +22,8 @@ class VehicleModel extends DBModel
                     i.ImagePath AS VehicleImage,
                     p.Acceleration,
                     p.TopSpeed,
-                    e.EngineName,
-                    e.EngineType,
+                    e.EngineName AS Engine,
+                    e.EngineType AS Type,
                     e.Power,
                     CASE WHEN f.VehicleID IS NOT NULL THEN 1 ELSE 0 END AS favorite
                 FROM 
@@ -79,5 +79,58 @@ class VehicleModel extends DBModel
         $vehicle = $stmt->fetchAll();
         $this->disconnect($db);
         return $vehicle;
+    }
+    public function AddVehicle($BrandID,$ModelName,$Version,$ModelYear,$IndicativePrice,$EngineName,$EngineType,$Power,$Acceleration,$TopSpeed,$Consumption,$Dimensions,$Capacity,$VitesseTYPE,$VehicleImage)
+    {
+        $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
+        $sql = "INSERT INTO Image (ImagePath) VALUES (:image);";
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(":image", $VehicleImage);
+        $stmt->execute();
+        $imageID = $db->lastInsertId(); 
+        $sql = "INSERT INTO Engine (EngineName, EngineType, Power) VALUES (:EngineName, :EngineType, :Power);";
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(":EngineName", $EngineName);
+        $stmt->bindParam(":EngineType", $EngineType);
+        $stmt->bindParam(":Power", $Power);
+        $stmt->execute();
+        $engineID = $db->lastInsertId();
+        $sql = "INSERT INTO Performance (Acceleration, TopSpeed) VALUES (:Acceleration, :TopSpeed);";
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(":Acceleration", $Acceleration);
+        $stmt->bindParam(":TopSpeed", $TopSpeed);
+        $stmt->execute();
+        $performanceID = $db->lastInsertId();
+        $sql = "INSERT INTO Model (ModelName, ModelYear, BrandID) VALUES (:ModelName, :ModelYear, :BrandID);";
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(":ModelName", $ModelName);
+        $stmt->bindParam(":ModelYear", $ModelYear);
+        $stmt->bindParam(":BrandID", $BrandID);
+        $stmt->execute();
+        $ModelID = $db->lastInsertId();
+        $sql = "SELECT BrandName FROM Brand WHERE BrandID = :BrandID;";
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(":BrandID", $BrandID);
+        $stmt->execute();
+        $brandName = $stmt->fetch();
+
+
+        $sql = "INSERT INTO VehicleInfo (VehiculeName, IndicativePrice, ModelID, EngineID, PerformanceID, ImageID, Dimensions, Capacity, Consumption, VitesseTYPE, Version) VALUES (:VehiculeName, :IndicativePrice, :ModelID, :EngineID, :PerformanceID, :ImageID, :Dimensions, :Capacity, :Consumption, :VitesseTYPE, :Version)";
+        $stmt = $db->prepare($sql);
+        $VehicleName = $brandName['BrandName'] . " " . $ModelName . " " . $Version;
+        $stmt->bindParam(':VehiculeName', $VehicleName);
+        $stmt->bindParam(':IndicativePrice', $IndicativePrice);
+        $stmt->bindParam(':ModelID', $ModelID);
+        $stmt->bindParam(':EngineID', $engineID);
+        $stmt->bindParam(':PerformanceID', $performanceID);
+        $stmt->bindParam(':ImageID', $imageID);
+        $stmt->bindParam(':Dimensions', $Dimensions);
+        $stmt->bindParam(':Capacity', $Capacity);
+        $stmt->bindParam(':Consumption', $Consumption);
+        $stmt->bindParam(':VitesseTYPE', $VitesseTYPE);
+        $stmt->bindParam(':Version', $Version);
+        $stmt->execute();
+        $this->disconnect($db);
+
     }
 }

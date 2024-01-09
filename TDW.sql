@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Jan 03, 2024 at 10:33 PM
+-- Generation Time: Jan 09, 2024 at 07:45 PM
 -- Server version: 5.7.26
 -- PHP Version: 7.2.18
 
@@ -21,6 +21,9 @@ SET time_zone = "+00:00";
 --
 -- Database: `projecttdw`
 --
+DROP DATABASE IF EXISTS `projecttdw`;
+CREATE DATABASE IF NOT EXISTS `projecttdw` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `projecttdw`;
 
 -- --------------------------------------------------------
 
@@ -63,8 +66,9 @@ CREATE TABLE IF NOT EXISTS `brand` (
   `YearOfEstablishment` int(11) DEFAULT NULL,
   `Logo` int(11) DEFAULT NULL,
   PRIMARY KEY (`BrandID`),
+  UNIQUE KEY `BrandName` (`BrandName`),
   KEY `Logo` (`Logo`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `brand`
@@ -94,17 +98,17 @@ CREATE TABLE IF NOT EXISTS `comparison` (
   KEY `UserID` (`UserID`),
   KEY `Vehicle1ID` (`Vehicle1ID`),
   KEY `Vehicle2ID` (`Vehicle2ID`)
-) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `comparison`
 --
 
 INSERT INTO `comparison` (`ComparisonID`, `UserID`, `Vehicle1ID`, `Vehicle2ID`, `Date`, `ComparisonCount`) VALUES
-(1, 1, 1, 2, '2023-12-09 23:00:00', 4),
+(1, 1, 1, 2, '2023-12-09 23:00:00', 5),
 (2, 2, 3, 4, '2023-12-04 23:00:00', 3),
-(3, NULL, 1, 3, '2023-12-28 22:30:44', 4),
-(4, NULL, 2, 3, '2023-12-28 22:30:44', 3),
+(3, NULL, 1, 3, '2023-12-28 22:30:44', 5),
+(4, NULL, 2, 3, '2023-12-28 22:30:44', 4),
 (5, NULL, 1, 4, '2023-12-28 22:46:49', 2),
 (6, NULL, 2, 4, '2023-12-28 22:46:49', 2);
 
@@ -122,7 +126,7 @@ CREATE TABLE IF NOT EXISTS `contact` (
   `LOGO` int(11) DEFAULT NULL,
   PRIMARY KEY (`ContactID`),
   KEY `LOGO` (`LOGO`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `contact`
@@ -146,7 +150,7 @@ CREATE TABLE IF NOT EXISTS `engine` (
   `EngineType` varchar(20) DEFAULT NULL,
   `Power` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`EngineID`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `engine`
@@ -157,6 +161,27 @@ INSERT INTO `engine` (`EngineID`, `EngineName`, `EngineType`, `Power`) VALUES
 (2, 'V8', 'Gasoline', '450 hp'),
 (3, 'V6', 'Gasoline', '310 hp'),
 (4, 'V8', 'Gasoline', '455 hp');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `favorite`
+--
+
+DROP TABLE IF EXISTS `favorite`;
+CREATE TABLE IF NOT EXISTS `favorite` (
+  `UserID` int(11) NOT NULL,
+  `VehicleID` int(11) NOT NULL,
+  PRIMARY KEY (`UserID`,`VehicleID`),
+  KEY `fk_veh` (`VehicleID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `favorite`
+--
+
+INSERT INTO `favorite` (`UserID`, `VehicleID`) VALUES
+(3, 2);
 
 -- --------------------------------------------------------
 
@@ -172,7 +197,7 @@ CREATE TABLE IF NOT EXISTS `guidesetting` (
   `ImageID` int(11) DEFAULT NULL,
   `VehicleID` int(11) DEFAULT NULL,
   PRIMARY KEY (`GuideSettingID`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `guidesetting`
@@ -193,7 +218,7 @@ CREATE TABLE IF NOT EXISTS `image` (
   `ImageID` int(11) NOT NULL AUTO_INCREMENT,
   `ImagePath` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`ImageID`)
-) ENGINE=MyISAM AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `image`
@@ -229,8 +254,8 @@ CREATE TABLE IF NOT EXISTS `model` (
   `BrandID` int(11) DEFAULT NULL,
   `ModelYear` int(11) DEFAULT NULL,
   PRIMARY KEY (`ModelID`),
-  KEY `BrandID` (`BrandID`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+  KEY `fk_brand` (`BrandID`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `model`
@@ -255,7 +280,7 @@ CREATE TABLE IF NOT EXISTS `news` (
   `Content` text,
   `Date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`NewsID`)
-) ENGINE=MyISAM AUTO_INCREMENT=35 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `news`
@@ -305,7 +330,7 @@ CREATE TABLE IF NOT EXISTS `newsimage` (
   `NewsID` int(11) NOT NULL,
   `ImageID` int(11) NOT NULL,
   PRIMARY KEY (`NewsID`,`ImageID`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `newsimage`
@@ -355,7 +380,7 @@ CREATE TABLE IF NOT EXISTS `performance` (
   `Acceleration` varchar(20) DEFAULT NULL,
   `TopSpeed` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`PerformanceID`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `performance`
@@ -381,20 +406,20 @@ CREATE TABLE IF NOT EXISTS `review` (
   `BrandID` int(11) DEFAULT NULL,
   `Comment` text,
   `Rating` int(11) DEFAULT NULL,
-  `Status` enum('Approved','Rejected') DEFAULT NULL,
+  `Status` enum('Approved','Rejected','Pending') DEFAULT 'Pending',
   `DATE` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`ReviewID`),
   KEY `UserID` (`UserID`),
   KEY `VehicleID` (`VehicleID`),
   KEY `BrandID` (`BrandID`)
-) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `review`
 --
 
 INSERT INTO `review` (`ReviewID`, `UserID`, `VehicleID`, `BrandID`, `Comment`, `Rating`, `Status`, `DATE`) VALUES
-(3, 1, 1, NULL, 'This vehicle exceeded my expectations in every way. The performance is outstanding, and the sleek design is simply breathtaking. The interior is luxurious, and the advanced technology features make driving a joy. I highly recommend this car!', 5, 'Rejected', '2023-12-22 15:07:07'),
+(3, 1, 1, NULL, 'This vehicle exceeded my expectations in every way. The performance is outstanding, and the sleek design is simply breathtaking. The interior is luxurious, and the advanced technology features make driving a joy. I highly recommend this car!', 5, 'Approved', '2023-12-22 15:07:07'),
 (5, 2, 1, NULL, 'I have been driving this car for a few months now, and I am impressed with its fuel efficiency. The handling is smooth, and the safety features add an extra layer of confidence. The spacious interior is perfect for long drives. Overall, a great investment!', 4, 'Approved', '2023-12-22 15:07:07'),
 (6, 1, 2, NULL, 'My experience with this vehicle has been mixed. While the exterior design is eye-catching, I ve encountered some issues with the transmission. The customer service was responsive, and the problem was fixed, but it was still an inconvenience. Hoping for better reliability in the future.', 3, 'Approved', '2023-12-22 15:07:07'),
 (7, 2, 2, NULL, 'I recently purchased this car, and it has quickly become my favorite. The acceleration is impressive, and the handling is superb. The infotainment system is user-friendly, and the overall build quality is top-notch. Definitely worth the investment!', 5, 'Approved', '2023-12-22 15:07:07'),
@@ -402,7 +427,9 @@ INSERT INTO `review` (`ReviewID`, `UserID`, `VehicleID`, `BrandID`, `Comment`, `
 (12, 2, 1, NULL, 'I love the design of this vehicle. It\'s stylish and modern. The performance is outstanding, especially the acceleration. The safety features add an extra layer of confidence on the road.', 4, 'Approved', '2023-01-02 00:00:00'),
 (14, 2, 1, NULL, 'Spacious interior with plenty of legroom. The cargo space is generous, making it ideal for family trips. The handling is responsive, and the ride is comfortable. Overall, a reliable and practical choice.', 5, 'Approved', '2023-01-04 00:00:00'),
 (16, 2, 1, NULL, 'The technology in this vehicle is cutting-edge. The infotainment system is user-friendly, and the connectivity options are impressive. A joy to drive with advanced features at your fingertips.', 4, 'Approved', '2023-01-06 00:00:00'),
-(17, 1, 1, NULL, 'Decent value for the money. It\'s not the flashiest car, but it gets the job done. Fuel economy is satisfactory, and maintenance costs are reasonable. A practical choice for daily commuting.', 3, 'Approved', '2023-01-07 00:00:00');
+(17, 1, 1, NULL, 'Decent value for the money. It\'s not the flashiest car, but it gets the job done. Fuel economy is satisfactory, and maintenance costs are reasonable. A practical choice for daily commuting.', 3, 'Approved', '2023-01-07 00:00:00'),
+(24, 3, NULL, 3, 'lfeknzlkfnzfrz', 4, 'Approved', '2024-01-07 18:14:32'),
+(26, 3, 2, NULL, 'dzmlka,dza', 4, 'Pending', '2024-01-09 13:23:22');
 
 -- --------------------------------------------------------
 
@@ -418,7 +445,7 @@ CREATE TABLE IF NOT EXISTS `slideshowsetting` (
   `Publicite` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`SlideshowSettingID`),
   KEY `SlideshowImageURL` (`SlideshowImageURL`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `slideshowsetting`
@@ -450,7 +477,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `admin` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`UserID`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `user`
@@ -487,7 +514,7 @@ CREATE TABLE IF NOT EXISTS `vehicleinfo` (
   KEY `ModelID` (`ModelID`),
   KEY `EngineID` (`EngineID`),
   KEY `PerformanceID` (`PerformanceID`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `vehicleinfo`
@@ -498,6 +525,36 @@ INSERT INTO `vehicleinfo` (`VehicleID`, `VehiculeName`, `Note`, `IndicativePrice
 (2, 'Ford Mustang GT', 5, '4500000 DA', 2, 'GT Premium', '4.7752 x 1.905 x 1.3716', '4 passengers', '9.4 L/100km', 12, 2, 'Manual', 2),
 (3, 'Dodge Charger SXT', 4, '3200000 DA', 3, 'SXT', '5.08 x 1.905 x 1.4732', '5 passengers', '8.4 L/100km', 13, 3, 'Automatic', 3),
 (4, 'Chevrolet Camaro SS', 4, '4000000 DA', 4, 'SS', '4.7752 x 1.905 x 1.3462', '4 passengers', '12.4 L/100km', 14, 4, 'Manual', 4);
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `comparison`
+--
+ALTER TABLE `comparison`
+  ADD CONSTRAINT `fk_veh1` FOREIGN KEY (`Vehicle1ID`) REFERENCES `vehicleinfo` (`VehicleID`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_veh2` FOREIGN KEY (`Vehicle2ID`) REFERENCES `vehicleinfo` (`VehicleID`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `favorite`
+--
+ALTER TABLE `favorite`
+  ADD CONSTRAINT `fk_user` FOREIGN KEY (`UserID`) REFERENCES `user` (`UserID`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_veh` FOREIGN KEY (`VehicleID`) REFERENCES `vehicleinfo` (`VehicleID`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `model`
+--
+ALTER TABLE `model`
+  ADD CONSTRAINT `fk_brand` FOREIGN KEY (`BrandID`) REFERENCES `brand` (`BrandID`);
+
+--
+-- Constraints for table `vehicleinfo`
+--
+ALTER TABLE `vehicleinfo`
+  ADD CONSTRAINT `fk_model` FOREIGN KEY (`ModelID`) REFERENCES `model` (`ModelID`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
