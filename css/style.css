@@ -300,7 +300,7 @@
   padding: 5%;
 }
 
-.compare-button , #load-more-btn{
+.compare-button , #load-more-btn,#load-moreguides-btn{
   padding: 10px 30px;
   background-color: #007bff;
   color: #fff; 
@@ -541,7 +541,6 @@
 
 .news-card {
   display: flex;
-  justify-content: center;
   flex-direction: column;
   gap: 10px;
   box-shadow: 0 2px 10px rgba(0,0,0,.1);
@@ -577,7 +576,7 @@
   font-size: 12px;
 }
 
-#load-more-btn:hover {
+#load-more-btn:hover,#load-moreguides-btn:hover {
   background-color: #0056b3;
 }
 
@@ -1565,4 +1564,15 @@
 
 .profile-reviews {
   margin: 64px 5%;
+}
+
+.Show-Details {
+  color: #4070F4;
+  display: flex;
+  align-items: center;
+}
+
+.Show-Details a {
+  text-decoration: none;
+  color: inherit;
 }

@@ -66,7 +66,7 @@ class BrandModel extends DBModel
         $this->disconnect($db);
         return $infos;
     }
-    public function getVehiculeByID($id)
+    public function getVehiculesByID($id)
     {
         $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
         $sql = "SELECT B.*,M.ModelName,M.ModelYear,VI.Version,VI.VehicleID, VI.VehiculeName, VI.ImageID, VI.Note, VI.IndicativePrice, VI.Dimensions, VI.Capacity, VI.Consumption, VI.VitesseTYPE, E.EngineName, E.EngineType, E.Power, P.Acceleration, P.TopSpeed, I.ImagePath FROM VehicleInfo VI JOIN Model M ON VI.ModelID = M.ModelID JOIN Brand B ON M.BrandID = B.BrandID JOIN Engine E ON VI.EngineID = E.EngineID JOIN Performance P ON VI.PerformanceID = P.PerformanceID JOIN Image I ON VI.ImageID = I.ImageID where B.BrandID = :id";
@@ -74,6 +74,17 @@ class BrandModel extends DBModel
         $stmt->bindParam(':id', $id);
         $stmt->execute();
         $infos = $stmt->fetchAll();
+        $this->disconnect($db);
+        return $infos;
+    }
+    public function getVehiculeByID($id)
+    {
+        $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
+        $sql = "SELECT B.BrandName,B.BrandID,M.ModelName,M.ModelYear,VI.*, E.EngineName, E.EngineType, E.Power, P.Acceleration, P.TopSpeed, I.ImagePath FROM VehicleInfo VI JOIN Model M ON VI.ModelID = M.ModelID JOIN Brand B ON M.BrandID = B.BrandID JOIN Engine E ON VI.EngineID = E.EngineID JOIN Performance P ON VI.PerformanceID = P.PerformanceID JOIN Image I ON VI.ImageID = I.ImageID where VI.VehicleID = :id";
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+        $infos = $stmt->fetch();
         $this->disconnect($db);
         return $infos;
     }

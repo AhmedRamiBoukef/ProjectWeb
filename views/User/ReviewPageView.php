@@ -17,7 +17,7 @@ class ReviewsPageView extends LayoutView
                     $brands = $controller->getBrands();
                     foreach ($brands as $brand) {
                     ?>
-                        <li><a href="/Project/review/?id=<?php echo $brand['BrandID'] ?>"><img src="/Project/public/images/<?php echo $brand['ImagePath'] ?>" alt="Brand<?php echo $brand['BrandID'] ?>"></a></li>
+                        <li><a href="/Project/review/brand/?id=<?php echo $brand['BrandID'] ?>"><img src="/Project/public/images/<?php echo $brand['ImagePath'] ?>" alt="Brand<?php echo $brand['BrandID'] ?>"></a></li>
                     <?php
                     }
                     ?>

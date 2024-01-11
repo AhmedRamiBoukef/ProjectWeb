@@ -54,7 +54,7 @@ class AdminLoginPageController
     public function handleLogout()
     {
         session_start();
-        if (isset($_SESSION['admin'])) {
+        if (isset($_SESSION['UserID'])) {
             session_destroy();
         }
         header('Location: /Project/Admin/login/');

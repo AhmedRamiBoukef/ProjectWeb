@@ -142,8 +142,8 @@ switch ($request) {
         $controller->showGuidePage();
         break;  
     case "/Project/guide/detail/":
-        $controller = new NewsPageController();
-        $controller->showNewsDetailsPage($id);
+        $controller = new GuidePageController();
+        $controller->showGuideDetailsPage($id);
         break;  
     case "/Project/brands/":
         $controller = new BrandsPageController();

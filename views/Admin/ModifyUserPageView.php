@@ -17,33 +17,32 @@ class AdminModifyUsersPageView extends AdminLayoutView
                     <input type="hidden" name="UserID" value="<?= $user['UserID'] ?>">
                     <div>
                         <label for="Username">Username</label>
-                        <input id="Username" name="username" type="text" value="<?= $user['username'] ?>" required>
+                        <input disabled id="Username" name="username" type="text" value="<?= $user['username'] ?>" required>
                     </div>
                     <div>
                         <label for="Firstname">Firstname</label>
-                        <input id="Firstname" name="FirstName" type="text" value="<?= $user['FirstName'] ?>" required>
+                        <input disabled id="Firstname" name="FirstName" type="text" value="<?= $user['FirstName'] ?>" required>
                     </div>
                     <div>
                         <label for="Lastname">Lastname</label>
-                        <input id="Lastname" name="LastName" type="text" value="<?= $user['LastName'] ?>" required>
+                        <input disabled id="Lastname" name="LastName" type="text" value="<?= $user['LastName'] ?>" required>
                     </div>
                     <div>
                         <label for="Gender">Gender</label>
-                        <select id="Gender" name="Gender" required>
+                        <select disabled id="Gender" name="Gender" required>
                             <option value="Male" <?= $user['Gender'] == 'Male' ? "selected" : "" ?>>Male</option>
                             <option value="Female" <?= $user['Gender'] == 'Female' ? "selected" : "" ?>>Female</option>
                         </select>
                     </div>
                     <div>
                         <label for="DateOfBirth">Date Of Birth</label>
-                        <input id="DateOfBirth" name="DateOfBirth" type="date" value="<?= $user['DateOfBirth'] ?>" required>
+                        <input disabled id="DateOfBirth" name="DateOfBirth" type="date" value="<?= $user['DateOfBirth'] ?>" required>
                     </div>
                     <div>
                         <label for="Email">Email</label>
-                        <input id="Email" name="Email" type="email" value="<?= $user['Email'] ?>" required>
+                        <input disabled id="Email" name="Email" type="email" value="<?= $user['Email'] ?>" required>
                     </div>
                 </div>
-                <button type="submit" name="updateUser">Update</button>
             </form>
         </div>
         

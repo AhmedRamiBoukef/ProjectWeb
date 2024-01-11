@@ -51,6 +51,23 @@ function deleteNews(id) {
     });
   }
 }
+function deleteVehicule(id) {
+  if (confirm("Are you sure you want to delete this Vehicle?")) {
+    $.ajax({
+      url: "/Project/Api/api.php",
+      method: "POST",
+      data: { VehicleID: id, deleteVehicle: 1 },
+      dataType: "json",
+      success: function (data) {
+        alert("Vehicle deleted successfully");
+        location.reload();
+      },
+      error: function (error) {
+        console.log("error", error);
+      },
+    });
+  }
+}
 function deleteUser(id) {
   if (confirm("Are you sure you want to delete this user?")) {
     $.ajax({
@@ -611,29 +628,65 @@ $(document).ready(function () {
   });
 
   const loadMoreBtn = $("#load-more-btn");
+  const loadMoreGuidesBtn = $("#load-moreguides-btn");
   const newsContainer = $("#news-container");
 
   let nombre = 0;
+  $.ajax({
+    url: `/Project/Api/api.php?getNews=1`,
+    method: "GET",
+    dataType: "json",
+    success: function (data) {
+      nombre = data.NumberOfNews;
+    },
+    error: function (error) {
+      console.error("Error fetching news:", error);
+    },
+  });
   loadMoreBtn.on("click", function () {
-    $.ajax({
-      url: `/Project/Api/api.php?getNews=1`,
-      method: "GET",
-      dataType: "json",
-      success: function (data) {
-        nombre = data.NumberOfNews;
-      },
-      error: function (error) {
-        console.error("Error fetching news:", error);
-      },
-    });
     if (newsContainer[0].children.length < nombre) {
       fetchNews();
+    } else {
+      loadMoreBtn.remove();
     }
   });
 
   function fetchNews() {
     $.ajax({
       url: `/Project/Api/api.php?offset=${offset}&limit=${limit}`,
+      method: "GET",
+      dataType: "json",
+      success: function (data) {
+        appendNewsToContainer(data);
+        offset = offset + limit;
+      },
+      error: function (error) {
+        console.error("Error fetching news:", error);
+      },
+    });
+  }
+  $.ajax({
+    url: `/Project/Api/api.php?getGuides=1`,
+    method: "GET",
+    dataType: "json",
+    success: function (data) {
+      nombre = data.NumberOfGuides;
+    },
+    error: function (error) {
+      console.error("Error fetching guides:", error);
+    },
+  });
+  loadMoreGuidesBtn.on("click", function () {
+    if (newsContainer[0].children.length < nombre) {
+      fetchGuides();
+    } else {
+      loadMoreGuidesBtn.remove();
+    }
+  });
+
+  function fetchGuides() {
+    $.ajax({
+      url: `/Project/Api/api.php?guides=1&offset=${offset}&limit=${limit}`,
       method: "GET",
       dataType: "json",
       success: function (data) {
@@ -697,6 +750,8 @@ $(document).ready(function () {
     const date = new Date(dateString);
     return date.toLocaleDateString("en-US", options);
   }
+
+
   var coll = document?.getElementsByClassName("collapsee");
   var i;
 

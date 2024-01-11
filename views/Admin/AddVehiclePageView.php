@@ -39,7 +39,7 @@ class AdminAddVehiclePageView extends AdminLayoutView
                     </div>
                     <div>
                         <label for="IndicativePrice">Price</label>
-                        <input id="IndicativePrice" name="IndicativePrice" type="number" required placeholder="Enter the Price of the Vehicle">
+                        <input id="IndicativePrice" name="IndicativePrice" type="text" required placeholder="Enter the Price of the Vehicle">
                     </div>
                     <div>
                         <label for="EngineName">Engine Name</label>

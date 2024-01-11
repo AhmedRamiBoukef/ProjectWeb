@@ -41,7 +41,12 @@ class NewsPageView extends LayoutView
                 }    
             ?>
             </div>
-            <button id="load-more-btn">Load More</button>
+            <?php
+            $nombre = $controller->getNombreNews();
+            if ($nombre["NumberOfNews"] > $limit) {
+                echo '<button id="load-more-btn">Load More</button>';
+            }
+            ?>
         </div>
         <?php
         

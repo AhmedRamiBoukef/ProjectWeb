@@ -6,6 +6,7 @@ require_once("../controllers/Admin/ReviewPageController.php");
 require_once("../controllers/Admin/UsersPageController.php");
 require_once("../controllers/Admin/NewsPageController.php");
 require_once("../controllers/User/NewsPageController.php");
+require_once("../controllers/User/GuidePageController.php");
 require_once("../controllers/User/ReviewPageController.php");
 require_once("../controllers/User/BrandsPageController.php");
 
@@ -48,11 +49,23 @@ if(isset($_GET['offset']) && isset($_GET['limit'])) {
     echo json_encode($news);
 }
 
+if(isset($_GET['guide']) && isset($_GET['offset']) && isset($_GET['limit'])) {
+    $controller = new GuidePageController();
+    $guides = $controller->getGuides($_GET['offset'],$_GET['limit']);
+    echo json_encode($guides);
+}
+
 
 if(isset($_GET['getNews']) ) {
     $controller = new NewsPageController();
     $news = $controller->getNombreNews();
     echo json_encode($news);
+}
+
+if(isset($_GET['getGuides']) ) {
+    $controller = new GuidePageController();
+    $guides = $controller->getNombreGuides();
+    echo json_encode($guides);
 }
 
 if(isset($_GET['getReviewsbyID']) ) {
@@ -163,9 +176,19 @@ if(isset($_POST['AddVehicle'])) {
     $controller->AddVehicle();
 }
 
+if(isset($_POST['UpdateVehicle'])) {
+    $controller = new AdminBrandsPageController();
+    $controller->UpdateVehicle();
+}
+
 if(isset($_POST['deleteNews'])) {
     $controller = new AdminNewsPageController();
     $controller->deleteNews();
+}
+
+if(isset($_POST['deleteVehicle'])) {
+    $controller = new AdminBrandsPageController();
+    $controller->deleteVehicle();
 }
 
 if(isset($_GET['vehiculeDetailsID'])) {
