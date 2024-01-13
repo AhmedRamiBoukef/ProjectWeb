@@ -18,7 +18,11 @@ class BrandsPageController
     public function getVehiculesByBrandID($id)
     {
         $model = new BrandModel();
-        return $model->getVehiculesByBrandID($id, $_SESSION['UserID']);
+        if (isset($_SESSION['UserID']))
+        {
+            return $model->getVehiculesByBrandID($id, $_SESSION['UserID']);
+        }
+        return $model->getVehiculesByBrandID($id, null);
     }
     public function showBrandPage($id)
     {
