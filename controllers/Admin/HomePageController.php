@@ -6,7 +6,7 @@ class AdminHomePageController
     public function handleCompare()
     {
         $model = new CompareModel();
-        $model->handleCompare($_POST['vehicleID1'],$_POST['vehicleID2']);
+        $model->handleCompare($_POST['vehicleID1'], $_POST['vehicleID2']);
         echo json_encode("Compare updated");
     }
     public function showHomePage()

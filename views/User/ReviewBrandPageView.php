@@ -13,7 +13,7 @@ class ReviewBrandPageView extends LayoutView
 
     public function showReview($id)
     {
-    ?>
+?>
         <div class="Review-details">
             <h1>Reviews</h1>
             <p>Here’s a list of reviews given for this brand.</p>
@@ -22,11 +22,11 @@ class ReviewBrandPageView extends LayoutView
             </div>
             <nav>
                 <ul id="pagination" class="pagination justify-content-center">
-                    
+
                 </ul>
             </nav>
         </div>
-<?php
+    <?php
 
     }
     public function showReviewBrandCard($vehicule)
@@ -56,7 +56,7 @@ class ReviewBrandPageView extends LayoutView
             </a>
 
         </div>
-<?php
+    <?php
     }
     public function showBrand($id)
     {

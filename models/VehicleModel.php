@@ -1,5 +1,6 @@
 <?php
 require_once($_SERVER['DOCUMENT_ROOT'] . './Project/Models/DBModel.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . './Project/Models/BrandModel.php');
 class VehicleModel extends DBModel
 {
     public function getVehicleByID($id)
@@ -8,11 +9,11 @@ class VehicleModel extends DBModel
         $sql = "SELECT 
                     v.VehicleID,
                     v.VehiculeName,
-                    v.Note,
+                    AVG(r.Rating) AS Note,
                     v.IndicativePrice,
-                    b.BrandName AS Brand,
-                    m.ModelName AS Model,
-                    m.ModelYear AS Year,
+                    b.BrandName,
+                    m.ModelName,
+                    m.ModelYear,
                     v.Version,
                     v.Dimensions,
                     v.Capacity,
@@ -22,8 +23,8 @@ class VehicleModel extends DBModel
                     i.ImagePath AS VehicleImage,
                     p.Acceleration,
                     p.TopSpeed,
-                    e.EngineName AS Engine,
-                    e.EngineType AS Type,
+                    e.EngineName,
+                    e.EngineType,
                     e.Power,
                     CASE WHEN f.VehicleID IS NOT NULL THEN 1 ELSE 0 END AS favorite
                 FROM 
@@ -42,8 +43,31 @@ class VehicleModel extends DBModel
                     Engine e ON v.EngineID = e.EngineID
                 LEFT JOIN 
                     Favorite f ON v.VehicleID = f.VehicleID AND f.UserID = :userID
+                LEFT JOIN 
+                    Review r ON v.VehicleID = r.VehicleID
                 WHERE 
-                    v.VehicleID = :VehicleID";
+                    v.VehicleID = :VehicleID
+                GROUP BY
+                    v.VehicleID,
+                    v.VehiculeName,
+                    v.IndicativePrice,
+                    b.BrandName,
+                    m.ModelName,
+                    m.ModelYear,
+                    v.Version,
+                    v.Dimensions,
+                    v.Capacity,
+                    v.Consumption,
+                    v.VitesseTYPE,
+                    j.ImagePath,
+                    i.ImagePath,
+                    p.Acceleration,
+                    p.TopSpeed,
+                    e.EngineName,
+                    e.EngineType,
+                    e.Power,
+                    f.VehicleID;
+                ";
         $stmt = $db->prepare($sql);
         $stmt->bindParam(":VehicleID", $id);
         $stmt->bindParam(":userID", $_SESSION['UserID']);
@@ -52,7 +76,8 @@ class VehicleModel extends DBModel
         $this->disconnect($db);
         return $vehicle;
     }
-    public function getFavorite($id) {
+    public function getFavorite($id)
+    {
         $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
         $sql = "SELECT
                     VI.VehicleID,
@@ -80,28 +105,28 @@ class VehicleModel extends DBModel
         $this->disconnect($db);
         return $vehicle;
     }
-    public function AddVehicle($BrandID,$ModelName,$Version,$ModelYear,$IndicativePrice,$EngineName,$EngineType,$Power,$Acceleration,$TopSpeed,$Consumption,$Dimensions,$Capacity,$VitesseTYPE,$VehicleImage)
+    public function AddVehicle($BrandID, $ModelName, $Version, $ModelYear, $IndicativePrice, $EngineName, $EngineType, $Power, $Acceleration, $TopSpeed, $Consumption, $Dimensions, $Capacity, $VitesseTYPE, $VehicleImage)
     {
         $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
-        $sql = "INSERT INTO Image (ImagePath) VALUES (:image);";
+        $sql = "INSERT IGNORE INTO Image (ImagePath) VALUES (:image);";
         $stmt = $db->prepare($sql);
         $stmt->bindParam(":image", $VehicleImage);
         $stmt->execute();
-        $imageID = $db->lastInsertId(); 
-        $sql = "INSERT INTO Engine (EngineName, EngineType, Power) VALUES (:EngineName, :EngineType, :Power);";
+        $imageID = $db->lastInsertId();
+        $sql = "INSERT IGNORE INTO Engine (EngineName, EngineType, Power) VALUES (:EngineName, :EngineType, :Power);";
         $stmt = $db->prepare($sql);
         $stmt->bindParam(":EngineName", $EngineName);
         $stmt->bindParam(":EngineType", $EngineType);
         $stmt->bindParam(":Power", $Power);
         $stmt->execute();
         $engineID = $db->lastInsertId();
-        $sql = "INSERT INTO Performance (Acceleration, TopSpeed) VALUES (:Acceleration, :TopSpeed);";
+        $sql = "INSERT IGNORE INTO Performance (Acceleration, TopSpeed) VALUES (:Acceleration, :TopSpeed);";
         $stmt = $db->prepare($sql);
         $stmt->bindParam(":Acceleration", $Acceleration);
         $stmt->bindParam(":TopSpeed", $TopSpeed);
         $stmt->execute();
         $performanceID = $db->lastInsertId();
-        $sql = "INSERT INTO Model (ModelName, ModelYear, BrandID) VALUES (:ModelName, :ModelYear, :BrandID);";
+        $sql = "INSERT IGNORE INTO Model (ModelName, ModelYear, BrandID) VALUES (:ModelName, :ModelYear, :BrandID);";
         $stmt = $db->prepare($sql);
         $stmt->bindParam(":ModelName", $ModelName);
         $stmt->bindParam(":ModelYear", $ModelYear);
@@ -115,7 +140,7 @@ class VehicleModel extends DBModel
         $brandName = $stmt->fetch();
 
 
-        $sql = "INSERT INTO VehicleInfo (VehiculeName, IndicativePrice, ModelID, EngineID, PerformanceID, ImageID, Dimensions, Capacity, Consumption, VitesseTYPE, Version) VALUES (:VehiculeName, :IndicativePrice, :ModelID, :EngineID, :PerformanceID, :ImageID, :Dimensions, :Capacity, :Consumption, :VitesseTYPE, :Version)";
+        $sql = "INSERT IGNORE INTO VehicleInfo (VehiculeName, IndicativePrice, ModelID, EngineID, PerformanceID, ImageID, Dimensions, Capacity, Consumption, VitesseTYPE, Version) VALUES (:VehiculeName, :IndicativePrice, :ModelID, :EngineID, :PerformanceID, :ImageID, :Dimensions, :Capacity, :Consumption, :VitesseTYPE, :Version)";
         $stmt = $db->prepare($sql);
         $VehicleName = $brandName['BrandName'] . " " . $ModelName . " " . $Version;
         $stmt->bindParam(':VehiculeName', $VehicleName);
@@ -131,12 +156,11 @@ class VehicleModel extends DBModel
         $stmt->bindParam(':Version', $Version);
         $stmt->execute();
         $this->disconnect($db);
-
     }
-    public function UpdateVehicle($VehicleID,$BrandID,$ModelName,$Version,$ModelYear,$IndicativePrice,$EngineName,$EngineType,$Power,$Acceleration,$TopSpeed,$Consumption,$Dimensions,$Capacity,$VitesseTYPE,$ModelID,$EngineID,$PerformanceID)
+    public function UpdateVehicle($VehicleID, $BrandID, $ModelName, $Version, $ModelYear, $IndicativePrice, $EngineName, $EngineType, $Power, $Acceleration, $TopSpeed, $Consumption, $Dimensions, $Capacity, $VitesseTYPE, $ModelID, $EngineID, $PerformanceID)
     {
         $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
-        
+
         $sql = "UPDATE Engine SET EngineName = :EngineName, EngineType = :EngineType, Power = :Power WHERE EngineID = :EngineID;";
         $stmt = $db->prepare($sql);
         $stmt->bindParam(":EngineName", $EngineName);
@@ -178,11 +202,11 @@ class VehicleModel extends DBModel
         $stmt->bindParam(':VehicleID', $VehicleID);
         $stmt->execute();
         $this->disconnect($db);
-
     }
-    public function updateImage($imageID,$imagePath) {
+    public function updateImage($imageID, $imagePath)
+    {
         $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
-        
+
         $sql = "UPDATE Image SET ImagePath = :imagePath WHERE ImageID = :imageID;";
         $stmt = $db->prepare($sql);
         $stmt->bindParam(":imagePath", $imagePath);
@@ -190,14 +214,19 @@ class VehicleModel extends DBModel
         $stmt->execute();
         $this->disconnect($db);
     }
-    public function deleteVehicle($id) {
+    public function deleteImage($imageID)
+    {
         $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
 
-        $vehicleInfos = $this->getVehicleByID($id);
-        $sql = "DELETE FROM Image WHERE ImageID = :ImageID;";
+        $sql = "DELETE FROM Image WHERE ImageID = :imageID;";
         $stmt = $db->prepare($sql);
-        $stmt->bindParam(":ImageID", $vehicleInfos['ImageID']);
+        $stmt->bindParam(":imageID", $imageID);
         $stmt->execute();
+        $this->disconnect($db);
+    }
+    public function deleteVehicle($id, $vehicleInfos)
+    {
+        $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
 
         $sql = "DELETE FROM Engine WHERE EngineID = :EngineID;";
         $stmt = $db->prepare($sql);
@@ -215,7 +244,7 @@ class VehicleModel extends DBModel
         $stmt->execute();
 
 
-        
+
         $sql = "DELETE FROM VehicleInfo WHERE VehicleID = :VehicleID;";
         $stmt = $db->prepare($sql);
         $stmt->bindParam(":VehicleID", $id);

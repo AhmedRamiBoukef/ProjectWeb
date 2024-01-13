@@ -6,7 +6,7 @@ require_once($_SERVER['DOCUMENT_ROOT'] . './Project/Models/UserModel.php');
 
 class AdminUsersPageController
 {
-    
+
     public function getUsers()
     {
         $model = new UserModel();
@@ -20,15 +20,15 @@ class AdminUsersPageController
     public function modifyUser()
     {
         $model = new UserModel();
-        $model->modifyUser($_POST['UserID'],$_POST['username'],$_POST['FirstName'],$_POST['LastName'],$_POST['Email'],$_POST['DateOfBirth'],$_POST['Gender']);
-        header("Location: /Project/Admin/users/");
+        $model->modifyUser($_POST['UserID'], $_POST['username'], $_POST['FirstName'], $_POST['LastName'], $_POST['Email'], $_POST['DateOfBirth'], $_POST['Gender']);
+        header("Location: /Project/profile/");
         exit();
     }
     public function toggleUser()
     {
         $model = new UserModel();
-        $model->toggleUser($_GET['UserID'],$_GET['toggleUser']);
-        header("Location: /Project/Admin/users/modify/?id=" . $_GET['UserID'] );
+        $model->toggleUser($_GET['UserID'], $_GET['toggleUser']);
+        header("Location: /Project/Admin/users/modify/?id=" . $_GET['UserID']);
         exit();
     }
     public function deleteUser()
@@ -40,7 +40,7 @@ class AdminUsersPageController
     public function blockUser()
     {
         $model = new UserModel();
-        $model->toggleUser($_POST['UserID'],1);
+        $model->toggleUser($_POST['UserID'], 1);
     }
     public function showUsersPage()
     {
@@ -52,15 +52,16 @@ class AdminUsersPageController
         $view = new AdminModifyUsersPageView();
         $view->showUserPage($id);
     }
-    public function addFavorite() {
+    public function addFavorite()
+    {
         $model = new UserModel();
         $model->addFavorite($_POST['VehicleID'], $_POST['UserID']);
         echo json_encode("Favorite added successfully");
     }
-    public function deleteFavorite() {
+    public function deleteFavorite()
+    {
         $model = new UserModel();
         $model->deleteFavorite($_POST['VehicleID'], $_POST['UserID']);
         echo json_encode("Favorite deleted successfully");
     }
-
 }

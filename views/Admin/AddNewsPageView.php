@@ -2,10 +2,10 @@
 require_once($_SERVER['DOCUMENT_ROOT'] . './Project/views/Admin/LayoutView.php');
 class AdminAddNewsPageView extends AdminLayoutView
 {
-    
+
     public function content()
     {
-    ?>
+?>
         <div class="NewsInfo">
             <div>
                 <h3>Add New News</h3>

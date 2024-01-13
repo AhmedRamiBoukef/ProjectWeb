@@ -11,7 +11,7 @@ class HomePageModel extends DBModel
         $socialMedia = $stmt->fetchAll();
         $this->disconnect($db);
         return $socialMedia;
-    }   
+    }
     public function getComparaison()
     {
         $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
@@ -21,7 +21,7 @@ class HomePageModel extends DBModel
         $compareinfo = $stmt->fetchAll();
         $this->disconnect($db);
         return $compareinfo;
-    }   
+    }
     public function getPopularComparaison($id)
     {
         $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
@@ -32,7 +32,7 @@ class HomePageModel extends DBModel
         $compareinfo = $stmt->fetchAll();
         $this->disconnect($db);
         return $compareinfo;
-    }   
+    }
     public function getDiaporama()
     {
         $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
@@ -42,5 +42,77 @@ class HomePageModel extends DBModel
         $slides = $stmt->fetchAll();
         $this->disconnect($db);
         return $slides;
-    }   
-}    
+    }
+    public function AddLogo($Logo)
+    {
+        $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
+        $sql = "INSERT IGNORE INTO Image (ImagePath) VALUES (:Logo);";
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':Logo', $Logo);
+        $stmt->execute();
+        $ImageID = $db->lastInsertId();
+        $this->disconnect($db);
+        return $ImageID;
+    }
+    public function AddSocialMedia($Type, $URL, $ImageID)
+    {
+        $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
+
+        $sql = "INSERT IGNORE INTO contact (Type, URL, LOGO) VALUES (:Type, :URL, :Logo);";
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':Type', $Type);
+        $stmt->bindParam(':URL', $URL);
+        $stmt->bindParam(':Logo', $ImageID);
+        $stmt->execute();
+        $mediaID = $db->lastInsertId();
+        $this->disconnect($db);
+        return $mediaID;
+    }
+    public function deletMedia($id, $Logo)
+    {
+        $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
+        $sql = "DELETE FROM Image WHERE ImageID = :Logo;";
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':Logo', $Logo);
+        $stmt->execute();
+
+        $sql = "DELETE FROM contact WHERE ContactID = :id;";
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+        $this->disconnect($db);
+    }
+    public function AddNewSlide($imageID, $url)
+    {
+        $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
+
+        $sql = "INSERT IGNORE INTO SlideshowSetting (SlideshowImageURL, SlideshowLinkURL) VALUES (:imageID, :url);";
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':imageID', $imageID);
+        $stmt->bindParam(':url', $url);
+        $stmt->execute();
+        $this->disconnect($db);
+    }
+    public function getNewsImage($NewsID)
+    {
+        $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
+
+        $sql = "SELECT ImageID FROM NewsImage WHERE NewsID = :NewsID LIMIT 1;";
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':NewsID', $NewsID);
+        $stmt->execute();
+        $ImageID = $stmt->fetch();
+        $this->disconnect($db);
+        return $ImageID['ImageID'];
+    }
+    public function deleteSlide($id)
+    {
+        $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
+
+        $sql = "DELETE FROM Image WHERE ImageID = :id;";
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+        $this->disconnect($db);
+    }
+}

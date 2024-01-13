@@ -5,7 +5,8 @@ class DBModel
     protected $dbname = 'ProjectTDW';
     protected $username = 'root';
     protected $password = '';
-    protected function connect( $host, $dbname, $username, $password ) {
+    protected function connect($host, $dbname, $username, $password)
+    {
         try {
             $db = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
         } catch (PDOException $e) {

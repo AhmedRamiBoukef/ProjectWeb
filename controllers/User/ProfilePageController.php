@@ -19,5 +19,4 @@ class ProfilePageController
         $view = new ProfilePageView();
         $view->showProfilePage();
     }
-    
 }

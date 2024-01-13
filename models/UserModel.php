@@ -2,7 +2,8 @@
 require_once($_SERVER['DOCUMENT_ROOT'] . './Project/Models/DBModel.php');
 class UserModel extends DBModel
 {
-    public function getUsers() {
+    public function getUsers()
+    {
         $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
         $sql = "SELECT * FROM user";
         $stmt = $db->prepare($sql);
@@ -11,7 +12,8 @@ class UserModel extends DBModel
         $this->disconnect($db);
         return $users;
     }
-    public function getUserById($id) {
+    public function getUserById($id)
+    {
         $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
         $sql = "SELECT * FROM user WHERE UserID = :id";
         $stmt = $db->prepare($sql);
@@ -21,7 +23,8 @@ class UserModel extends DBModel
         $this->disconnect($db);
         return $user;
     }
-    public function deleteUser($id) {
+    public function deleteUser($id)
+    {
         $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
         $sql = "DELETE FROM user WHERE UserID = :id";
         $stmt = $db->prepare($sql);
@@ -29,7 +32,8 @@ class UserModel extends DBModel
         $stmt->execute();
         $this->disconnect($db);
     }
-    public function modifyUser( $id, $username, $FirstName, $LastName, $Email, $DateOfBirth, $Gender ) {
+    public function modifyUser($id, $username, $FirstName, $LastName, $Email, $DateOfBirth, $Gender)
+    {
         $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
         $sql = "UPDATE user
         SET
@@ -54,7 +58,8 @@ class UserModel extends DBModel
         $stmt->execute();
         $this->disconnect($db);
     }
-    public function toggleUser($id,$IsBlocked) {
+    public function toggleUser($id, $IsBlocked)
+    {
         $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
         $sql = "UPDATE user
         SET
@@ -69,7 +74,8 @@ class UserModel extends DBModel
         $stmt->execute();
         $this->disconnect($db);
     }
-    public function addFavorite($vehicleID, $userID) {
+    public function addFavorite($vehicleID, $userID)
+    {
         $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
         $sql1 = "SELECT * FROM Favorite WHERE VehicleID = :vehicleID AND UserID = :userID";
         $stmt1 = $db->prepare($sql1);
@@ -77,7 +83,7 @@ class UserModel extends DBModel
         $stmt1->bindParam(':userID', $userID);
         $stmt1->execute();
         $favorite = $stmt1->fetch();
-        if(!$favorite) {
+        if (!$favorite) {
             $sql2 = "INSERT INTO Favorite (VehicleID, UserID) VALUES (:vehicleID, :userID)";
             $stmt2 = $db->prepare($sql2);
             $stmt2->bindParam(':vehicleID', $vehicleID);
@@ -87,7 +93,8 @@ class UserModel extends DBModel
         $this->disconnect($db);
     }
 
-    public function deleteFavorite($vehicleID, $userID) {
+    public function deleteFavorite($vehicleID, $userID)
+    {
         $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
         $sql1 = "SELECT * FROM Favorite WHERE VehicleID = :vehicleID AND UserID = :userID";
         $stmt1 = $db->prepare($sql1);
@@ -95,7 +102,7 @@ class UserModel extends DBModel
         $stmt1->bindParam(':userID', $userID);
         $stmt1->execute();
         $favorite = $stmt1->fetch();
-        if($favorite) {
+        if ($favorite) {
             $sql2 = "DELETE FROM Favorite WHERE VehicleID = :vehicleID AND UserID = :userID";
             $stmt2 = $db->prepare($sql2);
             $stmt2->bindParam(':vehicleID', $vehicleID);
@@ -104,5 +111,4 @@ class UserModel extends DBModel
         }
         $this->disconnect($db);
     }
-    
-}    
+}

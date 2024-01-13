@@ -3,8 +3,9 @@ require_once($_SERVER['DOCUMENT_ROOT'] . './Project/views/User/LayoutView.php');
 require_once($_SERVER['DOCUMENT_ROOT'] . '/Project/Controllers/Admin/BrandsPageController.php');
 class HomePageView extends LayoutView
 {
-    public function showGuide() {
-        ?>
+    public function showGuide()
+    {
+?>
         <div class="guide-section">
             <div>
                 <h2>To assist you in your decision,</h2>
@@ -16,15 +17,13 @@ class HomePageView extends LayoutView
                 <img src="/Project/public/images/guide_photo.png" alt="guide_photo">
             </div>
         </div>
-        <?php
+<?php
     }
 
     public function showHomePage()
     {
         $this->showHeader();
-        $controller = new HomePageController();
-        $diaporama = $controller->getDiaporama();
-        $this->showDiaporama($diaporama);
+        $this->showDiaporama();
         $this->showMenu();
         $this->showBrands();
         $this->showCompare();

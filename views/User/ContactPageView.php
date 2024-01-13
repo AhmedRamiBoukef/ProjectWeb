@@ -3,11 +3,11 @@ require_once($_SERVER['DOCUMENT_ROOT'] . './Project/views/User/LayoutView.php');
 
 class ContactPageView extends LayoutView
 {
-    
+
     public function showContactInfos()
     {
-        ?>
-        <div class="contact" >
+?>
+        <div class="contact">
             <div>
                 <h1>GET IN TOUCH</h1>
                 <p>BOUKEF Ahmed Rami</p>
@@ -37,9 +37,9 @@ class ContactPageView extends LayoutView
                 </div>
                 <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
-            </div>
-        <?php
-        
+        </div>
+<?php
+
     }
 
     public function showContactPage()

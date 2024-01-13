@@ -2,11 +2,11 @@
 require_once($_SERVER['DOCUMENT_ROOT'] . './Project/views/Admin/LayoutView.php');
 class AdminAddBrandPageView extends AdminLayoutView
 {
-    
+
     public function content()
     {
-    ?>
-        <div class="NewsInfo"> 
+?>
+        <div class="NewsInfo">
             <div>
                 <h3>Add New Brand</h3>
             </div>
@@ -24,7 +24,7 @@ class AdminAddBrandPageView extends AdminLayoutView
                         <label for="Siegesocial">Head Office</label>
                         <input id="Siegesocial" name="Siegesocial" type="text" required placeholder="Enter the Head Office of the Brand">
                     </div>
-                    
+
                     <div>
                         <label for="YearOfEstablishment">Year Of Establishment</label>
                         <input id="YearOfEstablishment" name="YearOfEstablishment" type="number" required placeholder="Enter the Year Of Establishment of the Brand">
@@ -36,10 +36,15 @@ class AdminAddBrandPageView extends AdminLayoutView
                         </div>
                         <input type="file" name="logo" id="BrandLogo" accept="image/*" required>
                     </div>
+                    <div>
+                        <label for="AddVehicle">Add Vehicles</label>
+                        <input type="checkbox" id="AddVehicle" name="AddVehicle">
+                        <span>Check this box if you want to add vehicles to the brand</span>
+                    </div>
 
-                    
+
                 </div>
-                <button type="submit" name="AddBrand">Add Brand</button>
+                <button type="submit" name="AddBrand" id="AddBrand">Add Brand</button>
             </form>
         </div>
 

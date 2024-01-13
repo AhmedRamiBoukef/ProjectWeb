@@ -2,13 +2,13 @@
 require_once($_SERVER['DOCUMENT_ROOT'] . './Project/views/Admin/LayoutView.php');
 class AdminUpdateBrandPageView extends AdminLayoutView
 {
-    
+
     public function content($id)
     {
         $controller = new BrandsPageController();
         $brand = $controller->getBrandByID($id);
-    ?>
-        <div class="NewsInfo"> 
+?>
+        <div class="NewsInfo">
             <div>
                 <h3>Update Brand</h3>
             </div>
@@ -26,10 +26,10 @@ class AdminUpdateBrandPageView extends AdminLayoutView
                         <label for="Siegesocial">Head Office</label>
                         <input id="Siegesocial" name="Siegesocial" type="text" required placeholder="Enter the Head Office of the Brand" value="<?= $brand["Siegesocial"] ?>">
                     </div>
-                    
+
                     <div>
                         <label for="YearOfEstablishment">Year Of Establishment</label>
-                        <input id="YearOfEstablishment" name="YearOfEstablishment" type="number" required placeholder="Enter the Year Of Establishment of the Brand"  value="<?= $brand["YearOfEstablishment"] ?>">
+                        <input id="YearOfEstablishment" name="YearOfEstablishment" type="number" required placeholder="Enter the Year Of Establishment of the Brand" value="<?= $brand["YearOfEstablishment"] ?>">
                     </div>
 
                     <div>
@@ -43,7 +43,7 @@ class AdminUpdateBrandPageView extends AdminLayoutView
                     <input type="hidden" name="ImageID" value="<?= $brand["ImageID"] ?>">
                     <input type="hidden" name="ImagePath" value="<?= $brand["ImagePath"] ?>">
 
-                    
+
                 </div>
                 <button type="submit" name="UpdateBrand">Update Brand</button>
             </form>

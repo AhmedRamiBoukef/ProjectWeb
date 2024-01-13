@@ -8,7 +8,7 @@ class AdminLoginPageController
         $username = $_POST['username'];
         $password = $_POST['password'];
         $login = new LoginModel();
-        $user = $login->login($username,$password);
+        $user = $login->login($username, $password);
         if ($user) {
             session_start();
             if ($user['admin'] == 1) {
@@ -34,7 +34,7 @@ class AdminLoginPageController
         $gender = $_POST['gender'];
         $password = $_POST['password'];
         $login = new LoginModel();
-        $user = $login->signup($username,$firstname,$lastname,$email,$date,$gender,$password);
+        $user = $login->signup($username, $firstname, $lastname, $email, $date, $gender, $password);
         print_r($user);
         if ($user) {
             session_start();

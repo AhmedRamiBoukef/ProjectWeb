@@ -2,7 +2,7 @@
 require_once($_SERVER['DOCUMENT_ROOT'] . './Project/Models/DBModel.php');
 class BrandModel extends DBModel
 {
-    public function AddBrand($Name, $CountryOfOrigin, $Siegesocial, $YearOfEstablishment,$Logo)
+    public function AddBrand($Name, $CountryOfOrigin, $Siegesocial, $YearOfEstablishment, $Logo)
     {
         $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
         $sql = "INSERT IGNORE INTO Image (ImagePath) VALUES (:Logo);";
@@ -21,7 +21,7 @@ class BrandModel extends DBModel
         $stmt->execute();
         $this->disconnect($db);
     }
-    public function UpdateBrand($BrandID,$Name, $CountryOfOrigin, $Siegesocial, $YearOfEstablishment,$Logo)
+    public function UpdateBrand($BrandID, $Name, $CountryOfOrigin, $Siegesocial, $YearOfEstablishment, $Logo)
     {
         $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
         $sql = "UPDATE Brand SET BrandName = :Name, CountryOfOrigin = :CountryOfOrigin, Siegesocial = :Siegesocial, YearOfEstablishment = :YearOfEstablishment ,Logo = :Logo WHERE BrandID = :id;";
@@ -48,7 +48,7 @@ class BrandModel extends DBModel
     public function getBrandsData()
     {
         $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
-        $sql = "SELECT B.*,I.ImagePath AS Logo FROM Brand B JOIN Image I ON B.Logo = I.ImageID";
+        $sql = "SELECT B.*,I.ImagePath AS Logo,I.ImageID FROM Brand B JOIN Image I ON B.Logo = I.ImageID";
         $stmt = $db->prepare($sql);
         $stmt->execute();
         $brands = $stmt->fetchAll();
@@ -66,6 +66,7 @@ class BrandModel extends DBModel
         $this->disconnect($db);
         return $infos;
     }
+
     public function getVehiculesByID($id)
     {
         $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
@@ -164,13 +165,24 @@ class BrandModel extends DBModel
         $this->disconnect($db);
         return $vehicules;
     }
-    public function updateImage($imageID,$image) {
+    public function updateImage($imageID, $image)
+    {
         $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
-        
+
         $sql = "UPDATE Image SET ImagePath = :image WHERE ImageID = :image2;";
         $stmt = $db->prepare($sql);
         $stmt->bindParam(':image', $image);
         $stmt->bindParam(':image2', $imageID);
+        $stmt->execute();
+        $this->disconnect($db);
+    }
+    public function deleteBrand($id)
+    {
+        $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
+
+        $sql = "DELETE FROM Brand WHERE BrandID = :id;";
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':id', $id);
         $stmt->execute();
         $this->disconnect($db);
     }

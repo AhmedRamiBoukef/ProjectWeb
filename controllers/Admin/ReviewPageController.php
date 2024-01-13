@@ -12,7 +12,7 @@ class AdminReviewPageController
     public function updateReview()
     {
         $model = new ReviewModel();
-        $model->updateReview($_POST['ReviewID'],$_POST['status']);
+        $model->updateReview($_POST['ReviewID'], $_POST['status']);
         echo json_encode("Review updated");
     }
     public function deleteReview()
@@ -21,11 +21,10 @@ class AdminReviewPageController
         $model->deleteReview($_POST['ReviewID']);
         echo json_encode("Review deleted");
     }
-    
+
     public function showReviewPage()
     {
         $view = new AdminReviewPageView();
         $view->showReviewPage();
     }
-
 }

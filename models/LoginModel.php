@@ -5,16 +5,16 @@ class LoginModel extends DBModel
     public function login($username, $password)
     {
         $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
-        $sql = "SELECT * FROM user WHERE username = :username";
+        $sql = "SELECT * FROM user WHERE username = :username AND IsBlocked = 0";
         $stmt = $db->prepare($sql);
         $stmt->bindParam(':username', $username);
         $stmt->execute();
         $user = $stmt->fetch();
         if ($user && password_verify($password, $user['Password'])) {
-            $this->disconnect($dataBase);
+            $this->disconnect($db);
             return $user;
         } else {
-            $this->disconnect($dataBase);
+            $this->disconnect($db);
             return false;
         }
     }
@@ -33,16 +33,15 @@ class LoginModel extends DBModel
         $stmt->bindParam(':gender', $gender);
         $stmt->bindParam(':password', $hashedPassword);
         $stmt->execute();
-        
+
         $insertedUserId = $db->lastInsertId();
         $sql = "SELECT * FROM user WHERE UserID = :userId";
         $stmt = $db->prepare($sql);
         $stmt->bindParam(':userId', $insertedUserId);
         $stmt->execute();
         $insertedUser = $stmt->fetch();
-        
+
         $this->disconnect($db);
         return $insertedUser;
     }
-
-}    
+}

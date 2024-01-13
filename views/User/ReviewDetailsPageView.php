@@ -49,7 +49,7 @@ class ReviewPageView extends LayoutView
             </div>
             <nav>
                 <ul id="pagination" class="pagination justify-content-center">
-                    
+
                 </ul>
             </nav>
         </div>

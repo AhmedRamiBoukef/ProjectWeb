@@ -34,44 +34,53 @@ class AdminBrandsPageController
         $model = new BrandModel();
         return $model->getVehiculeByID($id);
     }
-    public function getModelsByBrand($brandID) {
+    public function getModelsByBrand($brandID)
+    {
         $model = new BrandModel();
         return $model->getModelsByBrand($brandID);
     }
-    public function getYearsByModel($modelID) {
+    public function getYearsByModel($modelID)
+    {
         $model = new BrandModel();
         return $model->getYearsByModel($modelID);
     }
-    public function getVersionByModel($modelID) {
+    public function getVersionByModel($modelID)
+    {
         $model = new BrandModel();
         return $model->getVersionByModel($modelID);
     }
-    public function AddBrand() {
+    public function AddBrand()
+    {
         $model = new BrandModel();
         if (!empty($_FILES['logo']['name'])) {
-            
+
             $targetFolder = $_SERVER['DOCUMENT_ROOT'] . '/Project/public/images/';
-            
+
             $tempFile = $_FILES['logo']['tmp_name'];
             $targetFile = $targetFolder . $_FILES['logo']['name'];
             if (move_uploaded_file($tempFile, $targetFile)) {
             }
-            $model->AddBrand($_POST['Name'],$_POST['CountryOfOrigin'],$_POST['Siegesocial'],$_POST['YearOfEstablishment'],$_FILES['logo']['name']);
+            $model->AddBrand($_POST['Name'], $_POST['CountryOfOrigin'], $_POST['Siegesocial'], $_POST['YearOfEstablishment'], $_FILES['logo']['name']);
+        }
+        if ($_POST['AddVehicle']) {
+            header('Location: /Project/Admin/vehicle/add/');
+            exit();
         }
         header('Location: /Project/Admin/brands/');
         exit();
     }
-    public function UpdateBrand() {
+    public function UpdateBrand()
+    {
         $model = new BrandModel();
         $imageID = $_POST['ImageID'];
         if (!empty($_FILES['BrandLogo']['name'])) {
-            
+
             $targetFolder = $_SERVER['DOCUMENT_ROOT'] . '/Project/public/images/';
-            
+
             $tempFile = $_FILES['BrandLogo']['tmp_name'];
             $targetFile = $targetFolder . $_FILES['BrandLogo']['name'];
             if (move_uploaded_file($tempFile, $targetFile)) {
-                $model->updateImage($imageID,$_FILES['BrandLogo']['name']);
+                $model->updateImage($imageID, $_FILES['BrandLogo']['name']);
                 $imagePath = $targetFolder . $_POST['ImagePath'];
 
                 if (file_exists($imagePath)) {
@@ -79,36 +88,38 @@ class AdminBrandsPageController
                 }
             }
         }
-        $model->UpdateBrand($_POST['BrandID'],$_POST['Name'],$_POST['CountryOfOrigin'],$_POST['Siegesocial'],$_POST['YearOfEstablishment'],$imageID);
+        $model->UpdateBrand($_POST['BrandID'], $_POST['Name'], $_POST['CountryOfOrigin'], $_POST['Siegesocial'], $_POST['YearOfEstablishment'], $imageID);
         header('Location: /Project/Admin/brands/');
         exit();
     }
-    public function AddVehicle() {
+    public function AddVehicle()
+    {
         $model = new VehicleModel();
         if (!empty($_FILES['VehicleImage']['name'])) {
-            
+
             $targetFolder = $_SERVER['DOCUMENT_ROOT'] . '/Project/public/images/';
-            
+
             $tempFile = $_FILES['VehicleImage']['tmp_name'];
             $targetFile = $targetFolder . $_FILES['VehicleImage']['name'];
             if (move_uploaded_file($tempFile, $targetFile)) {
             }
-            $model->AddVehicle($_POST['BrandID'],$_POST['ModelName'],$_POST['Version'],$_POST['ModelYear'],$_POST['IndicativePrice'],$_POST['EngineName'],$_POST['EnginType'],$_POST['Power'],$_POST['Acceleration'],$_POST['TopSpeed'],$_POST['Consumption'],$_POST['Dimensions'],$_POST['Capacity'],$_POST['VitesseTYPE'],$_FILES['VehicleImage']['name']);
+            $model->AddVehicle($_POST['BrandID'], $_POST['ModelName'], $_POST['Version'], $_POST['ModelYear'], $_POST['IndicativePrice'], $_POST['EngineName'], $_POST['EnginType'], $_POST['Power'], $_POST['Acceleration'], $_POST['TopSpeed'], $_POST['Consumption'], $_POST['Dimensions'], $_POST['Capacity'], $_POST['VitesseTYPE'], $_FILES['VehicleImage']['name']);
         }
         header('Location: /Project/Admin/brand/details/?id=' . $_POST['BrandID']);
         exit();
     }
-    public function UpdateVehicle() {
+    public function UpdateVehicle()
+    {
         $model = new VehicleModel();
 
         if (!empty($_FILES['VehicleImage']['name']) && $_FILES['VehicleImage']['name'] != $_POST['ImagePath']) {
-            
+
             $targetFolder = $_SERVER['DOCUMENT_ROOT'] . '/Project/public/images/';
-            
+
             $tempFile = $_FILES['VehicleImage']['tmp_name'];
             $targetFile = $targetFolder . $_FILES['VehicleImage']['name'];
             if (move_uploaded_file($tempFile, $targetFile)) {
-                $model->updateImage($_POST['ImageID'],$_FILES['VehicleImage']['name']);
+                $model->updateImage($_POST['ImageID'], $_FILES['VehicleImage']['name']);
                 $imagePath = $targetFolder . $_POST['ImagePath'];
 
                 if (file_exists($imagePath)) {
@@ -116,14 +127,42 @@ class AdminBrandsPageController
                 }
             }
         }
-        $model->UpdateVehicle($_POST['VehicleID'],$_POST['BrandID'],$_POST['ModelName'],$_POST['Version'],$_POST['ModelYear'],$_POST['IndicativePrice'],$_POST['EngineName'],$_POST['EnginType'],$_POST['Power'],$_POST['Acceleration'],$_POST['TopSpeed'],$_POST['Consumption'],$_POST['Dimensions'],$_POST['Capacity'],$_POST['VitesseTYPE'],$_POST['ModelID'],$_POST['EngineID'],$_POST['PerformanceID']);
+        $model->UpdateVehicle($_POST['VehicleID'], $_POST['BrandID'], $_POST['ModelName'], $_POST['Version'], $_POST['ModelYear'], $_POST['IndicativePrice'], $_POST['EngineName'], $_POST['EnginType'], $_POST['Power'], $_POST['Acceleration'], $_POST['TopSpeed'], $_POST['Consumption'], $_POST['Dimensions'], $_POST['Capacity'], $_POST['VitesseTYPE'], $_POST['ModelID'], $_POST['EngineID'], $_POST['PerformanceID']);
         header('Location: /Project/Admin/brand/details/?id=' . $_POST['BrandID']);
         exit();
     }
-    public function deleteVehicle() {
+    public function deleteVehicle($id)
+    {
+        $model = new BrandModel();
+
+        $vehicleInfos = $model->getVehiculeByID($id);
+        $imageDirectory = '../public/images/';
+        $imagePath = $imageDirectory . $vehicleInfos['ImagePath'];
         $model = new VehicleModel();
-        $model->deleteVehicle($_POST['VehicleID']);
+        if (file_exists($imagePath)) {
+            unlink($imagePath);
+            $model->deleteImage($vehicleInfos['ImageID']);
+        }
+
+        $model->deleteVehicle($id, $vehicleInfos);
         echo json_encode("Vehicle Deleted");
+    }
+    public function deleteBrand()
+    {
+        $model = new BrandModel();
+
+        $imageDirectory = '../public/images/';
+        $imagePath = $imageDirectory . $_POST['ImagePath'];
+        if (file_exists($imagePath)) {
+            unlink($imagePath);
+        }
+        $vehicles = $this->getVehiculesByID($_POST['BrandID']);
+        foreach ($vehicles as $vehicle) {
+            $this->deleteVehicle($vehicle['VehicleID']);
+        }
+        $model->deleteBrand($_POST['BrandID']);
+
+        echo json_encode("Brand Deleted");
     }
     public function showBrandsPage()
     {
@@ -140,7 +179,7 @@ class AdminBrandsPageController
         $view = new AdminUpdateBrandPageView();
         $view->showUpdateBrandPage($id);
     }
-    
+
     public function showBrandDetailsPage($AdminVehiculeid)
     {
         $view = new AdminBrandDetailsPageView();
@@ -156,5 +195,4 @@ class AdminBrandsPageController
         $view = new AdminUpdateVehiclePageView();
         $view->showUpdateVehiclePage($id);
     }
-
 }

@@ -47,10 +47,11 @@ class ProfilePageView extends LayoutView
                 <button type="submit" name="updateUser">Update</button>
             </form>
         </div>
-        
-<?php
+
+    <?php
     }
-    public function showVehCard($vehicule) {
+    public function showVehCard($vehicule)
+    {
     ?>
 
         <div class="Brand-VehicleCard" data-vehicleID="<?= $vehicule['VehicleID'] ?>">
@@ -64,7 +65,7 @@ class ProfilePageView extends LayoutView
             </div>
             <div class="delete-favorite-logo" data-vehicleID="<?= $vehicule['VehicleID'] ?>" data-userID="<?= $_SESSION['UserID'] ?>">
                 <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="red" class="bi bi-trash-fill" viewBox="0 0 16 16">
-                    <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0"/>
+                    <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" />
                 </svg>
             </div>
 
@@ -73,51 +74,78 @@ class ProfilePageView extends LayoutView
             </a>
 
         </div>
-<?php
+    <?php
     }
-    public function showFavorite() {
+    public function showFavorite()
+    {
         $controller = new ProfilePageController();
         $favorites = $controller->getFavorite();
-        ?>
+    ?>
         <div class="userInfo">
             <div>
                 <h3>Favorites</h3>
             </div>
             <div class="favorite-container">
-            <?php
+                <?php
                 foreach ($favorites as $favorite) {
                     $this->showVehCard($favorite);
-                }    
+                }
                 if (count($favorites) == 0) {
                     echo "<p>There are no favorite vehicles for this profile</p>";
                 }
-            ?>
+                ?>
             </div>
         </div>
-        <?php
+    <?php
     }
-    public function showReviews($id) {
+    public function showReviewCardProfile($review)
+    {
+    ?>
+        <div class="Review-Card">
+            <div>
+                <div><?= strtoupper($review['UserName'][0]); ?></div>
+                <div>
+                    <div><?= $review['UserName']; ?></div>
+                    <div>
+                        <div><?php $this->showStars($review['Rating']) ?></div>
+                        <span><?= date('jS M Y', strtotime($review['Date'])) ?></span>
+                    </div>
+                </div>
+            </div>
+            <div style="display: flex; align-items:center;justify-content:space-between;">
+                <div style="flex: 1 1 0%;">
+                    <?= $review['Comment']; ?>
+                </div>
+                <a href="<?php echo $review['BrandID'] ? "/Project/brand/?id=" . $review['BrandID'] : "/Project/vehicle/?id=" . $review['VehicleID'] ?>">
+                    Link
+                </a>
+            </div>
+        </div>
+    <?php
+    }
+    public function showReviews($id)
+    {
         $controller = new ProfilePageController();
         $reviews = $controller->getReviews($id);
-        ?>
+    ?>
         <div class="profile-reviews">
             <div>
                 <h3>User Notaions</h3>
             </div>
-            <div class="favorite-container">
-            <?php
+            <div class="reviews-container">
+                <?php
                 foreach ($reviews as $review) {
-                    $this->showReviewCard($review);
-                }    
+                    $this->showReviewCardProfile($review);
+                }
                 if (count($reviews) == 0) {
                     echo "<p>There are no reviews for this profile</p>";
                 }
-            ?>
+                ?>
             </div>
         </div>
-        <?php
+<?php
     }
-    
+
 
     public function showProfilePage()
     {

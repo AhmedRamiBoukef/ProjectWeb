@@ -26,7 +26,7 @@ class AdminNewsPageController
     {
         $model = new NewsModel();
         $model->updateNews($_POST['NewsID'], $_POST['title'], $_POST['Content']);
-
+        $imageArray = explode(',', $_POST['updatedImages']);
         if (!empty($_FILES['images']['name'][0])) {
             $imagesArray = [];
 
@@ -35,9 +35,11 @@ class AdminNewsPageController
             foreach ($_FILES['images']['name'] as $key => $imageName) {
                 $tempFile = $_FILES['images']['tmp_name'][$key];
                 $targetFile = $targetFolder . $imageName;
-                if (move_uploaded_file($tempFile, $targetFile)) {
+                if (in_array($imageName, $imageArray)) {
+                    if (move_uploaded_file($tempFile, $targetFile)) {
 
-                    $imagesArray[] = $imageName;
+                        $imagesArray[] = $imageName;
+                    }
                 }
             }
             $model->InsertImages($_POST['NewsID'], $imagesArray);

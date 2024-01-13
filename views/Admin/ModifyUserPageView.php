@@ -45,7 +45,7 @@ class AdminModifyUsersPageView extends AdminLayoutView
                 </div>
             </form>
         </div>
-        
+
 <?php
     }
     public function showUserPage($id)
@@ -54,6 +54,4 @@ class AdminModifyUsersPageView extends AdminLayoutView
         $this->content($id);
         $this->showFooter();
     }
-
-
 }

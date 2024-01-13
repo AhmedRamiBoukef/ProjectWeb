@@ -28,13 +28,13 @@ class NewsModel extends DBModel
     {
         $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
         $sql = "SELECT N.NewsID, N.Title, I.ImageID, I.ImagePath, N.Content, N.Date
-        FROM News N 
-        JOIN (
-            SELECT NewsID, ImageID 
-            FROM NewsImage 
-            GROUP BY NewsID 
-        ) NI ON N.NewsID = NI.NewsID 
-        JOIN Image I ON NI.ImageID = I.ImageID
+                    FROM News N 
+                    JOIN (
+                        SELECT NewsID, ImageID 
+                        FROM NewsImage 
+                        GROUP BY NewsID 
+                    ) NI ON N.NewsID = NI.NewsID 
+                    JOIN Image I ON NI.ImageID = I.ImageID
         ";
         $stmt = $db->prepare($sql);
         $stmt->execute();
@@ -63,7 +63,7 @@ class NewsModel extends DBModel
         $this->disconnect($db);
         return $result;
     }
-    public function deleteImage($id,$image)
+    public function deleteImage($id, $image)
     {
         $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
         $sql = "SELECT ImageID FROM Image WHERE ImagePath = :image;";
@@ -80,7 +80,7 @@ class NewsModel extends DBModel
         $stmt->bindParam(":NewsID", $id);
         $stmt->bindParam(":imageID", $imageID['ImageID']);
         $stmt->execute();
-        
+
         $this->disconnect($db);
     }
 
@@ -94,9 +94,10 @@ class NewsModel extends DBModel
         $this->disconnect($db);
         return $news;
     }
-    public function getNewsImages($id) {
+    public function getNewsImages($id)
+    {
         $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
-        $sql ="SELECT ImagePath FROM Image I JOIN NewsImage NI ON I.ImageID = NI.ImageID WHERE NI.NewsID = :id;";
+        $sql = "SELECT ImagePath FROM Image I JOIN NewsImage NI ON I.ImageID = NI.ImageID WHERE NI.NewsID = :id;";
         $stmt = $db->prepare($sql);
         $stmt->bindParam(":id", $id);
         $stmt->execute();
@@ -115,7 +116,7 @@ class NewsModel extends DBModel
     public function updateNews($id, $title, $content)
     {
         $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
-        
+
         $sql = "UPDATE News SET Title = :title, Content = :content WHERE NewsID = :id;";
         $stmt = $db->prepare($sql);
         $stmt->bindParam(":id", $id);
@@ -127,7 +128,7 @@ class NewsModel extends DBModel
     public function AddNews($title, $content)
     {
         $db = $this->connect($this->host, $this->dbname, $this->username, $this->password);
-        
+
         $sql = "INSERT INTO News (Title, Content) VALUES (:title, :content);";
         $stmt = $db->prepare($sql);
         $stmt->bindParam(":title", $title);
@@ -146,10 +147,11 @@ class NewsModel extends DBModel
             $stmt = $db->prepare($sql);
             $stmt->bindParam(":image", $image);
             $stmt->execute();
-            $sql = "INSERT INTO NewsImage (NewsID, ImageID) VALUES (:NewsID, (SELECT ImageID FROM Image WHERE ImagePath = :image));";
+            $imageID = $db->lastInsertId();
+            $sql = "INSERT INTO NewsImage (NewsID, ImageID) VALUES (:NewsID, :imageID);";
             $stmt = $db->prepare($sql);
             $stmt->bindParam(":NewsID", $id);
-            $stmt->bindParam(":image", $image);
+            $stmt->bindParam(":imageID", $imageID);
             $stmt->execute();
         }
         $this->disconnect($db);

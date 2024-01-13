@@ -43,7 +43,7 @@ class ComparePageView extends LayoutView
                                     <?php
                                     if ($attribute == 'Note') {
                                     ?>
-                                        <div><?= $vehicle[$attribute] ?> / 5 <?php $this->showStars($vehicle[$attribute]) ?></div>
+                                        <div><?php echo $vehicle[$attribute] ? $vehicle[$attribute] : 0  ?> / 5 <?php $this->showStars($vehicle[$attribute]) ?></div>
                                     <?php
                                     } else {
                                     ?>

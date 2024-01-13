@@ -2,11 +2,11 @@
 require_once($_SERVER['DOCUMENT_ROOT'] . './Project/views/Admin/LayoutView.php');
 class AdminAddVehiclePageView extends AdminLayoutView
 {
-    
+
     public function content()
     {
-    ?>
-        <div class="NewsInfo"> 
+?>
+        <div class="NewsInfo">
             <div>
                 <h3>Add New Vehicle</h3>
             </div>
@@ -15,14 +15,14 @@ class AdminAddVehiclePageView extends AdminLayoutView
                     <div>
                         <label for="BrandID">Brand Name</label>
                         <select name="BrandID" required>
-                            <option >Select the Brand of the Vehicle</option>
-                        <?php
+                            <option>Select the Brand of the Vehicle</option>
+                            <?php
                             $controller = new AdminBrandsPageController();
                             $brands = $controller->getBrands();
                             foreach ($brands as $brand) {
                                 echo "<option value='" . $brand['BrandID'] . "'>" . $brand['Brand'] . "</option>";
                             }
-                        ?>
+                            ?>
                         </select>
                     </div>
                     <div>
@@ -79,9 +79,9 @@ class AdminAddVehiclePageView extends AdminLayoutView
                             <option>Select the Vitesse Type of the Vehicle</option>
                             <option value="Manual">Manual</option>
                             <option value="Automatic">Automatic</option>
-                        </select>                    
+                        </select>
                     </div>
-                    
+
 
                     <div>
                         <label for="VehicleImage">Vehicle Image</label>
@@ -90,7 +90,7 @@ class AdminAddVehiclePageView extends AdminLayoutView
                         <input type="file" name="VehicleImage" id="BrandLogo" accept="image/*" required>
                     </div>
 
-                    
+
                 </div>
                 <button type="submit" name="AddVehicle">Add Vehicle</button>
             </form>

@@ -68,6 +68,40 @@ function deleteVehicule(id) {
     });
   }
 }
+function deleteGuide(id) {
+  if (confirm("Are you sure you want to delete this Guide?")) {
+    $.ajax({
+      url: "/Project/Api/api.php",
+      method: "POST",
+      data: { ImageID: id, deleteGuide: 1 },
+      dataType: "json",
+      success: function (data) {
+        alert("Guide deleted successfully");
+        location.reload();
+      },
+      error: function (error) {
+        console.log("error", error);
+      },
+    });
+  }
+}
+function deleteBrand(id, ImageID, ImagePath) {
+  if (confirm("Are you sure you want to delete this Brand?")) {
+    $.ajax({
+      url: "/Project/Api/api.php",
+      method: "POST",
+      data: { BrandID: id, deleteBrand: 1, ImageID, ImagePath },
+      dataType: "json",
+      success: function (data) {
+        alert("Brand deleted successfully");
+        window.location.href = "/Project/Admin/brands/";
+      },
+      error: function (error) {
+        console.log("error", error);
+      },
+    });
+  }
+}
 function deleteUser(id) {
   if (confirm("Are you sure you want to delete this user?")) {
     $.ajax({
@@ -172,7 +206,6 @@ var swiper = new Swiper(".slide-content", {
   },
 });
 
-
 const root = document.documentElement;
 const spinnerElementsDisplayed = getComputedStyle(root).getPropertyValue(
   "--spinner-elements-displayed"
@@ -187,6 +220,61 @@ if (spinnerContent) {
   for (let i = 0; i < spinnerElementsDisplayed; i++) {
     spinnerContent.appendChild(spinnerContent.children[i].cloneNode(true));
   }
+}
+function updateGuide(guideID) {
+  var updatedTitle = $("input[data-guide-id='" + guideID + "']").val();
+  var updatedDescription = $("textarea[data-guide-id='" + guideID + "']").val();
+
+  $.ajax({
+    url: "/Project/Api/api.php",
+    method: "POST",
+    data: {
+      updateGuide: 1,
+      guideID: guideID,
+      title: updatedTitle,
+      description: updatedDescription,
+    },
+    dataType: "json",
+    success: function (response) {
+      alert("Guide updated successfully!");
+    },
+    error: function (error) {
+      console.log("Error updating guide", error);
+    },
+  });
+}
+function updateGuide(guideID) {
+  var updatedTitle = $("input[data-guide-id='" + guideID + "']").val();
+  var updatedDescription = $("textarea[data-guide-id='" + guideID + "']").val();
+  var image = $("img[data-guide-id='" + guideID + "']").data("img-src");
+
+  var formData = new FormData();
+  formData.append("updateGuide", 1);
+  formData.append("guideID", guideID);
+  formData.append("title", updatedTitle);
+  formData.append("description", updatedDescription);
+  formData.append("imageName", image);
+
+  var updatedImage = $("input[type='file'][data-guide-id='" + guideID + "']")[0]
+    .files[0];
+  if (updatedImage) {
+    formData.append("image", updatedImage);
+  }
+
+  $.ajax({
+    url: "/Project/Api/api.php",
+    method: "POST",
+    data: formData,
+    processData: false,
+    contentType: false,
+    dataType: "json",
+    success: function (response) {
+      location.reload();
+    },
+    error: function (error) {
+      console.log("Error updating guide", error);
+    },
+  });
 }
 let page = 1;
 function createPagination(totalPages, page) {
@@ -317,6 +405,7 @@ $(document).ready(function () {
     var currentFavorite = $(this).data("favorite");
     var vehicleID = $(this).data("vehicleid");
     var UserID = $(this).data("userid");
+    var favoriteContainer = $(this);
     if (currentFavorite) {
       $.ajax({
         url: "/Project/Api/api.php",
@@ -324,7 +413,8 @@ $(document).ready(function () {
         data: { VehicleID: vehicleID, deleteFavorite: 1, UserID: UserID },
         dataType: "json",
         success: function (data) {
-          $(this).data("favorite", 0);
+          console.log(favoriteContainer);
+          favoriteContainer.data("favorite", 0);
         },
         error: function (error) {
           console.error(error);
@@ -337,7 +427,8 @@ $(document).ready(function () {
         data: { VehicleID: vehicleID, addFavorite: 1, UserID: UserID },
         dataType: "json",
         success: function (data) {
-          $(this).data("favorite", 1);
+          console.log(favoriteContainer);
+          favoriteContainer.data("favorite", 1);
         },
         error: function (error) {
           console.error(error);
@@ -346,7 +437,7 @@ $(document).ready(function () {
     }
     $(this).find(".heart-icon").toggleClass("show not-show");
   });
-  
+
   if (location.href.split("=")[0] === "http://localhost/Project/review/?id") {
     $.ajax({
       url: `/Project/Api/api.php?getReviewsbyID=${location.href.split("=")[1]}`,
@@ -354,29 +445,51 @@ $(document).ready(function () {
       dataType: "json",
       success: function (data) {
         totalPages = Math.ceil(data / 5);
-        createPagination(totalPages, page);
+        if (data != null) {
+          createPagination(totalPages, page);
+        }
       },
       error: function (error) {
         console.error("Error fetching reviews:", error);
       },
     });
   }
-  if (location.href.split("=")[0] === "http://localhost/Project/review/brand/?id") {
+  if (
+    location.href.split("=")[0] === "http://localhost/Project/review/brand/?id"
+  ) {
     $.ajax({
-      url: `/Project/Api/api.php?getReviewsBrandbyID=${location.href.split("=")[1]}`,
+      url: `/Project/Api/api.php?getReviewsBrandbyID=${
+        location.href.split("=")[1]
+      }`,
       method: "GET",
       dataType: "json",
       success: function (data) {
-        totalPages = Math.ceil(data / 5) ;
+        totalPages = Math.ceil(data / 5);
         if (data != null) {
           createPagination2(totalPages, page);
-        } 
+        }
       },
       error: function (error) {
         console.error("Error fetching reviews:", error);
       },
     });
   }
+  $(".status").on("change", function () {
+    $(".status").each(function () {
+      var selectedValue = $(this).val();
+      var row = $(this).closest("select");
+
+      row.css("background-color", "");
+
+      if (selectedValue === "Approved") {
+        row.css("background-color", "green");
+      } else if (selectedValue === "Rejected") {
+        row.css("background-color", "red");
+      } else if (selectedValue === "Pending") {
+        row.css("background-color", "grey");
+      }
+    });
+  });
 
   for (let index = 1; index < 5; index++) {
     $("#vehicle_picker_brand" + index).on("change", function () {
@@ -606,24 +719,10 @@ $(document).ready(function () {
       "&vehicleID2=" +
       selectedVersion2;
     if (selectedVersion3 != "") {
-      location.href =
-        "/Project/compare/?vehicleID1=" +
-        selectedVersion1 +
-        "&vehicleID2=" +
-        selectedVersion2 +
-        "&vehicleID3=" +
-        selectedVersion3;
+      location.href += "&vehicleID3=" + selectedVersion3;
     }
     if (selectedVersion4 != "") {
-      location.href =
-        "/Project/compare/?vehicleID1=" +
-        selectedVersion1 +
-        "&vehicleID2=" +
-        selectedVersion2 +
-        "&vehicleID3=" +
-        selectedVersion3 +
-        "&vehicleID4=" +
-        selectedVersion4;
+      location.href += "&vehicleID4=" + selectedVersion4;
     }
   });
 
@@ -632,12 +731,13 @@ $(document).ready(function () {
   const newsContainer = $("#news-container");
 
   let nombre = 0;
+  let nombre1 = 0;
   $.ajax({
     url: `/Project/Api/api.php?getNews=1`,
     method: "GET",
     dataType: "json",
     success: function (data) {
-      nombre = data.NumberOfNews;
+      nombre = parseInt(data.NumberOfNews);
     },
     error: function (error) {
       console.error("Error fetching news:", error);
@@ -670,14 +770,14 @@ $(document).ready(function () {
     method: "GET",
     dataType: "json",
     success: function (data) {
-      nombre = data.NumberOfGuides;
+      nombre1 = data.NumberOfGuides;
     },
     error: function (error) {
       console.error("Error fetching guides:", error);
     },
   });
   loadMoreGuidesBtn.on("click", function () {
-    if (newsContainer[0].children.length < nombre) {
+    if (newsContainer[0].children.length < nombre1) {
       fetchGuides();
     } else {
       loadMoreGuidesBtn.remove();
@@ -750,7 +850,6 @@ $(document).ready(function () {
     const date = new Date(dateString);
     return date.toLocaleDateString("en-US", options);
   }
-
 
   var coll = document?.getElementsByClassName("collapsee");
   var i;
@@ -849,101 +948,209 @@ $(document).ready(function () {
     });
   });
 
-  const form = document?.getElementById("contactForm");
-  function sendEmail() {
-    const subject = document.getElementById("subject");
-    const message = document.getElementById("message");
-    const bodyMessage = `Subject: ${subject.value}<br> Message:${message.value}`;
-    console.log(bodyMessage);
-    Email.send({
-      Host: "smtp.elasticemail.com",
-      Username: "esiswitch@gmail.com",
-      Password: "xrth kfwz ztie qjqw",
-      To: "ka_boukef@esi.dz.com",
-      From: "esiswitch@gmail.com",
-      Subject: subject.value,
-      Body: bodyMessage,
-    }).then((message) => {
-      if (message == "OK") {
-        const toast = document.getElementById("toast");
-        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toast);
-        toastBootstrap.show();
+  $("#updateNewsForm").on("submit", function (e) {
+    e.preventDefault();
+
+    var updatedImages = [];
+
+    $(".card-img").each(function () {
+      var imgFilename = $(this).data("imgsrc");
+      console.log(imgFilename);
+      updatedImages.push(imgFilename);
+    });
+
+    $("#updatedImages").val(updatedImages.join(","));
+    var formElement = document.getElementById("updateNewsForm");
+    var formData = new FormData(formElement);
+
+    $.ajax({
+      url: "/Project/Api/api.php",
+      method: "POST",
+      data: formData,
+      processData: false,
+      contentType: false,
+      dataType: "json",
+      success: function (data) {
+        alert("News updated successfully");
+      },
+      error: function (error) {
+        console.log(error);
+      },
+    });
+  });
+
+  $("#AddSocialMediaForm").on("submit", function (e) {
+    e.preventDefault();
+    var formElement = document.getElementById("AddSocialMediaForm");
+    var formData = new FormData(formElement);
+
+    $.ajax({
+      url: "/Project/Api/api.php",
+      method: "POST",
+      data: formData,
+      processData: false,
+      contentType: false,
+      dataType: "json",
+      success: function (data) {
+        var mediaContainer = $(
+          "<div class='media-container'>" +
+            '<a href="' +
+            data[1] +
+            '">' +
+            '<img src="/Project/public/images/' +
+            data[2] +
+            '" alt="' +
+            data[2] +
+            '">' +
+            "</a>" +
+            "<div>" +
+            "<h3>" +
+            data[0] +
+            "</h3>" +
+            "</div>" +
+            '<h5 class="delete-media" style="color: red; margin-top: -10px; cursor: pointer;">Delete</h5>' +
+            '<input type="hidden" name="mediaID" value="' +
+            data[3] +
+            '">' +
+            '<input type="hidden" name="ImageID" value="' +
+            data[4] +
+            '">' +
+            "</div>"
+        );
+        $(".social-media").append(mediaContainer);
+
+        mediaContainer.find(".delete-media").on("click", function () {
+          var mediaId = $(this).siblings('input[name="mediaID"]').val();
+          var ImageID = $(this).siblings('input[name="ImageID"]').val();
+
+          var mediaContainer = $(this).closest(".media-container");
+          var imagePath = mediaContainer
+            .find("img")
+            .attr("src")
+            .split("/")
+            .pop();
+          if (confirm("Are you sure you want to delete this image?")) {
+            $.ajax({
+              type: "POST",
+              url: "/Project/Api/api.php",
+              data: {
+                mediaId: mediaId,
+                deletMedia: 1,
+                imagePath: imagePath,
+                ImageID: ImageID,
+              },
+              success: function (response) {
+                mediaContainer.remove();
+              },
+              error: function (error) {
+                console.error("Error deleting media:", error);
+              },
+            });
+          }
+        });
+      },
+      error: function (error) {
+        console.log("Error adding social media", error);
+      },
+    });
+  });
+
+  $(".delete-media").on("click", function () {
+    var mediaId = $(this).siblings('input[name="mediaID"]').val();
+    var ImageID = $(this).siblings('input[name="ImageID"]').val();
+
+    var mediaContainer = $(this).closest(".media-container");
+    var imagePath = mediaContainer.find("img").attr("src").split("/").pop();
+    if (confirm("Are you sure you want to delete this image?")) {
+      $.ajax({
+        type: "POST",
+        url: "/Project/Api/api.php",
+        data: {
+          mediaId: mediaId,
+          deletMedia: 1,
+          imagePath: imagePath,
+          ImageID: ImageID,
+        },
+        success: function (response) {
+          mediaContainer.remove();
+        },
+        error: function (error) {
+          console.error("Error deleting media:", error);
+        },
+      });
+    }
+  });
+
+  $("#SlideType").on("change", function () {
+    var selectedSlideType = $(this).val();
+
+    if (selectedSlideType === "News") {
+      $("#SlideNews").show();
+      $("#SlideAd").hide();
+    } else if (selectedSlideType === "Ad") {
+      $("#SlideNews").hide();
+      $("#SlideAd").show();
+    } else {
+      $("#SlideNews").hide();
+      $("#SlideAd").hide();
+    }
+  });
+  $("#AddDiapo").on("submit", function (e) {
+    e.preventDefault();
+    var selectedSlideType = $("#SlideType").val();
+    var selectedNews = $("#News").val();
+    var url = $("#Slideimage").val();
+    var image = $("#Slideimage").val();
+
+    if (selectedSlideType === "News") {
+      if (!selectedNews || selectedNews === "pub") {
+        alert("Please choose a News to Add.");
+        return;
       }
-    });
-  }
-  form?.addEventListener("submit", (e) => {
-    e.preventDefault();
-    console.log("submitted");
-    sendEmail();
+    } else if (selectedSlideType === "Ad") {
+      if (!url || !image) {
+        alert("Please fill in the URL and Image fields for the Ad.");
+        return;
+      }
+    } else {
+      alert("Please select type of slide.");
+      return;
+    }
+    $("#AddDiapo").off("submit");
+    $("#AddDiapo").submit();
   });
 
-  $("#updateNewsForm").on("submit", function (e) {
-    e.preventDefault();
+  $(".deleteSlide").on("click", function () {
+    var slideID = $(this).data("slide-id");
+    var slidePath = $(this).data("slide-path");
 
-    var updatedImages = [];
-
-    $(".card-img").each(function () {
-      var imgSrc = $(this).attr("src");
-      var imgFilename = imgSrc.substring(imgSrc.lastIndexOf("/") + 1);
-      updatedImages.push(imgFilename);
-    });
-
-    $("#updatedImages").val(updatedImages.join(","));
-    var formElement = document.getElementById("updateNewsForm");
-    var formData = new FormData(formElement);
-
-    $.ajax({
-      url: "/Project/Api/api.php",
-      method: "POST",
-      data: formData,
-      processData: false,
-      contentType: false,
-      dataType: "json",
-      success: function (data) {
-        alert("News updated successfully");
-      },
-      error: function (error) {
-        console.log(error);
-      },
-    });
-  });
-  $("#updateNewsForm").on("submit", function (e) {
-    e.preventDefault();
-
-    var updatedImages = [];
-
-    $(".card-img").each(function () {
-      var imgSrc = $(this).attr("src");
-      var imgFilename = imgSrc.substring(imgSrc.lastIndexOf("/") + 1);
-      updatedImages.push(imgFilename);
-    });
-
-    $("#updatedImages").val(updatedImages.join(","));
-    var formElement = document.getElementById("updateNewsForm");
-    var formData = new FormData(formElement);
-
-    $.ajax({
-      url: "/Project/Api/api.php",
-      method: "POST",
-      data: formData,
-      processData: false,
-      contentType: false,
-      dataType: "json",
-      success: function (data) {
-        alert("News updated successfully");
-      },
-      error: function (error) {
-        console.log(error);
-      },
-    });
+    if ($(".card").length > 1) {
+      if (confirm("Are you sure you want to delete this slide?")) {
+        $.ajax({
+          url: "/Project/Api/api.php",
+          method: "POST",
+          data: { slideID, slidePath, deleteSlide: 1 },
+          dataType: "json",
+          success: function (data) {
+            $("#slide" + slideID).remove();
+            console.log("#slide" + slideID);
+            swiper.update();
+          },
+          error: function (error) {
+            console.error("Error deleting entry", error);
+          },
+        });
+      }
+    } else {
+      alert("Diaporama can't have 0 images");
+    }
   });
 
-  $(".card .bi-x-circle-fill").on("click", function () {
+  $(".newsCard .bi-x-circle-fill").on("click", function () {
     var card = $(this).closest(".card");
     var imgSrc = card.find(".card-img").attr("src");
     var imgFilename = imgSrc.substring(imgSrc.lastIndexOf("/") + 1);
     var id = $("#NewsID").val();
-    console.log($(".card").length);
 
     if ($(".card").length > 1) {
       if (confirm("Are you sure you want to delete this image?")) {
@@ -954,7 +1161,6 @@ $(document).ready(function () {
           dataType: "json",
           success: function (data) {
             card.remove();
-            console.log(data);
           },
           error: function (error) {
             console.log("error", error);
@@ -968,21 +1174,54 @@ $(document).ready(function () {
 
   $("#images").on("change", function (e) {
     var files = e.target.files;
+    var inputFiles = [...files];
 
     for (var i = 0; i < files.length; i++) {
       var reader = new FileReader();
+      var fileName = inputFiles[i].name;
       reader.onload = function (event) {
         var imgSrc = event.target.result;
         var newCard = $(
           '<div class="card swiper-slide">' +
             '<img src="' +
             imgSrc +
-            '" alt="" class="card-img">' +
-            '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-x-circle-fill delete-image" viewBox="0 0 16 16">' +
-            '<path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z" />' +
-            "</svg>" +
+            '" alt="" class="card-img" ' +
+            "data-imgSrc=" +
+            fileName +
+            " >" +
             "</div>"
         );
+        var newImage = $(
+          '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-x-circle-fill delete-image" viewBox="0 0 16 16">' +
+            '<path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z" />' +
+            "</svg>"
+        );
+        newImage.on("click", function () {
+          var card = $(this).closest(".card");
+          var imgSrc = card.find(".card-img").attr("src");
+          var imgFilename = imgSrc.substring(imgSrc.lastIndexOf("/") + 1);
+          var id = $("#NewsID").val();
+
+          if ($(".card").length > 1) {
+            if (confirm("Are you sure you want to delete this image?")) {
+              $.ajax({
+                url: "/Project/Api/api.php",
+                method: "POST",
+                data: { deleteNewsImage: imgFilename, id: id },
+                dataType: "json",
+                success: function (data) {
+                  card.remove();
+                },
+                error: function (error) {
+                  console.log("error", error);
+                },
+              });
+            }
+          } else {
+            alert("News can't have 0 images");
+          }
+        });
+        newCard.append(newImage);
 
         $(".card-wrapper").append(newCard);
       };
@@ -1027,4 +1266,3 @@ $(document).ready(function () {
 
   $(".dtsp-collapseAll").click();
 });
-

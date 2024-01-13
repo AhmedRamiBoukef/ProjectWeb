@@ -14,7 +14,7 @@ class AdminReviewPageView extends AdminLayoutView
                 <thead>
                     <tr>
                         <th>User</th>
-                        <th>Vehicule</th>
+                        <th>Brand/Vehicule</th>
                         <th>Comment</th>
                         <th>Status</th>
                         <th>Rating</th>
@@ -39,10 +39,16 @@ class AdminReviewPageView extends AdminLayoutView
                                     </a>
                                 </div>
                             </td>
-                            <td><?php echo $review['VehiculeName'] ?></td>
+                            <td><?php
+                                if ($review['BrandName']) {
+                                    echo $review['BrandName'];
+                                } else {
+                                    echo $review['VehiculeName'];
+                                }
+                                ?></td>
                             <td style="width:50%"><?php echo $review['Comment'] ?></td>
                             <td>
-                                <select name="status" class="status" id="status<?= $review['ReviewID'] ?>">
+                                <select style="background-color: <?php echo $review['Status'] == 'Pending' ? 'grey' : ($review['Status'] == 'Rejected' ? 'red' : 'green') ?>;" name="status" class="status" id="status<?= $review['ReviewID'] ?>">
                                     <option value="Pending" <?php echo $review['Status'] == 'Pending' ? 'selected' : '' ?>>Pending</option>
                                     <option value="Approved" <?php echo $review['Status'] == 'Approved' ? 'selected' : '' ?>>Approved</option>
                                     <option value="Rejected" <?php echo $review['Status'] == 'Rejected' ? 'selected' : '' ?>>Rejected</option>

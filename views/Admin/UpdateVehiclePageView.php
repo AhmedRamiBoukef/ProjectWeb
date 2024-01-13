@@ -2,14 +2,14 @@
 require_once($_SERVER['DOCUMENT_ROOT'] . './Project/views/Admin/LayoutView.php');
 class AdminUpdateVehiclePageView extends AdminLayoutView
 {
-    
+
     public function content($id)
     {
         require_once($_SERVER['DOCUMENT_ROOT'] . '/Project/Controllers/Admin/BrandsPageController.php');
         $controller = new AdminBrandsPageController();
         $vehicle = $controller->getVehiculeByID($id);
-    ?>
-        <div class="NewsInfo"> 
+?>
+        <div class="NewsInfo">
             <div>
                 <h3>Update Vehicle</h3>
             </div>
@@ -24,20 +24,20 @@ class AdminUpdateVehiclePageView extends AdminLayoutView
                     <div>
                         <label for="BrandID">Brand Name</label>
                         <select name="BrandID" required>
-                            <option >Select the Brand of the Vehicle</option>
-                        <?php
+                            <option>Select the Brand of the Vehicle</option>
+                            <?php
                             $controller = new AdminBrandsPageController();
                             $brands = $controller->getBrands();
                             foreach ($brands as $brand) {
                                 $selected = $vehicle["BrandID"] == $brand['BrandID'] ? "selected" : "";
-                                echo "<option value='" . $brand['BrandID'] . "' ". $selected  . ">" . $brand['Brand'] . "</option>";
+                                echo "<option value='" . $brand['BrandID'] . "' " . $selected  . ">" . $brand['Brand'] . "</option>";
                             }
-                        ?>
+                            ?>
                         </select>
                     </div>
                     <div>
                         <label for="ModelName">Model Name</label>
-                        <input id="ModelName" name="ModelName" type="text" required placeholder="Enter the Model Name of the Vehicle"  value="<?= $vehicle["ModelName"] ?>">
+                        <input id="ModelName" name="ModelName" type="text" required placeholder="Enter the Model Name of the Vehicle" value="<?= $vehicle["ModelName"] ?>">
                     </div>
                     <div>
                         <label for="Version">Version</label>
@@ -89,9 +89,9 @@ class AdminUpdateVehiclePageView extends AdminLayoutView
                             <option>Select the Vitesse Type of the Vehicle</option>
                             <option value="Manual" <?= $vehicle["VitesseTYPE"] == "Manual" ? "selected" : "" ?>>Manual</option>
                             <option value="Automatic" <?= $vehicle["VitesseTYPE"] == "Manual" ? "" : "selected" ?>>Automatic</option>
-                        </select>                    
+                        </select>
                     </div>
-                    
+
 
                     <div>
                         <label for="VehicleImage">Vehicle Image</label>
@@ -101,7 +101,7 @@ class AdminUpdateVehiclePageView extends AdminLayoutView
                         <input type="file" name="VehicleImage" id="BrandLogo" accept="image/*" required>
                     </div>
 
-                    
+
                 </div>
                 <button type="submit" name="UpdateVehicle">Update Vehicle</button>
             </form>

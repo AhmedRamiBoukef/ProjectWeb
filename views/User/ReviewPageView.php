@@ -8,23 +8,23 @@ class ReviewsPageView extends LayoutView
     {
 ?>
         <div class="brandPage">
-        <div class="Brands">
-            <h1>Brands</h1>
-            <div class="spinner">
-                <ul class="spinner-content">
-                    <?php
-                    $controller = new AdminBrandsPageController();
-                    $brands = $controller->getBrands();
-                    foreach ($brands as $brand) {
-                    ?>
-                        <li><a href="/Project/review/brand/?id=<?php echo $brand['BrandID'] ?>"><img src="/Project/public/images/<?php echo $brand['ImagePath'] ?>" alt="Brand<?php echo $brand['BrandID'] ?>"></a></li>
-                    <?php
-                    }
-                    ?>
+            <div class="Brands">
+                <h1>Brands</h1>
+                <div class="spinner">
+                    <ul class="spinner-content">
+                        <?php
+                        $controller = new AdminBrandsPageController();
+                        $brands = $controller->getBrands();
+                        foreach ($brands as $brand) {
+                        ?>
+                            <li><a href="/Project/review/brand/?id=<?php echo $brand['BrandID'] ?>"><img src="/Project/public/images/<?php echo $brand['ImagePath'] ?>" alt="Brand<?php echo $brand['BrandID'] ?>"></a></li>
+                        <?php
+                        }
+                        ?>
 
-                </ul>
+                    </ul>
+                </div>
             </div>
-        </div>
         </div>
 <?php
 
